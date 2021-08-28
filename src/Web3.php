@@ -59,20 +59,11 @@ class Web3
      */
     protected $utils;
 
-    /**
-     * methods
-     *
-     * @var array
-     */
-    private $methods = [];
+    private array $methods = [];
 
-    /**
-     * allowedMethods
-     *
-     * @var array
-     */
-    private $allowedMethods = [
-        'web3_clientVersion', 'web3_sha3',
+    private array $allowedMethods = [
+        'web3_clientVersion',
+        'web3_sha3',
     ];
 
     /**
@@ -110,35 +101,42 @@ class Web3
 
         $class = explode('\\', get_class());
 
-        if (preg_match('/^[a-zA-Z0-9]+$/', $name) === 1) {
-            $method = strtolower($class[1]) . '_' . $name;
+        if (preg_match('/^[a-zA-Z0-9]+$/', $name) !== 1) {
+            return;
+        }
 
-            if (!in_array($method, $this->allowedMethods)) {
-                throw new \RuntimeException('Unallowed rpc method: ' . $method);
-            }
-            if ($this->provider->isBatch) {
-                $callback = null;
-            } else {
-                $callback = array_pop($arguments);
+        $method = strtolower($class[1]) . '_' . $name;
 
-                if (is_callable($callback) !== true) {
-                    throw new \InvalidArgumentException('The last param must be callback function.');
-                }
-            }
-            if (!array_key_exists($method, $this->methods)) {
-                // new the method
-                $methodClass = sprintf("\Web3\Methods\%s\%s", ucfirst($class[1]), ucfirst($name));
-                $methodObject = new $methodClass($method, $arguments);
-                $this->methods[$method] = $methodObject;
-            } else {
-                $methodObject = $this->methods[$method];
-            }
-            if ($methodObject->validate($arguments)) {
-                $inputs = $methodObject->transform($arguments, $methodObject->inputFormatters);
-                $methodObject->arguments = $inputs;
-                $this->provider->send($methodObject, $callback);
+        if (!in_array($method, $this->allowedMethods)) {
+            throw new \RuntimeException('Unallowed rpc method: ' . $method);
+        }
+
+        if ($this->provider->isBatch) {
+            $callback = null;
+        } else {
+            $callback = array_pop($arguments);
+
+            if (is_callable($callback) !== true) {
+                throw new \InvalidArgumentException('The last param must be callback function.');
             }
         }
+
+        if (!array_key_exists($method, $this->methods)) {
+            // new the method
+            $methodClass = sprintf("\Web3\Methods\%s\%s", ucfirst($class[1]), ucfirst($name));
+            $methodObject = new $methodClass($method, $arguments);
+            $this->methods[$method] = $methodObject;
+        } else {
+            $methodObject = $this->methods[$method];
+        }
+
+        if (!$methodObject->validate($arguments)) {
+            return;
+        }
+
+        $inputs = $methodObject->transform($arguments, $methodObject->inputFormatters);
+        $methodObject->arguments = $inputs;
+        $this->provider->send($methodObject, $callback);
     }
 
     /**
@@ -200,79 +198,29 @@ class Web3
         return false;
     }
 
-    /**
-     * getEth
-     *
-     * @return \Web3\Eth
-     */
-    public function getEth()
+    public function getEth(): Eth
     {
-        if (!isset($this->eth)) {
-            $eth = new Eth($this->provider);
-            $this->eth = $eth;
-        }
-
-        return $this->eth;
+        return $this->eth ??= new Eth($this->provider);
     }
 
-    /**
-     * getNet
-     *
-     * @return \Web3\Net
-     */
-    public function getNet()
+    public function getNet(): Net
     {
-        if (!isset($this->net)) {
-            $net = new Net($this->provider);
-            $this->net = $net;
-        }
-
-        return $this->net;
+        return $this->net ??= new Net($this->provider);
     }
 
-    /**
-     * getPersonal
-     *
-     * @return \Web3\Personal
-     */
-    public function getPersonal()
+    public function getPersonal(): Personal
     {
-        if (!isset($this->personal)) {
-            $personal = new Personal($this->provider);
-            $this->personal = $personal;
-        }
-
-        return $this->personal;
+        return $this->personal ??= new Personal($this->provider);
     }
 
-    /**
-     * getShh
-     *
-     * @return \Web3\Shh
-     */
-    public function getShh()
+    public function getShh(): Shh
     {
-        if (!isset($this->shh)) {
-            $shh = new Shh($this->provider);
-            $this->shh = $shh;
-        }
-
-        return $this->shh;
+        return $this->shh ??= new Shh($this->provider);
     }
 
-    /**
-     * getUtils
-     *
-     * @return \Web3\Utils
-     */
-    public function getUtils()
+    public function getUtils(): Utils
     {
-        if (!isset($this->utils)) {
-            $utils = new Utils();
-            $this->utils = $utils;
-        }
-
-        return $this->utils;
+        return $this->utils ??= new Utils();
     }
 
     /**
