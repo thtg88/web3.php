@@ -11,30 +11,17 @@
 
 namespace Web3\Providers;
 
+use Web3\Methods\IMethod;
+
 interface IProvider
 {
-    /**
-     * send
-     *
-     * @param \Web3\Methods\IMethod $method
-     * @param callable $callback
-     * @return void
-     */
-    public function send($method, $callback);
+    public function send(IMethod $method, callable $callback): void;
 
     /**
-     * batch
-     *
      * @param bool $status
      * @return void
      */
     public function batch($status);
 
-    /**
-     * execute
-     *
-     * @param callable $callback
-     * @return void
-     */
-    public function execute($callback);
+    public function execute(callable $callback): void;
 }

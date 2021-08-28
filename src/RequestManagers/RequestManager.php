@@ -13,12 +13,7 @@ namespace Web3\RequestManagers;
 
 class RequestManager
 {
-    /**
-     * host
-     *
-     * @var string
-     */
-    protected $host;
+    protected string $host;
 
     /**
      * timeout
@@ -27,22 +22,13 @@ class RequestManager
      */
     protected $timeout;
 
-    /**
-     * construct
-     *
-     * @param string $host
-     * @param float $timeout
-     * @return void
-     */
-    public function __construct($host, $timeout=1)
+    public function __construct(string $host, float $timeout=1)
     {
         $this->host = $host;
-        $this->timeout = (float) $timeout;
+        $this->timeout = $timeout;
     }
 
     /**
-     * get
-     *
      * @param string $name
      */
     public function __get($name)
@@ -57,8 +43,6 @@ class RequestManager
     }
 
     /**
-     * set
-     *
      * @param string $name
      * @return bool
      */
@@ -73,22 +57,12 @@ class RequestManager
         return false;
     }
 
-    /**
-     * getHost
-     *
-     * @return string
-     */
-    public function getHost()
+    public function getHost(): string
     {
         return $this->host;
     }
 
-    /**
-     * getTimeout
-     *
-     * @return float
-     */
-    public function getTimeout()
+    public function getTimeout(): float
     {
         return $this->timeout;
     }

@@ -29,19 +29,9 @@ class Provider
      */
     protected $isBatch = false;
 
-    /**
-     * batch
-     *
-     * @var array
-     */
-    protected $batch = [];
+    protected array $batch = [];
 
-    /**
-     * rpcVersion
-     *
-     * @var string
-     */
-    protected $rpcVersion = '2.0';
+    protected string $rpcVersion = '2.0';
 
     /**
      * id
@@ -50,19 +40,12 @@ class Provider
      */
     protected $id = 0;
 
-    /**
-     * construct
-     *
-     * @return void
-     */
     public function __construct(RequestManager $requestManager)
     {
         $this->requestManager = $requestManager;
     }
 
     /**
-     * get
-     *
      * @param string $name
      */
     public function __get($name)
@@ -77,8 +60,6 @@ class Provider
     }
 
     /**
-     * set
-     *
      * @param string $name
      * @return bool
      */
@@ -94,8 +75,6 @@ class Provider
     }
 
     /**
-     * getRequestManager
-     *
      * @return \Web3\RequestManagers\RequestManager
      */
     public function getRequestManager()
@@ -104,8 +83,6 @@ class Provider
     }
 
     /**
-     * getIsBatch
-     *
      * @return bool
      */
     public function getIsBatch()

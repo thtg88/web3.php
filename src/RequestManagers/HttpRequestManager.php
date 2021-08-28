@@ -36,6 +36,7 @@ class HttpRequestManager extends RequestManager implements IRequestManager
     public function __construct($host, $timeout = 1)
     {
         parent::__construct($host, $timeout);
+
         $this->client = new Client();
     }
 
@@ -61,51 +62,71 @@ class HttpRequestManager extends RequestManager implements IRequestManager
                 'timeout' => $this->timeout,
                 'connect_timeout' => $this->timeout,
             ]);
-            /**
-             * @var StreamInterface $stream ;
-             */
-            $stream = $res->getBody();
-            $json = json_decode($stream);
-            $stream->close();
-
-            if (JSON_ERROR_NONE !== json_last_error()) {
-                call_user_func($callback, new InvalidArgumentException('json_decode error: ' . json_last_error_msg()), null);
-            }
-            if (is_array($json)) {
-                // batch results
-                $results = [];
-                $errors = [];
-
-                foreach ($json as $result) {
-                    if (property_exists($result, 'result')) {
-                        $results[] = $result->result;
-                    } else {
-                        if (isset($json->error)) {
-                            $error = $json->error;
-                            $errors[] = new RPCException(mb_ereg_replace('Error: ', '', $error->message), $error->code);
-                        } else {
-                            $results[] = null;
-                        }
-                    }
-                }
-                if (count($errors) > 0) {
-                    call_user_func($callback, $errors, $results);
-                } else {
-                    call_user_func($callback, null, $results);
-                }
-            } elseif (property_exists($json, 'result')) {
-                call_user_func($callback, null, $json->result);
-            } else {
-                if (isset($json->error)) {
-                    $error = $json->error;
-
-                    call_user_func($callback, new RPCException(mb_ereg_replace('Error: ', '', $error->message), $error->code), null);
-                } else {
-                    call_user_func($callback, new RPCException('Something wrong happened.'), null);
-                }
-            }
         } catch (RequestException $err) {
             call_user_func($callback, $err, null);
+
+            return;
         }
+
+        /** @var StreamInterface $stream */
+        $stream = $res->getBody();
+
+        /** @var object $json */
+        $json = json_decode($stream);
+
+        $stream->close();
+
+        if (JSON_ERROR_NONE !== json_last_error()) {
+            call_user_func($callback, new InvalidArgumentException('json_decode error: ' . json_last_error_msg()), null);
+        }
+
+        if (is_array($json)) {
+            // batch results
+            $results = [];
+            $errors = [];
+
+            foreach ($json as $result) {
+                if (property_exists($result, 'result')) {
+                    $results[] = $result->result;
+
+                    continue;
+                }
+
+                if (isset($json->error)) {
+                    $error = $json->error;
+                    $errors[] = new RPCException(mb_ereg_replace('Error: ', '', $error->message), $error->code);
+
+                    continue;
+                }
+
+                $results[] = null;
+            }
+
+            if (count($errors) > 0) {
+                call_user_func($callback, $errors, $results);
+
+                return;
+            }
+
+            call_user_func($callback, null, $results);
+
+            return;
+        }
+
+        if (property_exists($json, 'result')) {
+            call_user_func($callback, null, $json->result);
+
+            return;
+        }
+
+        if (isset($json->error)) {
+            $error = $json->error;
+
+            call_user_func($callback, new RPCException(mb_ereg_replace('Error: ', '', $error->message), $error->code), null);
+
+            return;
+        }
+
+        call_user_func($callback, new RPCException('Something wrong happened.'), null);
     }
 }

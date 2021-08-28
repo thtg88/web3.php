@@ -15,98 +15,83 @@ use Web3\RequestManagers\RequestManager;
 
 class HttpProvider extends Provider implements IProvider
 {
-    /**
-     * methods
-     *
-     * @var array
-     */
-    protected $methods = [];
+    protected array $methods = [];
 
-    /**
-     * construct
-     *
-     * @return void
-     */
     public function __construct(RequestManager $requestManager)
     {
         parent::__construct($requestManager);
     }
 
-    /**
-     * send
-     *
-     * @param \Web3\Methods\IMethod $method
-     * @param callable $callback
-     * @return void
-     */
-    public function send($method, $callback)
+    public function send(IMethod $method, callable $callback): void
     {
         $payload = $method->toPayloadString();
 
-        if (!$this->isBatch) {
-            $proxy = function ($err, $res) use ($method, $callback) {
-                if ($err !== null) {
-                    return call_user_func($callback, $err, null);
-                }
-                if (!is_array($res)) {
-                    $res = $method->transform([$res], $method->outputFormatters);
-
-                    return call_user_func($callback, null, $res[0]);
-                }
-                $res = $method->transform($res, $method->outputFormatters);
-
-                return call_user_func($callback, null, $res);
-            };
-            $this->requestManager->sendPayload($payload, $proxy);
-        } else {
+        if ($this->isBatch) {
             $this->methods[] = $method;
             $this->batch[] = $payload;
+
+            return;
         }
+
+        $proxy = function ($err, $res) use ($method, $callback) {
+            if ($err !== null) {
+                return call_user_func($callback, $err, null);
+            }
+
+            if (!is_array($res)) {
+                $res = $method->transform([$res], $method->outputFormatters);
+
+                return call_user_func($callback, null, $res[0]);
+            }
+
+            $res = $method->transform($res, $method->outputFormatters);
+
+            return call_user_func($callback, null, $res);
+        };
+
+        $this->requestManager->sendPayload($payload, $proxy);
     }
 
     /**
-     * batch
-     *
      * @param bool $status
-     * @return void
+     * @return
      */
-    public function batch($status)
+    public function batch($status): void
     {
         $status = is_bool($status);
 
         $this->isBatch = $status;
     }
 
-    /**
-     * execute
-     *
-     * @param callable $callback
-     * @return void
-     */
-    public function execute($callback)
+    public function execute(callable $callback): void
     {
         if (!$this->isBatch) {
             throw new \RuntimeException('Please batch json rpc first.');
         }
+
         $methods = $this->methods;
         $proxy = function ($err, $res) use ($methods, $callback) {
             if ($err !== null) {
                 return call_user_func($callback, $err, null);
             }
+
             foreach ($methods as $key => $method) {
-                if (isset($res[$key])) {
-                    if (!is_array($res[$key])) {
-                        $transformed = $method->transform([$res[$key]], $method->outputFormatters);
-                        $res[$key] = $transformed[0];
-                    } else {
-                        $transformed = $method->transform($res[$key], $method->outputFormatters);
-                        $res[$key] = $transformed;
-                    }
+                if (!isset($res[$key])) {
+                    continue;
+                }
+
+                if (!is_array($res[$key])) {
+                    $transformed = $method->transform([$res[$key]], $method->outputFormatters);
+                    $res[$key] = $transformed[0];
+                } else {
+                    $transformed = $method->transform($res[$key], $method->outputFormatters);
+                    $res[$key] = $transformed;
                 }
             }
 
             return call_user_func($callback, null, $res);
         };
+
         $this->requestManager->sendPayload('[' . implode(',', $this->batch) . ']', $proxy);
         $this->methods[] = [];
         $this->batch = [];
