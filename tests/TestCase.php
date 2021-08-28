@@ -1,6 +1,6 @@
 <?php
 
-namespace Test;
+namespace Web3\Tests;
 
 use PHPUnit\Framework\TestCase as BaseTestCase;
 use Web3\Web3;
