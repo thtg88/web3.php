@@ -22,7 +22,7 @@ class HttpRequestManager extends RequestManager implements IRequestManager
     /**
      * client
      *
-     * @var \GuzzleHttp
+     * @var \GuzzleHttp\Client
      */
     protected $client;
 

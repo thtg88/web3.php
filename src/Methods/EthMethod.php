@@ -77,37 +77,37 @@ class EthMethod extends JSONRPC implements IMethod
     /**
      * validate
      *
-     * @param array $params
+     * @param array $data
      * @return bool
      */
-    public function validate(&$params)
+    public function validate(&$data)
     {
-        if (!is_array($params)) {
+        if (!is_array($data)) {
             throw new InvalidArgumentException('Please use array params when call validate.');
         }
         $rules = $this->validators;
 
-        if (count($params) < count($rules)) {
+        if (count($data) < count($rules)) {
             if (!isset($this->defaultValues) || empty($this->defaultValues)) {
                 throw new InvalidArgumentException('The params are less than validators.');
             }
             $defaultValues = $this->defaultValues;
 
             foreach ($defaultValues as $key => $value) {
-                if (!isset($params[$key])) {
-                    $params[$key] = $value;
+                if (!isset($data[$key])) {
+                    $data[$key] = $value;
                 }
             }
-        } elseif (count($params) > count($rules)) {
+        } elseif (count($data) > count($rules)) {
             throw new InvalidArgumentException('The params are more than validators.');
         }
         foreach ($rules as $key => $rule) {
-            if (isset($params[$key])) {
+            if (isset($data[$key])) {
                 if (is_array($rule)) {
                     $isError = true;
 
                     foreach ($rule as $subRule) {
-                        if (call_user_func([$subRule, 'validate'], $params[$key]) === true) {
+                        if (call_user_func([$subRule, 'validate'], $data[$key]) === true) {
                             $isError = false;
 
                             break;
@@ -117,7 +117,7 @@ class EthMethod extends JSONRPC implements IMethod
                         throw new RuntimeException('Wrong type of ' . $this->method . ' method argument ' . $key . '.');
                     }
                 } else {
-                    if (call_user_func([$rule, 'validate'], $params[$key]) === false) {
+                    if (call_user_func([$rule, 'validate'], $data[$key]) === false) {
                         throw new RuntimeException('Wrong type of ' . $this->method . ' method argument ' . $key . '.');
                     }
                 }
@@ -132,25 +132,25 @@ class EthMethod extends JSONRPC implements IMethod
     /**
      * transform
      *
-     * @param array $params
+     * @param array $data
      * @param array $rules
      * @return array
      */
-    public function transform($params, $rules)
+    public function transform($data, $rules)
     {
-        if (!is_array($params)) {
+        if (!is_array($data)) {
             throw new InvalidArgumentException('Please use array params when call transform.');
         }
         if (!is_array($rules)) {
             throw new InvalidArgumentException('Please use array rules when call transform.');
         }
-        foreach ($params as $key => $param) {
+        foreach ($data as $key => $param) {
             if (isset($rules[$key])) {
                 $formatted = call_user_func([$rules[$key], 'format'], $param);
-                $params[$key] = $formatted;
+                $data[$key] = $formatted;
             }
         }
 
-        return $params;
+        return $data;
     }
 }

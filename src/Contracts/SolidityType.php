@@ -11,8 +11,9 @@
 
 namespace Web3\Contracts;
 
-use Web3\Utils;
+use InvalidArgumentException;
 use Web3\Formatters\IntegerFormatter;
+use Web3\Utils;
 
 class SolidityType
 {

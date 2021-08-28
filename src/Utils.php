@@ -334,6 +334,7 @@ class Utils
             // $base = (new BigNumber(10))->pow(new BigNumber($fractionLength));
 
             // So we switch phpseclib special global param, change in the future
+            /** @psalm-suppress UndefinedConstant */
             switch (MATH_BIGINTEGER_MODE) {
                 case $whole::MODE_GMP:
                     static $two;

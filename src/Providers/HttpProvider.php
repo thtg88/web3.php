@@ -35,7 +35,7 @@ class HttpProvider extends Provider implements IProvider
     /**
      * send
      *
-     * @param \Web3\Methods\Method $method
+     * @param \Web3\Methods\IMethod $method
      * @param callable $callback
      * @return void
      */
