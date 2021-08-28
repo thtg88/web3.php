@@ -21,49 +21,15 @@ use Web3\Formatters\NumberFormatter;
 
 class UnlockAccount extends EthMethod
 {
-    /**
-     * validators
-     *
-     * @var array
-     */
-    protected $validators = [
+    protected array $validators = [
         AddressValidator::class, StringValidator::class, QuantityValidator::class,
     ];
 
-    /**
-     * inputFormatters
-     *
-     * @var array
-     */
-    protected $inputFormatters = [
+    protected array $inputFormatters = [
         AddressFormatter::class, StringFormatter::class, NumberFormatter::class,
     ];
 
-    /**
-     * outputFormatters
-     *
-     * @var array
-     */
-    protected $outputFormatters = [];
-
-    /**
-     * defaultValues
-     *
-     * @var array
-     */
-    protected $defaultValues = [
+    protected array $defaultValues = [
         2 => 300,
     ];
-
-    /**
-     * construct
-     *
-     * @param string $method
-     * @param array $arguments
-     * @return void
-     */
-    // public function __construct($method='', $arguments=[])
-    // {
-    //     parent::__construct($method, $arguments);
-    // }
 }

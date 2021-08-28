@@ -19,47 +19,11 @@ use Web3\Formatters\StringFormatter;
 
 class SendTransaction extends EthMethod
 {
-    /**
-     * validators
-     *
-     * @var array
-     */
-    protected $validators = [
+    protected array $validators = [
         TransactionValidator::class, StringValidator::class,
     ];
 
-    /**
-     * inputFormatters
-     *
-     * @var array
-     */
-    protected $inputFormatters = [
+    protected array $inputFormatters = [
         TransactionFormatter::class, StringFormatter::class,
     ];
-
-    /**
-     * outputFormatters
-     *
-     * @var array
-     */
-    protected $outputFormatters = [];
-
-    /**
-     * defaultValues
-     *
-     * @var array
-     */
-    protected $defaultValues = [];
-
-    /**
-     * construct
-     *
-     * @param string $method
-     * @param array $arguments
-     * @return void
-     */
-    // public function __construct($method='', $arguments=[])
-    // {
-    //     parent::__construct($method, $arguments);
-    // }
 }
