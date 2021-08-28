@@ -10,8 +10,8 @@
          stopOnFailure="false"
          syntaxCheck="false">
 
-    <testsuite name="Web3.php unit test">
-        <directory suffix="Test.php">./test/unit</directory>
+    <testsuite name="Web3.php Unit Tests">
+        <directory suffix="Test.php">./tests/Unit</directory>
     </testsuite>
 
     <filter>
