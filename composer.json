@@ -37,5 +37,9 @@
         "post-update-cmd": [
             "[[ -d .git ]] && vendor/bin/cghooks update || true"
         ],
+        "ci": [
+            "@test --stop-on-failure"
+        ],
+        "test": "vendor/bin/phpunit"
     }
 }
