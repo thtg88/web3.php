@@ -2,19 +2,14 @@
 
 /**
  * This file is part of web3.php package.
- * 
+ *
  * (c) Kuan-Cheng,Lai <alk03073135@gmail.com>
- * 
+ *
  * @author Peter Lai <alk03073135@gmail.com>
  * @license MIT
  */
 
 namespace Web3\Validators;
-
-use Web3\Validators\IValidator;
-use Web3\Validators\QuantityValidator;
-use Web3\Validators\HexValidator;
-use Web3\Validators\IdentityValidator;
 
 class ShhFilterValidator
 {
@@ -42,6 +37,7 @@ class ShhFilterValidator
                         return false;
                     }
                 }
+
                 continue;
             }
             if (HexValidator::validate($topic) === false) {
@@ -50,6 +46,7 @@ class ShhFilterValidator
                 }
             }
         }
+
         return true;
     }
 }

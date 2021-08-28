@@ -2,18 +2,16 @@
 
 /**
  * This file is part of web3.php package.
- * 
+ *
  * (c) Kuan-Cheng,Lai <alk03073135@gmail.com>
- * 
+ *
  * @author Peter Lai <alk03073135@gmail.com>
  * @license MIT
  */
 
 namespace Web3\Contracts\Types;
 
-use InvalidArgumentException;
 use Web3\Contracts\SolidityType;
-use Web3\Contracts\Types\IType;
 use Web3\Utils;
 use Web3\Formatters\IntegerFormatter;
 
@@ -21,17 +19,16 @@ class Address extends SolidityType implements IType
 {
     /**
      * construct
-     * 
+     *
      * @return void
      */
     public function __construct()
     {
-        //
     }
 
     /**
      * isType
-     * 
+     *
      * @param string $name
      * @return bool
      */
@@ -42,7 +39,7 @@ class Address extends SolidityType implements IType
 
     /**
      * isDynamicType
-     * 
+     *
      * @return bool
      */
     public function isDynamicType()
@@ -53,8 +50,7 @@ class Address extends SolidityType implements IType
     /**
      * inputFormat
      * to do: iban
-     * 
-     * @param mixed $value
+     *
      * @param string $name
      * @return string
      */
@@ -76,8 +72,7 @@ class Address extends SolidityType implements IType
 
     /**
      * outputFormat
-     * 
-     * @param mixed $value
+     *
      * @param string $name
      * @return string
      */

@@ -2,19 +2,14 @@
 
 /**
  * This file is part of web3.php package.
- * 
+ *
  * (c) Kuan-Cheng,Lai <alk03073135@gmail.com>
- * 
+ *
  * @author Peter Lai <alk03073135@gmail.com>
  * @license MIT
  */
 
 namespace Web3\Validators;
-
-use Web3\Validators\IValidator;
-use Web3\Validators\QuantityValidator;
-use Web3\Validators\TagValidator;
-use Web3\Validators\HexValidator;
 
 class TransactionValidator
 {
@@ -22,7 +17,7 @@ class TransactionValidator
      * validate
      * To do: check is data optional?
      * Data is not optional on spec, see https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_sendtransaction
-     * 
+     *
      * @param array $value
      * @return bool
      */
@@ -61,6 +56,7 @@ class TransactionValidator
         if (isset($value['nonce']) && QuantityValidator::validate($value['nonce']) === false) {
             return false;
         }
+
         return true;
     }
 }

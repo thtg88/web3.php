@@ -8,6 +8,7 @@ echo 'Eth Get Account and Balance' . PHP_EOL;
 $eth->accounts(function ($err, $accounts) use ($eth) {
     if ($err !== null) {
         echo 'Error: ' . $err->getMessage();
+
         return;
     }
     foreach ($accounts as $account) {
@@ -16,6 +17,7 @@ $eth->accounts(function ($err, $accounts) use ($eth) {
         $eth->getBalance($account, function ($err, $balance) {
             if ($err !== null) {
                 echo 'Error: ' . $err->getMessage();
+
                 return;
             }
             echo 'Balance: ' . $balance . PHP_EOL;

@@ -2,9 +2,9 @@
 
 /**
  * This file is part of web3.php package.
- * 
+ *
  * (c) Kuan-Cheng,Lai <alk03073135@gmail.com>
- * 
+ *
  * @author Peter Lai <alk03073135@gmail.com>
  * @license MIT
  */
@@ -15,16 +15,16 @@ interface IProvider
 {
     /**
      * send
-     * 
+     *
      * @param \Web3\Methods\Method $method
      * @param callable $callback
      * @return void
      */
-    public function send($method, $callback);  
+    public function send($method, $callback);
 
     /**
      * batch
-     * 
+     *
      * @param bool $status
      * @return void
      */
@@ -32,7 +32,7 @@ interface IProvider
 
     /**
      * execute
-     * 
+     *
      * @param callable $callback
      * @return void
      */

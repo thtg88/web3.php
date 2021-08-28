@@ -14,11 +14,8 @@ namespace Web3\RequestManagers;
 use InvalidArgumentException;
 use Psr\Http\Message\StreamInterface;
 use RuntimeException as RPCException;
-use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Client;
-use Web3\RequestManagers\RequestManager;
-use Web3\RequestManagers\IRequestManager;
 
 class HttpRequestManager extends RequestManager implements IRequestManager
 {
@@ -39,7 +36,7 @@ class HttpRequestManager extends RequestManager implements IRequestManager
     public function __construct($host, $timeout = 1)
     {
         parent::__construct($host, $timeout);
-        $this->client = new Client;
+        $this->client = new Client();
     }
 
     /**
@@ -58,11 +55,11 @@ class HttpRequestManager extends RequestManager implements IRequestManager
         try {
             $res = $this->client->post($this->host, [
                 'headers' => [
-                    'content-type' => 'application/json'
+                    'content-type' => 'application/json',
                 ],
                 'body' => $payload,
                 'timeout' => $this->timeout,
-                'connect_timeout' => $this->timeout
+                'connect_timeout' => $this->timeout,
             ]);
             /**
              * @var StreamInterface $stream ;
@@ -80,7 +77,7 @@ class HttpRequestManager extends RequestManager implements IRequestManager
                 $errors = [];
 
                 foreach ($json as $result) {
-                    if (property_exists($result,'result')) {
+                    if (property_exists($result, 'result')) {
                         $results[] = $result->result;
                     } else {
                         if (isset($json->error)) {
@@ -96,7 +93,7 @@ class HttpRequestManager extends RequestManager implements IRequestManager
                 } else {
                     call_user_func($callback, null, $results);
                 }
-            } elseif (property_exists($json,'result')) {
+            } elseif (property_exists($json, 'result')) {
                 call_user_func($callback, null, $json->result);
             } else {
                 if (isset($json->error)) {

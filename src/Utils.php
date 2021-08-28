@@ -2,16 +2,15 @@
 
 /**
  * This file is part of web3.php package.
- * 
+ *
  * (c) Kuan-Cheng,Lai <alk03073135@gmail.com>
- * 
+ *
  * @author Peter Lai <alk03073135@gmail.com>
  * @license MIT
  */
 
 namespace Web3;
 
-use RuntimeException;
 use InvalidArgumentException;
 use stdClass;
 use kornrunner\Keccak;
@@ -21,18 +20,18 @@ class Utils
 {
     /**
      * SHA3_NULL_HASH
-     * 
+     *
      * @const string
      */
-    const SHA3_NULL_HASH = 'c5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470';
+    public const SHA3_NULL_HASH = 'c5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470';
 
     /**
      * UNITS
      * from ethjs-unit
-     * 
+     *
      * @const array
      */
-    const UNITS = [
+    public const UNITS = [
         'noether' => '0',
         'wei' => '1',
         'kwei' => '1000',
@@ -59,13 +58,13 @@ class Utils
         'grand' => '1000000000000000000000',
         'mether' => '1000000000000000000000000',
         'gether' => '1000000000000000000000000000',
-        'tether' => '1000000000000000000000000000000'
+        'tether' => '1000000000000000000000000000000',
     ];
 
     /**
      * NEGATIVE1
      * Cannot work, see: http://php.net/manual/en/language.constants.syntax.php
-     * 
+     *
      * @const
      */
     // const NEGATIVE1 = new BigNumber(-1);
@@ -80,7 +79,7 @@ class Utils
     /**
      * toHex
      * Encoding string or integer or numeric string(is not zero prefixed) or big number to hex.
-     * 
+     *
      * @param string|int|BigNumber $value
      * @param bool $isPrefix
      * @return string
@@ -104,12 +103,13 @@ class Utils
         if ($isPrefix) {
             return '0x' . $hex;
         }
+
         return $hex;
     }
 
     /**
      * hexToBin
-     * 
+     *
      * @param string
      * @return string
      */
@@ -122,12 +122,13 @@ class Utils
             $count = 1;
             $value = str_replace('0x', '', $value, $count);
         }
+
         return pack('H*', $value);
     }
 
     /**
      * isZeroPrefixed
-     * 
+     *
      * @param string
      * @return bool
      */
@@ -136,12 +137,13 @@ class Utils
         if (!is_string($value)) {
             throw new InvalidArgumentException('The value to isZeroPrefixed function must be string.');
         }
+
         return (strpos($value, '0x') === 0);
     }
 
     /**
      * stripZero
-     * 
+     *
      * @param string $value
      * @return string
      */
@@ -149,14 +151,16 @@ class Utils
     {
         if (self::isZeroPrefixed($value)) {
             $count = 1;
+
             return str_replace('0x', '', $value, $count);
         }
+
         return $value;
     }
 
     /**
      * isNegative
-     * 
+     *
      * @param string
      * @return bool
      */
@@ -165,12 +169,13 @@ class Utils
         if (!is_string($value)) {
             throw new InvalidArgumentException('The value to isNegative function must be string.');
         }
+
         return (strpos($value, '-') === 0);
     }
 
     /**
      * isAddress
-     * 
+     *
      * @param string $value
      * @return bool
      */
@@ -184,6 +189,7 @@ class Utils
         } elseif (preg_match('/^(0x|0X)?[a-f0-9]{40}$/', $value) === 1 || preg_match('/^(0x|0X)?[A-F0-9]{40}$/', $value) === 1) {
             return true;
         }
+
         return self::isAddressChecksum($value);
     }
 
@@ -209,6 +215,7 @@ class Utils
                 return false;
             }
         }
+
         return true;
     }
 
@@ -234,12 +241,13 @@ class Utils
                 $ret .= $value[$i];
             }
         }
+
         return $ret;
     }
 
     /**
      * isHex
-     * 
+     *
      * @param string $value
      * @return bool
      */
@@ -251,7 +259,7 @@ class Utils
     /**
      * sha3
      * keccak256
-     * 
+     *
      * @param string $value
      * @return string
      */
@@ -268,13 +276,13 @@ class Utils
         if ($hash === self::SHA3_NULL_HASH) {
             return null;
         }
+
         return '0x' . $hash;
     }
 
     /**
      * toString
-     * 
-     * @param mixed $value
+     *
      * @return string
      */
     public static function toString($value)
@@ -288,9 +296,9 @@ class Utils
      * toWei
      * Change number from unit to wei.
      * For example:
-     * $wei = Utils::toWei('1', 'kwei'); 
+     * $wei = Utils::toWei('1', 'kwei');
      * $wei->toString(); // 1000
-     * 
+     *
      * @param BigNumber|string $number
      * @param string $unit
      * @return \phpseclib\Math\BigInteger
@@ -330,12 +338,15 @@ class Utils
                 case $whole::MODE_GMP:
                     static $two;
                     $powerBase = gmp_pow(gmp_init(10), (int) $fractionLength);
+
                     break;
                 case $whole::MODE_BCMATH:
                     $powerBase = bcpow('10', (string) $fractionLength, 0);
+
                     break;
                 default:
                     $powerBase = pow(10, (int) $fractionLength);
+
                     break;
             }
             $base = new BigNumber($powerBase);
@@ -344,6 +355,7 @@ class Utils
             if ($negative1 !== false) {
                 return $whole->add($fraction)->multiply($negative1);
             }
+
             return $whole->add($fraction);
         }
 
@@ -354,9 +366,9 @@ class Utils
      * toEther
      * Change number from unit to ether.
      * For example:
-     * list($bnq, $bnr) = Utils::toEther('1', 'kether'); 
+     * list($bnq, $bnr) = Utils::toEther('1', 'kether');
      * $bnq->toString(); // 1000
-     * 
+     *
      * @param BigNumber|string|int $number
      * @param string $unit
      * @return array
@@ -376,9 +388,9 @@ class Utils
      * fromWei
      * Change number from wei to unit.
      * For example:
-     * list($bnq, $bnr) = Utils::fromWei('1000', 'kwei'); 
+     * list($bnq, $bnr) = Utils::fromWei('1000', 'kwei');
      * $bnq->toString(); // 1
-     * 
+     *
      * @param BigNumber|string|int $number
      * @param string $unit
      * @return \phpseclib\Math\BigInteger
@@ -400,7 +412,7 @@ class Utils
 
     /**
      * jsonMethodToString
-     * 
+     *
      * @param stdClass|array $json
      * @return string
      */
@@ -427,6 +439,7 @@ class Utils
                     $typeName[] = $param->type;
                 }
             }
+
             return $json['name'] . '(' . implode(',', $typeName) . ')';
         } elseif (!is_array($json)) {
             throw new InvalidArgumentException('jsonMethodToString json must be array or stdClass.');
@@ -441,12 +454,13 @@ class Utils
                 $typeName[] = $param['type'];
             }
         }
+
         return $json['name'] . '(' . implode(',', $typeName) . ')';
     }
 
     /**
      * jsonToArray
-     * 
+     *
      * @param stdClass|array $json
      * @return array
      */
@@ -476,19 +490,20 @@ class Utils
                 }
             }
         }
+
         return $json;
     }
 
     /**
      * toBn
      * Change number or number string to bignumber.
-     * 
+     *
      * @param BigNumber|string|int $number
      * @return array|\phpseclib\Math\BigInteger
      */
     public static function toBn($number)
     {
-        if ($number instanceof BigNumber){
+        if ($number instanceof BigNumber) {
             $bn = $number;
         } elseif (is_int($number)) {
             $bn = new BigNumber($number);
@@ -513,7 +528,7 @@ class Utils
                     new BigNumber($whole),
                     new BigNumber($fraction),
                     strlen($comps[1]),
-                    isset($negative1) ? $negative1 : false
+                    isset($negative1) ? $negative1 : false,
                 ];
             } else {
                 $bn = new BigNumber($number);
@@ -543,6 +558,7 @@ class Utils
         } else {
             throw new InvalidArgumentException('toBn number must be BigNumber, string or int.');
         }
+
         return $bn;
     }
 }

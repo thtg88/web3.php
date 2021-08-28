@@ -2,9 +2,9 @@
 
 /**
  * This file is part of web3.php package.
- * 
+ *
  * (c) Kuan-Cheng,Lai <alk03073135@gmail.com>
- * 
+ *
  * @author Peter Lai <alk03073135@gmail.com>
  * @license MIT
  */
@@ -19,39 +19,39 @@ class LockAccount extends EthMethod
 {
     /**
      * validators
-     * 
+     *
      * @var array
      */
     protected $validators = [
-        AddressValidator::class
+        AddressValidator::class,
     ];
 
     /**
      * inputFormatters
-     * 
+     *
      * @var array
      */
     protected $inputFormatters = [
-        AddressFormatter::class
+        AddressFormatter::class,
     ];
 
     /**
      * outputFormatters
-     * 
+     *
      * @var array
      */
     protected $outputFormatters = [];
 
     /**
      * defaultValues
-     * 
+     *
      * @var array
      */
     protected $defaultValues = [];
 
     /**
      * construct
-     * 
+     *
      * @param string $method
      * @param array $arguments
      * @return void
@@ -61,4 +61,3 @@ class LockAccount extends EthMethod
     //     parent::__construct($method, $arguments);
     // }
 }
-

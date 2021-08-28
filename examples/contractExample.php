@@ -280,7 +280,7 @@ $web3->eth->accounts(function ($err, $accounts) use ($contract, $testBytecode) {
         $toAccount = $accounts[1];
         $contract->bytecode($testBytecode)->new(1000000, 'Game Token', 1, 'GT', [
             'from' => $fromAccount,
-            'gas' => '0x200b20'
+            'gas' => '0x200b20',
         ], function ($err, $result) use ($contract, $fromAccount, $toAccount) {
             if ($err !== null) {
                 throw $err;
@@ -300,7 +300,7 @@ $web3->eth->accounts(function ($err, $accounts) use ($contract, $testBytecode) {
 
                     $contract->at($contractAddress)->send('transfer', $toAccount, 16, [
                         'from' => $fromAccount,
-                        'gas' => '0x200b20'
+                        'gas' => '0x200b20',
                     ], function ($err, $result) use ($contract, $fromAccount, $toAccount) {
                         if ($err !== null) {
                             throw $err;

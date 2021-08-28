@@ -2,9 +2,9 @@
 
 /**
  * This file is part of web3.php package.
- * 
+ *
  * (c) Kuan-Cheng,Lai <alk03073135@gmail.com>
- * 
+ *
  * @author Peter Lai <alk03073135@gmail.com>
  * @license MIT
  */
@@ -13,7 +13,6 @@ namespace Web3;
 
 use Web3\Providers\Provider;
 use Web3\Providers\HttpProvider;
-use Web3\RequestManagers\RequestManager;
 use Web3\RequestManagers\HttpRequestManager;
 
 class Net
@@ -27,18 +26,18 @@ class Net
 
     /**
      * methods
-     * 
+     *
      * @var array
      */
     private $methods = [];
 
     /**
      * allowedMethods
-     * 
+     *
      * @var array
      */
     private $allowedMethods = [
-        'net_version', 'net_peerCount', 'net_listening'
+        'net_version', 'net_peerCount', 'net_listening',
     ];
 
     /**
@@ -56,14 +55,14 @@ class Net
 
                 $this->provider = new HttpProvider($requestManager);
             }
-        } else if ($provider instanceof Provider) {
+        } elseif ($provider instanceof Provider) {
             $this->provider = $provider;
         }
     }
 
     /**
      * call
-     * 
+     *
      * @param string $name
      * @param array $arguments
      * @return void
@@ -109,9 +108,8 @@ class Net
 
     /**
      * get
-     * 
+     *
      * @param string $name
-     * @return mixed
      */
     public function __get($name)
     {
@@ -120,15 +118,14 @@ class Net
         if (method_exists($this, $method)) {
             return call_user_func_array([$this, $method], []);
         }
+
         return false;
     }
 
     /**
      * set
-     * 
+     *
      * @param string $name
-     * @param mixed $value
-     * @return mixed
      */
     public function __set($name, $value)
     {
@@ -137,12 +134,13 @@ class Net
         if (method_exists($this, $method)) {
             return call_user_func_array([$this, $method], [$value]);
         }
+
         return false;
     }
 
     /**
      * getProvider
-     * 
+     *
      * @return \Web3\Providers\Provider
      */
     public function getProvider()
@@ -152,7 +150,7 @@ class Net
 
     /**
      * setProvider
-     * 
+     *
      * @param \Web3\Providers\Provider $provider
      * @return bool
      */
@@ -160,14 +158,16 @@ class Net
     {
         if ($provider instanceof Provider) {
             $this->provider = $provider;
+
             return true;
         }
+
         return false;
     }
 
     /**
      * batch
-     * 
+     *
      * @param bool $status
      * @return void
      */

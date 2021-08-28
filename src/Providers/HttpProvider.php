@@ -2,32 +2,29 @@
 
 /**
  * This file is part of web3.php package.
- * 
+ *
  * (c) Kuan-Cheng,Lai <alk03073135@gmail.com>
- * 
+ *
  * @author Peter Lai <alk03073135@gmail.com>
  * @license MIT
  */
 
 namespace Web3\Providers;
 
-use Web3\Providers\Provider;
-use Web3\Providers\IProvider;
 use Web3\RequestManagers\RequestManager;
 
 class HttpProvider extends Provider implements IProvider
 {
     /**
      * methods
-     * 
+     *
      * @var array
      */
     protected $methods = [];
 
     /**
      * construct
-     * 
-     * @param \Web3\RequestManagers\RequestManager $requestManager
+     *
      * @return void
      */
     public function __construct(RequestManager $requestManager)
@@ -37,7 +34,7 @@ class HttpProvider extends Provider implements IProvider
 
     /**
      * send
-     * 
+     *
      * @param \Web3\Methods\Method $method
      * @param callable $callback
      * @return void
@@ -53,6 +50,7 @@ class HttpProvider extends Provider implements IProvider
                 }
                 if (!is_array($res)) {
                     $res = $method->transform([$res], $method->outputFormatters);
+
                     return call_user_func($callback, null, $res[0]);
                 }
                 $res = $method->transform($res, $method->outputFormatters);
@@ -68,7 +66,7 @@ class HttpProvider extends Provider implements IProvider
 
     /**
      * batch
-     * 
+     *
      * @param bool $status
      * @return void
      */
@@ -81,7 +79,7 @@ class HttpProvider extends Provider implements IProvider
 
     /**
      * execute
-     * 
+     *
      * @param callable $callback
      * @return void
      */
@@ -106,6 +104,7 @@ class HttpProvider extends Provider implements IProvider
                     }
                 }
             }
+
             return call_user_func($callback, null, $res);
         };
         $this->requestManager->sendPayload('[' . implode(',', $this->batch) . ']', $proxy);

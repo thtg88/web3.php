@@ -2,9 +2,9 @@
 
 /**
  * This file is part of web3.php package.
- * 
+ *
  * (c) Kuan-Cheng,Lai <alk03073135@gmail.com>
- * 
+ *
  * @author Peter Lai <alk03073135@gmail.com>
  * @license MIT
  */
@@ -14,23 +14,21 @@ namespace Web3\Contracts\Types;
 use InvalidArgumentException;
 use Web3\Utils;
 use Web3\Contracts\SolidityType;
-use Web3\Contracts\Types\IType;
 
 class Bytes extends SolidityType implements IType
 {
     /**
      * construct
-     * 
+     *
      * @return void
      */
     public function __construct()
     {
-        //
     }
 
     /**
      * isType
-     * 
+     *
      * @param string $name
      * @return bool
      */
@@ -41,7 +39,7 @@ class Bytes extends SolidityType implements IType
 
     /**
      * isDynamicType
-     * 
+     *
      * @return bool
      */
     public function isDynamicType()
@@ -51,8 +49,7 @@ class Bytes extends SolidityType implements IType
 
     /**
      * inputFormat
-     * 
-     * @param mixed $value
+     *
      * @param string $name
      * @return string
      */
@@ -64,7 +61,7 @@ class Bytes extends SolidityType implements IType
         $value = Utils::stripZero($value);
 
         if (mb_strlen($value) % 2 !== 0) {
-            $value = "0" . $value;
+            $value = '0' . $value;
             // throw new InvalidArgumentException('The value to inputFormat has invalid length. Value: ' . $value);
         }
 
@@ -79,8 +76,7 @@ class Bytes extends SolidityType implements IType
 
     /**
      * outputFormat
-     * 
-     * @param mixed $value
+     *
      * @param string $name
      * @return string
      */
@@ -96,6 +92,7 @@ class Bytes extends SolidityType implements IType
             $length = 2 * $size;
             $value = mb_substr($value, 0, $length);
         }
+
         return '0x' . $value;
     }
 }

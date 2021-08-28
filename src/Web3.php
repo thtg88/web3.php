@@ -2,23 +2,17 @@
 
 /**
  * This file is part of web3.php package.
- * 
+ *
  * (c) Kuan-Cheng,Lai <alk03073135@gmail.com>
- * 
+ *
  * @author Peter Lai <alk03073135@gmail.com>
  * @license MIT
  */
 
 namespace Web3;
 
-use Web3\Eth;
-use Web3\Net;
-use Web3\Personal;
-use Web3\Shh;
-use Web3\Utils;
 use Web3\Providers\Provider;
 use Web3\Providers\HttpProvider;
-use Web3\RequestManagers\RequestManager;
 use Web3\RequestManagers\HttpRequestManager;
 
 class Web3
@@ -32,53 +26,53 @@ class Web3
 
     /**
      * eth
-     * 
+     *
      * @var \Web3\Eth
      */
     protected $eth;
 
     /**
      * net
-     * 
+     *
      * @var \Web3\Net
      */
     protected $net;
 
     /**
      * personal
-     * 
+     *
      * @var \Web3\Personal
      */
     protected $personal;
 
     /**
      * shh
-     * 
+     *
      * @var \Web3\Shh
      */
     protected $shh;
 
     /**
      * utils
-     * 
+     *
      * @var \Web3\Utils
      */
     protected $utils;
 
     /**
      * methods
-     * 
+     *
      * @var array
      */
     private $methods = [];
 
     /**
      * allowedMethods
-     * 
+     *
      * @var array
      */
     private $allowedMethods = [
-        'web3_clientVersion', 'web3_sha3'
+        'web3_clientVersion', 'web3_sha3',
     ];
 
     /**
@@ -96,14 +90,14 @@ class Web3
 
                 $this->provider = new HttpProvider($requestManager);
             }
-        } else if ($provider instanceof Provider) {
+        } elseif ($provider instanceof Provider) {
             $this->provider = $provider;
         }
     }
 
     /**
      * call
-     * 
+     *
      * @param string $name
      * @param array $arguments
      * @return void
@@ -149,9 +143,8 @@ class Web3
 
     /**
      * get
-     * 
+     *
      * @param string $name
-     * @return mixed
      */
     public function __get($name)
     {
@@ -160,15 +153,14 @@ class Web3
         if (method_exists($this, $method)) {
             return call_user_func_array([$this, $method], []);
         }
+
         return false;
     }
 
     /**
      * set
-     * 
+     *
      * @param string $name
-     * @param mixed $value
-     * @return mixed
      */
     public function __set($name, $value)
     {
@@ -177,12 +169,13 @@ class Web3
         if (method_exists($this, $method)) {
             return call_user_func_array([$this, $method], [$value]);
         }
+
         return false;
     }
 
     /**
      * getProvider
-     * 
+     *
      * @return \Web3\Providers\Provider
      */
     public function getProvider()
@@ -192,7 +185,7 @@ class Web3
 
     /**
      * setProvider
-     * 
+     *
      * @param \Web3\Providers\Provider $provider
      * @return bool
      */
@@ -200,14 +193,16 @@ class Web3
     {
         if ($provider instanceof Provider) {
             $this->provider = $provider;
+
             return true;
         }
+
         return false;
     }
 
     /**
      * getEth
-     * 
+     *
      * @return \Web3\Eth
      */
     public function getEth()
@@ -216,12 +211,13 @@ class Web3
             $eth = new Eth($this->provider);
             $this->eth = $eth;
         }
+
         return $this->eth;
     }
 
     /**
      * getNet
-     * 
+     *
      * @return \Web3\Net
      */
     public function getNet()
@@ -230,12 +226,13 @@ class Web3
             $net = new Net($this->provider);
             $this->net = $net;
         }
+
         return $this->net;
     }
 
     /**
      * getPersonal
-     * 
+     *
      * @return \Web3\Personal
      */
     public function getPersonal()
@@ -244,12 +241,13 @@ class Web3
             $personal = new Personal($this->provider);
             $this->personal = $personal;
         }
+
         return $this->personal;
     }
 
     /**
      * getShh
-     * 
+     *
      * @return \Web3\Shh
      */
     public function getShh()
@@ -258,26 +256,28 @@ class Web3
             $shh = new Shh($this->provider);
             $this->shh = $shh;
         }
+
         return $this->shh;
     }
 
     /**
      * getUtils
-     * 
+     *
      * @return \Web3\Utils
      */
     public function getUtils()
     {
         if (!isset($this->utils)) {
-            $utils = new Utils;
+            $utils = new Utils();
             $this->utils = $utils;
         }
+
         return $this->utils;
     }
 
     /**
      * batch
-     * 
+     *
      * @param bool $status
      * @return void
      */

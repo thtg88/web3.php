@@ -2,18 +2,16 @@
 
 /**
  * This file is part of web3.php package.
- * 
+ *
  * (c) Kuan-Cheng,Lai <alk03073135@gmail.com>
- * 
+ *
  * @author Peter Lai <alk03073135@gmail.com>
  * @license MIT
  */
 
 namespace Web3\Contracts\Types;
 
-use Web3\Utils;
 use Web3\Contracts\SolidityType;
-use Web3\Contracts\Types\IType;
 use Web3\Formatters\IntegerFormatter;
 use Web3\Formatters\BigNumberFormatter;
 
@@ -21,17 +19,16 @@ class Integer extends SolidityType implements IType
 {
     /**
      * construct
-     * 
+     *
      * @return void
      */
     public function __construct()
     {
-        //
     }
 
     /**
      * isType
-     * 
+     *
      * @param string $name
      * @return bool
      */
@@ -42,7 +39,7 @@ class Integer extends SolidityType implements IType
 
     /**
      * isDynamicType
-     * 
+     *
      * @return bool
      */
     public function isDynamicType()
@@ -52,8 +49,7 @@ class Integer extends SolidityType implements IType
 
     /**
      * inputFormat
-     * 
-     * @param mixed $value
+     *
      * @param string $name
      * @return string
      */
@@ -64,8 +60,7 @@ class Integer extends SolidityType implements IType
 
     /**
      * outputFormat
-     * 
-     * @param mixed $value
+     *
      * @param string $name
      * @return string
      */
@@ -77,6 +72,7 @@ class Integer extends SolidityType implements IType
             // due to value without 0x prefix, we will parse as decimal
             $value = '0x' . $match[1];
         }
+
         return BigNumberFormatter::format($value);
     }
 }

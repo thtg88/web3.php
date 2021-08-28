@@ -2,9 +2,9 @@
 
 /**
  * This file is part of web3.php package.
- * 
+ *
  * (c) Kuan-Cheng,Lai <alk03073135@gmail.com>
- * 
+ *
  * @author Peter Lai <alk03073135@gmail.com>
  * @license MIT
  */
@@ -13,44 +13,40 @@ namespace Web3\Methods;
 
 use InvalidArgumentException;
 use RuntimeException;
-use Web3\Methods\IMethod;
-use Web3\Methods\JSONRPC;
 
 class EthMethod extends JSONRPC implements IMethod
 {
     /**
      * validators
-     * 
+     *
      * @var array
      */
     protected $validators = [];
 
     /**
      * inputFormatters
-     * 
+     *
      * @var array
      */
     protected $inputFormatters = [];
 
     /**
      * outputFormatters
-     * 
+     *
      * @var array
      */
     protected $outputFormatters = [];
 
     /**
      * defaultValues
-     * 
+     *
      * @var array
      */
     protected $defaultValues = [];
 
     /**
      * construct
-     * 
-     * @param string $method
-     * @param array $arguments
+     *
      * @return void
      */
     // public function __construct($method='', $arguments=[])
@@ -60,7 +56,7 @@ class EthMethod extends JSONRPC implements IMethod
 
     /**
      * getInputFormatters
-     * 
+     *
      * @return array
      */
     public function getInputFormatters()
@@ -70,7 +66,7 @@ class EthMethod extends JSONRPC implements IMethod
 
     /**
      * getOutputFormatters
-     * 
+     *
      * @return array
      */
     public function getOutputFormatters()
@@ -80,7 +76,7 @@ class EthMethod extends JSONRPC implements IMethod
 
     /**
      * validate
-     * 
+     *
      * @param array $params
      * @return bool
      */
@@ -101,7 +97,6 @@ class EthMethod extends JSONRPC implements IMethod
                 if (!isset($params[$key])) {
                     $params[$key] = $value;
                 }
-
             }
         } elseif (count($params) > count($rules)) {
             throw new InvalidArgumentException('The params are more than validators.');
@@ -114,6 +109,7 @@ class EthMethod extends JSONRPC implements IMethod
                     foreach ($rule as $subRule) {
                         if (call_user_func([$subRule, 'validate'], $params[$key]) === true) {
                             $isError = false;
+
                             break;
                         }
                     }
@@ -129,12 +125,13 @@ class EthMethod extends JSONRPC implements IMethod
                 throw new RuntimeException($this->method . ' method argument ' . $key . ' doesn\'t have default value.');
             }
         }
+
         return true;
     }
 
     /**
      * transform
-     * 
+     *
      * @param array $params
      * @param array $rules
      * @return array
@@ -153,6 +150,7 @@ class EthMethod extends JSONRPC implements IMethod
                 $params[$key] = $formatted;
             }
         }
+
         return $params;
     }
 }

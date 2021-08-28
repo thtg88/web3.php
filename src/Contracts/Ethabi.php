@@ -2,9 +2,9 @@
 
 /**
  * This file is part of web3.php package.
- * 
+ *
  * (c) Kuan-Cheng,Lai <alk03073135@gmail.com>
- * 
+ *
  * @author Peter Lai <alk03073135@gmail.com>
  * @license MIT
  */
@@ -20,14 +20,14 @@ class Ethabi
 {
     /**
      * types
-     * 
+     *
      * @var array
      */
     protected $types = [];
 
     /**
      * construct
-     * 
+     *
      * @param array $types
      * @return void
      */
@@ -41,9 +41,8 @@ class Ethabi
 
     /**
      * get
-     * 
+     *
      * @param string $name
-     * @return mixed
      */
     public function __get($name)
     {
@@ -52,15 +51,14 @@ class Ethabi
         if (method_exists($this, $method)) {
             return call_user_func_array([$this, $method], []);
         }
+
         return false;
     }
 
     /**
      * set
-     * 
+     *
      * @param string $name
-     * @param mixed $value
-     * @return mixed
      */
     public function __set($name, $value)
     {
@@ -69,24 +67,24 @@ class Ethabi
         if (method_exists($this, $method)) {
             return call_user_func_array([$this, $method], [$value]);
         }
+
         return false;
     }
 
     /**
      * callStatic
-     * 
+     *
      * @param string $name
      * @param array $arguments
      * @return void
      */
     public static function __callStatic($name, $arguments)
     {
-        // 
     }
 
     /**
      * encodeFunctionSignature
-     * 
+     *
      * @param string|stdClass|array $functionName
      * @return string
      */
@@ -95,13 +93,14 @@ class Ethabi
         if (!is_string($functionName)) {
             $functionName = Utils::jsonMethodToString($functionName);
         }
+
         return mb_substr(Utils::sha3($functionName), 0, 10);
     }
 
     /**
      * encodeEventSignature
      * TODO: Fix same event name with different params
-     * 
+     *
      * @param string|stdClass|array $functionName
      * @return string
      */
@@ -110,14 +109,14 @@ class Ethabi
         if (!is_string($functionName)) {
             $functionName = Utils::jsonMethodToString($functionName);
         }
+
         return Utils::sha3($functionName);
     }
 
     /**
      * encodeParameter
-     * 
+     *
      * @param string $type
-     * @param mixed $param
      * @return string
      */
     public function encodeParameter($type, $param)
@@ -125,12 +124,13 @@ class Ethabi
         if (!is_string($type)) {
             throw new InvalidArgumentException('The type to encodeParameter must be string.');
         }
+
         return $this->encodeParameters([$type], [$param]);
     }
 
     /**
      * encodeParameters
-     * 
+     *
      * @param stdClass|array $types
      * @param array $params
      * @return string
@@ -173,14 +173,14 @@ class Ethabi
                 $dynamicOffset += $roundedStaticPartLength;
             }
         }
+
         return '0x' . $this->encodeMultiWithOffset($types, $solidityTypes, $encodes, $dynamicOffset);
     }
 
     /**
      * decodeParameter
-     * 
+     *
      * @param string $type
-     * @param mixed $param
      * @return string
      */
     public function decodeParameter($type, $param)
@@ -188,13 +188,13 @@ class Ethabi
         if (!is_string($type)) {
             throw new InvalidArgumentException('The type to decodeParameter must be string.');
         }
+
         return $this->decodeParameters([$type], $param)[0];
     }
 
     /**
      * decodeParameters
-     * 
-     * @param stdClass|array $type
+     *
      * @param string $param
      * @return string
      */
@@ -247,7 +247,7 @@ class Ethabi
 
     /**
      * getSolidityTypes
-     * 
+     *
      * @param array $types
      * @return array
      */
@@ -277,15 +277,15 @@ class Ethabi
                 }
             }
         }
+
         return $solidityTypes;
     }
 
     /**
      * encodeWithOffset
-     * 
+     *
      * @param string $type
      * @param \Web3\Contracts\SolidityType $solidityType
-     * @param mixed $encode
      * @param int $offset
      * @return string
      */
@@ -318,6 +318,7 @@ class Ethabi
                 $additionalOffset = floor(mb_strlen($result) / 2);
                 $result .= $this->encodeWithOffset($nestedName, $solidityType, $encoded[$i], $offset + $additionalOffset);
             }
+
             return mb_substr($result, 64);
         } elseif ($solidityType->isStaticArray($type)) {
             $nestedName = $solidityType->nestedName($type);
@@ -346,14 +347,16 @@ class Ethabi
                 $additionalOffset = floor(mb_strlen($result) / 2);
                 $result .= $this->encodeWithOffset($nestedName, $solidityType, $encoded[$i], $offset + $additionalOffset);
             }
+
             return $result;
         }
+
         return $encoded;
     }
 
     /**
      * encodeMultiWithOffset
-     * 
+     *
      * @param array $types
      * @param array $solidityTypes
      * @param array $encodes
@@ -380,6 +383,7 @@ class Ethabi
                 $result .= $e;
             }
         }
+
         return $result;
     }
 }
