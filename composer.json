@@ -11,10 +11,10 @@
     ],
     "require": {
         "php": "^7.1|^8.0",
+        "ext-mbstring": "*",
         "guzzlehttp/guzzle": "~6.0",
         "kornrunner/keccak": "~1.0",
-        "phpseclib/phpseclib": "~2.0.11",
-        "ext-mbstring": "*"
+        "phpseclib/phpseclib": "~2.0.11"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.0",
