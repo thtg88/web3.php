@@ -20,6 +20,7 @@
         "phpunit/phpunit": "^9.0",
         "friendsofphp/php-cs-fixer": "^3.0",
         "brainmaestro/composer-git-hooks": "^2.8",
+        "vimeo/psalm": "^4.9"
     },
     "autoload": {
         "psr-4": {
@@ -40,10 +41,12 @@
         ],
         "ci": [
             "@check-style",
+            "@stan",
             "@test --stop-on-failure"
         ],
         "check-style": "vendor/bin/php-cs-fixer fix --using-cache=no --diff --dry-run",
         "fix-style": "vendor/bin/php-cs-fixer fix --using-cache=no",
+        "stan": "vendor/bin/psalm --no-cache",
         "test": "vendor/bin/phpunit"
     }
 }
