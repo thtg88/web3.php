@@ -19,49 +19,16 @@ use Web3\Formatters\QuantityFormatter;
 
 class GetUncleByBlockNumberAndIndex extends EthMethod
 {
-    /**
-     * validators
-     *
-     * @var array
-     */
-    protected $validators = [
+    protected array $validators = [
         [
-            TagValidator::class, QuantityValidator::class,
-        ], QuantityValidator::class,
+            TagValidator::class,
+            QuantityValidator::class,
+        ],
+        QuantityValidator::class,
     ];
 
-    /**
-     * inputFormatters
-     *
-     * @var array
-     */
-    protected $inputFormatters = [
-        OptionalQuantityFormatter::class, QuantityFormatter::class,
+    protected array $inputFormatters = [
+        OptionalQuantityFormatter::class,
+        QuantityFormatter::class,
     ];
-
-    /**
-     * outputFormatters
-     *
-     * @var array
-     */
-    protected $outputFormatters = [];
-
-    /**
-     * defaultValues
-     *
-     * @var array
-     */
-    protected $defaultValues = [];
-
-    /**
-     * construct
-     *
-     * @param string $method
-     * @param array $arguments
-     * @return void
-     */
-    // public function __construct($method='', $arguments=[])
-    // {
-    //     parent::__construct($method, $arguments);
-    // }
 }

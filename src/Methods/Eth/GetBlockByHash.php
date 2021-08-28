@@ -19,47 +19,13 @@ use Web3\Formatters\BooleanFormatter;
 
 class GetBlockByHash extends EthMethod
 {
-    /**
-     * validators
-     *
-     * @var array
-     */
-    protected $validators = [
-        BlockHashValidator::class, BooleanValidator::class,
+    protected array $validators = [
+        BlockHashValidator::class,
+        BooleanValidator::class,
     ];
 
-    /**
-     * inputFormatters
-     *
-     * @var array
-     */
-    protected $inputFormatters = [
-        HexFormatter::class, BooleanFormatter::class,
+    protected array $inputFormatters = [
+        HexFormatter::class,
+        BooleanFormatter::class,
     ];
-
-    /**
-     * outputFormatters
-     *
-     * @var array
-     */
-    protected $outputFormatters = [];
-
-    /**
-     * defaultValues
-     *
-     * @var array
-     */
-    protected $defaultValues = [];
-
-    /**
-     * construct
-     *
-     * @param string $method
-     * @param array $arguments
-     * @return void
-     */
-    // public function __construct($method='', $arguments=[])
-    // {
-    //     parent::__construct($method, $arguments);
-    // }
 }

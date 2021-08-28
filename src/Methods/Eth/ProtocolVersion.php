@@ -16,45 +16,7 @@ use Web3\Formatters\BigNumberFormatter;
 
 class ProtocolVersion extends EthMethod
 {
-    /**
-     * validators
-     *
-     * @var array
-     */
-    protected $validators = [];
-
-    /**
-     * inputFormatters
-     *
-     * @var array
-     */
-    protected $inputFormatters = [];
-
-    /**
-     * outputFormatters
-     *
-     * @var array
-     */
-    protected $outputFormatters = [
+    protected array $outputFormatters = [
         BigNumberFormatter::class,
     ];
-
-    /**
-     * defaultValues
-     *
-     * @var array
-     */
-    protected $defaultValues = [];
-
-    /**
-     * construct
-     *
-     * @param string $method
-     * @param array $arguments
-     * @return void
-     */
-    // public function __construct($method='', $arguments=[])
-    // {
-    //     parent::__construct($method, $arguments);
-    // }
 }

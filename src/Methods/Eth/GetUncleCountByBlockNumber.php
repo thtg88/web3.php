@@ -19,53 +19,22 @@ use Web3\Formatters\BigNumberFormatter;
 
 class GetUncleCountByBlockNumber extends EthMethod
 {
-    /**
-     * validators
-     *
-     * @var array
-     */
-    protected $validators = [
+    protected array $validators = [
         [
-            TagValidator::class, QuantityValidator::class,
+            TagValidator::class,
+            QuantityValidator::class,
         ],
     ];
 
-    /**
-     * inputFormatters
-     *
-     * @var array
-     */
-    protected $inputFormatters = [
+    protected array $inputFormatters = [
         OptionalQuantityFormatter::class,
     ];
 
-    /**
-     * outputFormatters
-     *
-     * @var array
-     */
-    protected $outputFormatters = [
+    protected array $outputFormatters = [
         BigNumberFormatter::class,
     ];
 
-    /**
-     * defaultValues
-     *
-     * @var array
-     */
-    protected $defaultValues = [
+    protected array $defaultValues = [
         'latest',
     ];
-
-    /**
-     * construct
-     *
-     * @param string $method
-     * @param array $arguments
-     * @return void
-     */
-    // public function __construct($method='', $arguments=[])
-    // {
-    //     parent::__construct($method, $arguments);
-    // }
 }

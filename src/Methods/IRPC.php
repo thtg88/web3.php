@@ -16,14 +16,9 @@ interface IRPC
     /**
      * __toString
      *
-     * @return array
+     * @return string
      */
     public function __toString();
 
-    /**
-     * toPayload
-     *
-     * @return array
-     */
-    public function toPayload();
+    public function toPayload(): array;
 }

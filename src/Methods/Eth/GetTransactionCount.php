@@ -21,53 +21,24 @@ use Web3\Formatters\BigNumberFormatter;
 
 class GetTransactionCount extends EthMethod
 {
-    /**
-     * validators
-     *
-     * @var array
-     */
-    protected $validators = [
-        AddressValidator::class, [
-            TagValidator::class, QuantityValidator::class,
+    protected array $validators = [
+        AddressValidator::class,
+        [
+            TagValidator::class,
+            QuantityValidator::class,
         ],
     ];
 
-    /**
-     * inputFormatters
-     *
-     * @var array
-     */
-    protected $inputFormatters = [
-        AddressFormatter::class, OptionalQuantityFormatter::class,
+    protected array $inputFormatters = [
+        AddressFormatter::class,
+        OptionalQuantityFormatter::class,
     ];
 
-    /**
-     * outputFormatters
-     *
-     * @var array
-     */
-    protected $outputFormatters = [
+    protected array $outputFormatters = [
         BigNumberFormatter::class,
     ];
 
-    /**
-     * defaultValues
-     *
-     * @var array
-     */
-    protected $defaultValues = [
+    protected array $defaultValues = [
         1 => 'latest',
     ];
-
-    /**
-     * construct
-     *
-     * @param string $method
-     * @param array $arguments
-     * @return void
-     */
-    // public function __construct($method='', $arguments=[])
-    // {
-    //     parent::__construct($method, $arguments);
-    // }
 }

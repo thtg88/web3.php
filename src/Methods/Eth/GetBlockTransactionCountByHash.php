@@ -18,49 +18,15 @@ use Web3\Formatters\BigNumberFormatter;
 
 class GetBlockTransactionCountByHash extends EthMethod
 {
-    /**
-     * validators
-     *
-     * @var array
-     */
-    protected $validators = [
+    protected array $validators = [
         BlockHashValidator::class,
     ];
 
-    /**
-     * inputFormatters
-     *
-     * @var array
-     */
-    protected $inputFormatters = [
+    protected array $inputFormatters = [
         HexFormatter::class,
     ];
 
-    /**
-     * outputFormatters
-     *
-     * @var array
-     */
-    protected $outputFormatters = [
+    protected array $outputFormatters = [
         BignumberFormatter::class,
     ];
-
-    /**
-     * defaultValues
-     *
-     * @var array
-     */
-    protected $defaultValues = [];
-
-    /**
-     * construct
-     *
-     * @param string $method
-     * @param array $arguments
-     * @return void
-     */
-    // public function __construct($method='', $arguments=[])
-    // {
-    //     parent::__construct($method, $arguments);
-    // }
 }

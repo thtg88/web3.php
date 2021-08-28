@@ -18,47 +18,13 @@ use Web3\Formatters\QuantityFormatter;
 
 class SubmitWork extends EthMethod
 {
-    /**
-     * validators
-     *
-     * @var array
-     */
-    protected $validators = [
-        NonceValidator::class, BlockHashValidator::class, BlockHashValidator::class,
+    protected array $validators = [
+        NonceValidator::class,
+        BlockHashValidator::class,
+        BlockHashValidator::class,
     ];
 
-    /**
-     * inputFormatters
-     *
-     * @var array
-     */
-    protected $inputFormatters = [
+    protected array $inputFormatters = [
         QuantityFormatter::class,
     ];
-
-    /**
-     * outputFormatters
-     *
-     * @var array
-     */
-    protected $outputFormatters = [];
-
-    /**
-     * defaultValues
-     *
-     * @var array
-     */
-    protected $defaultValues = [];
-
-    /**
-     * construct
-     *
-     * @param string $method
-     * @param array $arguments
-     * @return void
-     */
-    // public function __construct($method='', $arguments=[])
-    // {
-    //     parent::__construct($method, $arguments);
-    // }
 }

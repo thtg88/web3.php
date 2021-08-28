@@ -36,21 +36,14 @@ class JSONRPC implements IRPC
      */
     protected $method = '';
 
-    /**
-     * arguments
-     *
-     * @var array
-     */
-    protected $arguments = [];
+    protected array $arguments = [];
 
     /**
      * construct
      *
      * @param string $method
-     * @param array $arguments
-     * @return void
      */
-    public function __construct($method, $arguments)
+    public function __construct($method, array $arguments)
     {
         $this->method = $method;
         $this->arguments = $arguments;
@@ -100,99 +93,57 @@ class JSONRPC implements IRPC
         return json_encode($payload);
     }
 
-    /**
-     * setId
-     *
-     * @param int $id
-     * @return bool
-     */
-    public function setId($id)
+    public function setId(int $id): self
     {
-        if (!is_int($id)) {
-            throw new InvalidArgumentException('Id must be integer.');
-        }
         $this->id = $id;
 
-        return true;
+        return $this;
     }
 
-    /**
-     * getId
-     *
-     * @return int
-     */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * getRpcVersion
-     *
-     * @return string
-     */
-    public function getRpcVersion()
+    public function getRpcVersion(): string
     {
         return $this->rpcVersion;
     }
 
-    /**
-     * getMethod
-     *
-     * @return string
-     */
-    public function getMethod()
+    public function getMethod(): string
     {
         return $this->method;
     }
 
-    /**
-     * setArguments
-     *
-     * @param array $arguments
-     * @return bool
-     */
-    public function setArguments($arguments)
+    public function setArguments(array $arguments): self
     {
-        if (!is_array($arguments)) {
-            throw new InvalidArgumentException('Please use array when call setArguments.');
-        }
         $this->arguments = $arguments;
 
-        return true;
+        return $this;
     }
 
-    /**
-     * getArguments
-     *
-     * @return array
-     */
-    public function getArguments()
+    public function getArguments(): array
     {
         return $this->arguments;
     }
 
-    /**
-     * toPayload
-     *
-     * @return array
-     */
-    public function toPayload()
+    public function toPayload(): array
     {
         if (empty($this->method) || !is_string($this->method)) {
             throw new InvalidArgumentException('Please check the method set properly.');
         }
+
         if (empty($this->id)) {
             $id = rand();
         } else {
             $id = $this->id;
         }
+
         $rpc = [
             'id' => $id,
             'jsonrpc' => $this->rpcVersion,
             'method' => $this->method,
         ];
-
         if (count($this->arguments) > 0) {
             $rpc['params'] = $this->arguments;
         }
@@ -200,12 +151,7 @@ class JSONRPC implements IRPC
         return $rpc;
     }
 
-    /**
-     * toPayloadString
-     *
-     * @return string
-     */
-    public function toPayloadString()
+    public function toPayloadString(): string
     {
         $payload = $this->toPayload();
 
