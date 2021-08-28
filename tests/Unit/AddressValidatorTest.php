@@ -14,12 +14,7 @@ class AddressValidatorTest extends TestCase
      */
     protected $validator;
 
-    /**
-     * setUp
-     *
-     * @return void
-     */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->validator = new AddressValidator();

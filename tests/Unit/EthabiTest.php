@@ -157,12 +157,7 @@ class EthabiTest extends TestCase
         ],
     ];
 
-    /**
-     * setUp
-     *
-     * @return void
-     */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         // Error: Using $this when not in object context

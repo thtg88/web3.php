@@ -407,12 +407,7 @@ class ContractTest extends TestCase
      */
     protected $contractAddress;
 
-    /**
-     * setUp
-     *
-     * @return void
-     */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

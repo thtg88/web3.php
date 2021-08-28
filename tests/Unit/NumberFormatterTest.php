@@ -14,12 +14,7 @@ class NumberFormatterTest extends TestCase
      */
     protected $formatter;
 
-    /**
-     * setUp
-     *
-     * @return void
-     */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->formatter = new NumberFormatter();

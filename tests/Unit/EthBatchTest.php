@@ -14,12 +14,7 @@ class EthBatchTest extends TestCase
      */
     protected $eth;
 
-    /**
-     * setUp
-     *
-     * @return void
-     */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

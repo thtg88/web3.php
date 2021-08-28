@@ -16,12 +16,7 @@ class NetApiTest extends TestCase
      */
     protected $net;
 
-    /**
-     * setUp
-     *
-     * @return void
-     */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

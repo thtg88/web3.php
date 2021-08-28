@@ -14,12 +14,7 @@ class SolidityTypeTest extends TestCase
      */
     protected $type;
 
-    /**
-     * setUp
-     *
-     * @return void
-     */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->type = new SolidityType();

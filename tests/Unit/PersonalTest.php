@@ -18,12 +18,7 @@ class PersonalTest extends TestCase
      */
     protected $personal;
 
-    /**
-     * setUp
-     *
-     * @return void
-     */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
