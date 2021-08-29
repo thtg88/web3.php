@@ -39,9 +39,8 @@ class Boolean extends SolidityType implements IType
 
     /**
      * @param string $name
-     * @return string
      */
-    public function outputFormat($value, $name)
+    public function outputFormat($value, $name): string
     {
         $value = (int) mb_substr($value, 63, 1);
 

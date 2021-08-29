@@ -78,7 +78,6 @@ class Ethabi
      * TODO: Fix same event name with different params
      *
      * @param string|stdClass|array $functionName
-     * @return string
      */
     public function encodeEventSignature($functionName): string
     {

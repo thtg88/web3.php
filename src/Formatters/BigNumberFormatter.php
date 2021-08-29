@@ -11,7 +11,6 @@
 
 namespace Web3\Formatters;
 
-use phpseclib\Math\BigInteger;
 use Web3\Utils;
 
 class BigNumberFormatter implements IFormatter

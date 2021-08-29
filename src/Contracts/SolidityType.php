@@ -12,10 +12,11 @@
 namespace Web3\Contracts;
 
 use InvalidArgumentException;
+use Web3\Contracts\Types\IType;
 use Web3\Formatters\IntegerFormatter;
 use Web3\Utils;
 
-class SolidityType
+abstract class SolidityType implements IType
 {
     /**
      * @param string $name
@@ -33,7 +34,6 @@ class SolidityType
 
     /**
      * @param string $name
-     * @return mixed
      */
     public function __set($name, $value)
     {
@@ -248,4 +248,7 @@ class SolidityType
 
         return $this->outputFormat($param, $name);
     }
+
+    abstract public function inputFormat($value, $name): string;
+    abstract public function outputFormat($value, $name): string;
 }
