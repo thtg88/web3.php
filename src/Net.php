@@ -11,8 +11,9 @@
 
 namespace Web3;
 
-use Web3\Providers\Provider;
+use RuntimeException;
 use Web3\Providers\HttpProvider;
+use Web3\Providers\Provider;
 use Web3\RequestManagers\HttpRequestManager;
 
 class Net
@@ -24,27 +25,16 @@ class Net
      */
     protected $provider;
 
-    /**
-     * methods
-     *
-     * @var array
-     */
-    private $methods = [];
+    private array $methods = [];
 
-    /**
-     * allowedMethods
-     *
-     * @var array
-     */
-    private $allowedMethods = [
-        'net_version', 'net_peerCount', 'net_listening',
+    private array $allowedMethods = [
+        'net_version',
+        'net_peerCount',
+        'net_listening',
     ];
 
     /**
-     * construct
-     *
      * @param string|\Web3\Providers\Provider $provider
-     * @return void
      */
     public function __construct($provider)
     {
@@ -61,8 +51,6 @@ class Net
     }
 
     /**
-     * call
-     *
      * @param string $name
      * @param array $arguments
      * @return void
@@ -75,40 +63,45 @@ class Net
 
         $class = explode('\\', get_class());
 
-        if (preg_match('/^[a-zA-Z0-9]+$/', $name) === 1) {
-            $method = strtolower($class[1]) . '_' . $name;
+        if (preg_match('/^[a-zA-Z0-9]+$/', $name) !== 1) {
+            return;
+        }
 
-            if (!in_array($method, $this->allowedMethods)) {
-                throw new \RuntimeException('Unallowed rpc method: ' . $method);
-            }
-            if ($this->provider->isBatch) {
-                $callback = null;
-            } else {
-                $callback = array_pop($arguments);
+        $method = strtolower($class[1]) . '_' . $name;
 
-                if (is_callable($callback) !== true) {
-                    throw new \InvalidArgumentException('The last param must be callback function.');
-                }
-            }
-            if (!array_key_exists($method, $this->methods)) {
-                // new the method
-                $methodClass = sprintf("\Web3\Methods\%s\%s", ucfirst($class[1]), ucfirst($name));
-                $methodObject = new $methodClass($method, $arguments);
-                $this->methods[$method] = $methodObject;
-            } else {
-                $methodObject = $this->methods[$method];
-            }
-            if ($methodObject->validate($arguments)) {
-                $inputs = $methodObject->transform($arguments, $methodObject->inputFormatters);
-                $methodObject->arguments = $inputs;
-                $this->provider->send($methodObject, $callback);
+        if (!in_array($method, $this->allowedMethods)) {
+            throw new RuntimeException('Unallowed rpc method: ' . $method);
+        }
+
+        if ($this->provider->isBatch) {
+            $callback = null;
+        } else {
+            $callback = array_pop($arguments);
+
+            if (is_callable($callback) !== true) {
+                throw new \InvalidArgumentException('The last param must be callback function.');
             }
         }
+
+        if (!array_key_exists($method, $this->methods)) {
+            // new the method
+            $methodClass = sprintf("\Web3\Methods\%s\%s", ucfirst($class[1]), ucfirst($name));
+            $methodObject = new $methodClass($method, $arguments);
+            $this->methods[$method] = $methodObject;
+        } else {
+            $methodObject = $this->methods[$method];
+        }
+
+        if (!$methodObject->validate($arguments)) {
+            return;
+        }
+
+        $inputs = $methodObject->transform($arguments, $methodObject->inputFormatters);
+        $methodObject->arguments = $inputs;
+        $this->provider->send($methodObject, $callback);
     }
 
     /**
-     * get
-     *
      * @param string $name
      */
     public function __get($name)
@@ -123,8 +116,6 @@ class Net
     }
 
     /**
-     * set
-     *
      * @param string $name
      */
     public function __set($name, $value)
@@ -138,31 +129,19 @@ class Net
         return false;
     }
 
-    /**
-     * getProvider
-     *
-     * @return \Web3\Providers\Provider
-     */
-    public function getProvider()
+    public function getProvider(): Provider
     {
         return $this->provider;
     }
 
     /**
-     * setProvider
-     *
      * @param \Web3\Providers\Provider $provider
-     * @return bool
      */
-    public function setProvider($provider)
+    public function setProvider($provider): self
     {
-        if ($provider instanceof Provider) {
-            $this->provider = $provider;
+        $this->provider = $provider;
 
-            return true;
-        }
-
-        return false;
+        return $this;
     }
 
     /**

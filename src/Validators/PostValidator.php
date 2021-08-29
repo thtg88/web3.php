@@ -17,7 +17,6 @@ class PostValidator
      * validate
      *
      * @param array $value
-     * @return bool
      */
     public static function validate($value): bool
     {

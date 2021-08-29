@@ -75,7 +75,6 @@ class Eth
 
     /**
      * @param string|\Web3\Providers\Provider $provider
-     * @return void
      */
     public function __construct($provider)
     {

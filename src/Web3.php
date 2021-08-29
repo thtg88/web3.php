@@ -24,40 +24,15 @@ class Web3
      */
     protected $provider;
 
-    /**
-     * eth
-     *
-     * @var \Web3\Eth
-     */
-    protected $eth;
+    protected Eth $eth;
 
-    /**
-     * net
-     *
-     * @var \Web3\Net
-     */
-    protected $net;
+    protected Net $net;
 
-    /**
-     * personal
-     *
-     * @var \Web3\Personal
-     */
-    protected $personal;
+    protected Personal $personal;
 
-    /**
-     * shh
-     *
-     * @var \Web3\Shh
-     */
-    protected $shh;
+    protected Shh $shh;
 
-    /**
-     * utils
-     *
-     * @var \Web3\Utils
-     */
-    protected $utils;
+    protected Utils $utils;
 
     private array $methods = [];
 
@@ -140,8 +115,6 @@ class Web3
     }
 
     /**
-     * get
-     *
      * @param string $name
      */
     public function __get($name)
@@ -156,8 +129,6 @@ class Web3
     }
 
     /**
-     * set
-     *
      * @param string $name
      */
     public function __set($name, $value)
@@ -171,31 +142,19 @@ class Web3
         return false;
     }
 
-    /**
-     * getProvider
-     *
-     * @return \Web3\Providers\Provider
-     */
-    public function getProvider()
+    public function getProvider(): Provider
     {
         return $this->provider;
     }
 
     /**
-     * setProvider
-     *
      * @param \Web3\Providers\Provider $provider
-     * @return bool
      */
-    public function setProvider($provider)
+    public function setProvider($provider): self
     {
-        if ($provider instanceof Provider) {
-            $this->provider = $provider;
+        $this->provider = $provider;
 
-            return true;
-        }
-
-        return false;
+        return $this;
     }
 
     public function getEth(): Eth
