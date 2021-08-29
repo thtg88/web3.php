@@ -1,0 +1,93 @@
+[
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "ethAddress",
+        "type": "address"
+      }
+    ],
+    "name": "getUser",
+    "outputs": [
+      {
+        "name": "firstName",
+        "type": "string"
+      },
+      {
+        "name": "lastName",
+        "type": "string"
+      },
+      {
+        "name": "age",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "ethAddress",
+        "type": "address"
+      },
+      {
+        "name": "firstName",
+        "type": "string"
+      },
+      {
+        "name": "lastName",
+        "type": "string"
+      },
+      {
+        "name": "age",
+        "type": "uint256"
+      }
+    ],
+    "name": "addUser",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "fallback"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "name": "ethAddress",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "name": "firstName",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "name": "lastName",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "name": "age",
+        "type": "uint256"
+      }
+    ],
+    "name": "AddUser",
+    "type": "event"
+  }
+]

@@ -1,0 +1,42 @@
+[
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_data",
+        "type": "bytes"
+      }
+    ],
+    "name": "setData",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "name": "_data",
+        "type": "bytes"
+      }
+    ],
+    "name": "SetData",
+    "type": "event"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "data",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  }
+]
