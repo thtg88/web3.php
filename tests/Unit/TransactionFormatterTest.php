@@ -7,25 +7,17 @@ use Web3\Formatters\TransactionFormatter;
 
 class TransactionFormatterTest extends TestCase
 {
-    /**
-     * formatter
-     *
-     * @var \Web3\Formatters\TransactionFormatter
-     */
-    protected $formatter;
+    protected TransactionFormatter $formatter;
 
     public function setUp(): void
     {
         parent::setUp();
+
         $this->formatter = new TransactionFormatter();
     }
 
-    /**
-     * testFormat
-     *
-     * @return void
-     */
-    public function testFormat()
+    /** @test */
+    public function format(): void
     {
         $formatter = $this->formatter;
 

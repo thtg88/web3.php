@@ -7,25 +7,17 @@ use Web3\Formatters\BooleanFormatter;
 
 class BooleanFormatterTest extends TestCase
 {
-    /**
-     * formatter
-     *
-     * @var \Web3\Formatters\BooleanFormatter
-     */
-    protected $formatter;
+    protected BooleanFormatter $formatter;
 
     public function setUp(): void
     {
         parent::setUp();
+
         $this->formatter = new BooleanFormatter();
     }
 
-    /**
-     * testFormat
-     *
-     * @return void
-     */
-    public function testFormat()
+    /** @test */
+    public function format(): void
     {
         $formatter = $this->formatter;
 

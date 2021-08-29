@@ -2,63 +2,58 @@
 
 namespace Web3\Tests\Unit;
 
-use Web3\Tests\TestCase;
+use Web3\Contracts\SolidityType;
 use Web3\Contracts\Types\DynamicBytes;
+use Web3\Tests\TestCase;
 
 class DynamicBytesTypeTest extends TestCase
 {
-    /**
-     * testTypes
-     *
-     * @var array
-     */
-    protected $testTypes = [
+    protected array $testTypes = [
         [
             'value' => 'bytes',
             'result' => true,
-        ], [
+        ],
+        [
             'value' => 'bytes[]',
             'result' => true,
-        ], [
+        ],
+        [
             'value' => 'bytes[4]',
             'result' => true,
-        ], [
+        ],
+        [
             'value' => 'bytes[][]',
             'result' => true,
-        ], [
+        ],
+        [
             'value' => 'bytes[3][]',
             'result' => true,
-        ], [
+        ],
+        [
             'value' => 'bytes[][6][]',
             'result' => true,
-        ], [
+        ],
+        [
             'value' => 'bytes32',
             'result' => false,
-        ], [
+        ],
+        [
             'value' => 'bytes8[4]',
             'result' => false,
         ],
     ];
 
-    /**
-     * solidityType
-     *
-     * @var \Web3\Contracts\SolidityType
-     */
-    protected $solidityType;
+    protected SolidityType $solidityType;
 
     public function setUp(): void
     {
         parent::setUp();
+
         $this->solidityType = new DynamicBytes();
     }
 
-    /**
-     * testIsType
-     *
-     * @return void
-     */
-    public function testIsType()
+    /** @test */
+    public function is_type(): void
     {
         $solidityType = $this->solidityType;
 

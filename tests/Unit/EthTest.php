@@ -11,12 +11,7 @@ use Web3\Eth;
 
 class EthTest extends TestCase
 {
-    /**
-     * eth
-     *
-     * @var \Web3\Eth
-     */
-    protected $eth;
+    protected Eth $eth;
 
     public function setUp(): void
     {
@@ -25,12 +20,8 @@ class EthTest extends TestCase
         $this->eth = $this->web3->eth;
     }
 
-    /**
-     * testInstance
-     *
-     * @return void
-     */
-    public function testInstance()
+    /** @test */
+    public function instance(): void
     {
         $eth = new Eth($this->testHost);
 
@@ -38,12 +29,8 @@ class EthTest extends TestCase
         $this->assertTrue($eth->provider->requestManager instanceof RequestManager);
     }
 
-    /**
-     * testSetProvider
-     *
-     * @return void
-     */
-    public function testSetProvider()
+    /** @test */
+    public function set_provider(): void
     {
         $eth = $this->eth;
         $requestManager = new HttpRequestManager('http://localhost:8545');
@@ -56,12 +43,8 @@ class EthTest extends TestCase
         $this->assertEquals($eth->provider->requestManager->host, 'http://localhost:8545');
     }
 
-    /**
-     * testCallThrowRuntimeException
-     *
-     * @return void
-     */
-    public function testCallThrowRuntimeException()
+    /** @test */
+    public function call_throw_runtime_exception(): void
     {
         $this->expectException(RuntimeException::class);
 

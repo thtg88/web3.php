@@ -11,137 +11,31 @@ use Web3\Utils;
 class UtilsTest extends TestCase
 {
     /**
-     * testHex
      * 'hello world'
      * you can check by call pack('H*', $hex)
-     *
-     * @var string
      */
-    protected $testHex = '68656c6c6f20776f726c64';
+    protected string $testHex = '68656c6c6f20776f726c64';
 
     /**
-     * testJsonMethodString
      * from GameToken approve function
-     *
-     * @var string
      */
-    protected $testJsonMethodString = '{
-      "constant": false,
-      "inputs": [
-        {
-          "name": "_spender",
-          "type": "address"
-        },
-        {
-          "name": "_value",
-          "type": "uint256"
-        }
-      ],
-      "name": "approve",
-      "outputs": [
-        {
-          "name": "success",
-          "type": "bool"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function",
-      "test": {
-        "name": "testObject"
-      }
-    }';
+    protected string $testJsonMethodString;
 
     /**
-     * testIssue112Json
      * see: https://github.com/sc0Vu/web3.php/issues/112
-     *
-     * @var string
      */
-    protected $testIssue112Json = '[
-        {
-          "constant": true,
-          "inputs": [],
-          "name": "name",
-          "outputs": [
-            {
-              "name": "",
-              "type": "string"
-            }
-          ],
-          "payable": false,
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "constant": true,
-          "inputs": [],
-          "name": "decimals",
-          "outputs": [
-            {
-              "name": "",
-              "type": "uint256"
-            }
-          ],
-          "payable": false,
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "constant": true,
-          "inputs": [
-            {
-              "name": "tokenOwner",
-              "type": "address"
-            }
-          ],
-          "name": "balanceOf",
-          "outputs": [
-            {
-              "name": "balance",
-              "type": "uint256"
-            }
-          ],
-          "payable": false,
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "constant": false,
-          "inputs": [
-            {
-              "name": "to",
-              "type": "address"
-            },
-            {
-              "name": "tokens",
-              "type": "uint256"
-            }
-          ],
-          "name": "transfer",
-          "outputs": [
-            {
-              "name": "success",
-              "type": "bool"
-            }
-          ],
-          "payable": false,
-          "stateMutability": "nonpayable",
-          "type": "function"
-        }
-    ]';
+    protected string $testIssue112Json = '';
 
     public function setUp(): void
     {
         parent::setUp();
+
+        $this->testJsonMethodString = file_get_contents(__DIR__ . '/../Fixtures/game_token_approve_function.json');
+        $this->testIssue112Json = file_get_contents(__DIR__ . '/../Fixtures/issue_112.json');
     }
 
-    /**
-     * testToHex
-     *
-     * @return void
-     */
-    public function testToHex()
+    /** @test */
+    public function to_hex(): void
     {
         $this->assertEquals($this->testHex, Utils::toHex('hello world'));
         $this->assertEquals('0x' . $this->testHex, Utils::toHex('hello world', true));
@@ -175,12 +69,8 @@ class UtilsTest extends TestCase
         $hex = Utils::toHex(new stdClass());
     }
 
-    /**
-     * testHexToBin
-     *
-     * @return void
-     */
-    public function testHexToBin()
+    /** @test */
+    public function hex_to_bin(): void
     {
         $str = Utils::hexToBin($this->testHex);
         $this->assertEquals($str, 'hello world');
@@ -190,34 +80,20 @@ class UtilsTest extends TestCase
 
         $str = Utils::hexToBin('0xe4b883e5bda9e7a59ee4bb99e9b1bc');
         $this->assertEquals($str, '七彩神仙鱼');
-
-        $this->expectException(InvalidArgumentException::class);
-        $str = Utils::hexToBin(new stdClass());
     }
 
-    /**
-     * testIsZeroPrefixed
-     *
-     * @return void
-     */
-    public function testIsZeroPrefixed()
+    /** @test */
+    public function is_zero_prefixed(): void
     {
         $isPrefixed = Utils::isZeroPrefixed($this->testHex);
         $this->assertEquals($isPrefixed, false);
 
         $isPrefixed = Utils::isZeroPrefixed('0x' . $this->testHex);
         $this->assertEquals($isPrefixed, true);
-
-        $this->expectException(InvalidArgumentException::class);
-        $isPrefixed = Utils::isZeroPrefixed(new stdClass());
     }
 
-    /**
-     * testIsAddress
-     *
-     * @return void
-     */
-    public function testIsAddress()
+    /** @test */
+    public function is_address(): void
     {
         $isAddress = Utils::isAddress('ca35b7d915458ef540ade6068dfe2f44e8fa733c');
         $this->assertEquals($isAddress, true);
@@ -236,17 +112,10 @@ class UtilsTest extends TestCase
 
         $isAddress = Utils::isAddress('0xCA35B7D915458EF540ADE6068DFE2F44E8FA73cc');
         $this->assertEquals($isAddress, false);
-
-        $this->expectException(InvalidArgumentException::class);
-        $isAddress = Utils::isAddress(new stdClass());
     }
 
-    /**
-     * testIsAddressChecksum
-     *
-     * @return void
-     */
-    public function testIsAddressChecksum()
+    /** @test */
+    public function is_address_checksum(): void
     {
         $isAddressChecksum = Utils::isAddressChecksum('0x52908400098527886E0F7030069857D2E4169EE7');
         $this->assertEquals($isAddressChecksum, true);
@@ -280,17 +149,10 @@ class UtilsTest extends TestCase
 
         $isAddressChecksum = Utils::isAddressChecksum('0xd1220a0cf47c7b9be7a2e6ba89f429762e7b9adb');
         $this->assertEquals($isAddressChecksum, false);
-
-        $this->expectException(InvalidArgumentException::class);
-        $isAddressChecksum = Utils::isAddressChecksum(new stdClass());
     }
 
-    /**
-     * testToChecksumAddress
-     *
-     * @return void
-     */
-    public function testToChecksumAddress()
+    /** @test */
+    public function to_checksum_address(): void
     {
         $checksumAddressTest = [
             // All caps
@@ -308,16 +170,13 @@ class UtilsTest extends TestCase
 
         for ($i=0; $i<count($checksumAddressTest); $i++) {
             $checksumAddress = Utils::toChecksumAddress(strtolower($checksumAddressTest[$i]));
+
             $this->assertEquals($checksumAddressTest[$i], $checksumAddress);
         }
     }
 
-    /**
-     * testStripZero
-     *
-     * @return void
-     */
-    public function testStripZero()
+    /** @test */
+    public function strip_zero(): void
     {
         $str = Utils::stripZero($this->testHex);
 
@@ -328,29 +187,18 @@ class UtilsTest extends TestCase
         $this->assertEquals($str, $this->testHex);
     }
 
-    /**
-     * testSha3
-     *
-     * @return void
-     */
-    public function testSha3()
+    /** @test */
+    public function sha3(): void
     {
         $str = Utils::sha3('');
         $this->assertNull($str);
 
         $str = Utils::sha3('baz(uint32,bool)');
         $this->assertEquals(mb_substr($str, 0, 10), '0xcdcd77c0');
-
-        $this->expectException(InvalidArgumentException::class);
-        $str = Utils::sha3(new stdClass());
     }
 
-    /**
-     * testToWei
-     *
-     * @return void
-     */
-    public function testToWei()
+    /** @test */
+    public function to_wei(): void
     {
         $bn = Utils::toWei('0x1', 'wei');
         $this->assertEquals('1', $bn->toString());
@@ -408,12 +256,8 @@ class UtilsTest extends TestCase
         }
     }
 
-    /**
-     * testToEther
-     *
-     * @return void
-     */
-    public function testToEther()
+    /** @test */
+    public function to_ether(): void
     {
         list($bnq, $bnr) = Utils::toEther('0x1', 'wei');
 
@@ -441,12 +285,8 @@ class UtilsTest extends TestCase
         $this->assertEquals($bnr->toString(), '0');
     }
 
-    /**
-     * testFromWei
-     *
-     * @return void
-     */
-    public function testFromWei()
+    /** @test */
+    public function from_wei(): void
     {
         list($bnq, $bnr) = Utils::fromWei('1000000000000000000', 'ether');
 
@@ -486,12 +326,8 @@ class UtilsTest extends TestCase
         }
     }
 
-    /**
-     * testJsonMethodToString
-     *
-     * @return void
-     */
-    public function testJsonMethodToString()
+    /** @test */
+    public function json_method_to_string(): void
     {
         $json = json_decode($this->testJsonMethodString);
         $methodString = Utils::jsonMethodToString($json);
@@ -512,12 +348,8 @@ class UtilsTest extends TestCase
         $methodString = Utils::jsonMethodToString('test');
     }
 
-    /**
-     * testJsonToArray
-     *
-     * @return void
-     */
-    public function testJsonToArray()
+    /** @test */
+    public function json_to_array(): void
     {
         $decodedJson = json_decode($this->testJsonMethodString);
         $jsonArray = Utils::jsonToArray($decodedJson);
@@ -531,12 +363,8 @@ class UtilsTest extends TestCase
         $this->assertEquals($jsonAssoc, $jsonArray);
     }
 
-    /**
-     * testIsHex
-     *
-     * @return void
-     */
-    public function testIsHex()
+    /** @test */
+    public function is_hex(): void
     {
         $isHex = Utils::isHex($this->testHex);
 
@@ -551,12 +379,8 @@ class UtilsTest extends TestCase
         $this->assertFalse($isHex);
     }
 
-    /**
-     * testIsNegative
-     *
-     * @return void
-     */
-    public function testIsNegative()
+    /** @test */
+    public function is_negative(): void
     {
         $isNegative = Utils::isNegative('-1');
         $this->assertTrue($isNegative);
@@ -565,12 +389,8 @@ class UtilsTest extends TestCase
         $this->assertFalse($isNegative);
     }
 
-    /**
-     * testToBn
-     *
-     * @return void
-     */
-    public function testToBn()
+    /** @test */
+    public function to_bn(): void
     {
         $bn = Utils::toBn('');
         $this->assertEquals($bn->toString(), '0');

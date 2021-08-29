@@ -7,12 +7,7 @@ use Web3\Contracts\SolidityType;
 
 class SolidityTypeTest extends TestCase
 {
-    /**
-     * type
-     *
-     * @var \Web3\Contracts\SolidityType
-     */
-    protected $type;
+    protected SolidityType $type;
 
     public function setUp(): void
     {
@@ -20,12 +15,8 @@ class SolidityTypeTest extends TestCase
         $this->type = new SolidityType();
     }
 
-    /**
-     * testNestedTypes
-     *
-     * @return void
-     */
-    public function testNestedTypes()
+    /** @test */
+    public function nested_types(): void
     {
         $type = $this->type;
 
@@ -38,12 +29,8 @@ class SolidityTypeTest extends TestCase
         $this->assertEquals($type->nestedTypes('int'), false);
     }
 
-    /**
-     * testNestedName
-     *
-     * @return void
-     */
-    public function testNestedName()
+    /** @test */
+    public function nested_name(): void
     {
         $type = $this->type;
 
@@ -56,12 +43,8 @@ class SolidityTypeTest extends TestCase
         $this->assertEquals($type->nestedName('int'), 'int');
     }
 
-    /**
-     * testIsDynamicArray
-     *
-     * @return void
-     */
-    public function testIsDynamicArray()
+    /** @test */
+    public function is_dynamic_array(): void
     {
         $type = $this->type;
 
@@ -74,12 +57,8 @@ class SolidityTypeTest extends TestCase
         $this->assertFalse($type->isDynamicArray('int'));
     }
 
-    /**
-     * testIsStaticArray
-     *
-     * @return void
-     */
-    public function testIsStaticArray()
+    /** @test */
+    public function is_static_array(): void
     {
         $type = $this->type;
 
@@ -92,12 +71,8 @@ class SolidityTypeTest extends TestCase
         $this->assertFalse($type->isStaticArray('int'));
     }
 
-    /**
-     * testStaticArrayLength
-     *
-     * @return void
-     */
-    public function testStaticArrayLength()
+    /** @test */
+    public function static_array_length(): void
     {
         $type = $this->type;
 
@@ -110,23 +85,15 @@ class SolidityTypeTest extends TestCase
         $this->assertEquals($type->staticArrayLength('int'), 1);
     }
 
-    /**
-     * testEncode
-     *
-     * @return void
-     */
-    // public function testEncode()
+    /** @test */
+    // public function encode(): void
     // {
     //     $type = $this->type;
     //     $this->assertTrue(true);
     // }
 
-    /**
-     * testDecode
-     *
-     * @return void
-     */
-    // public function testDecode()
+    /** @test */
+    // public function decode(): void
     // {
     //     $type = $this->type;
     //     $this->assertTrue(true);

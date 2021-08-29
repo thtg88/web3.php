@@ -3,16 +3,12 @@
 namespace Web3\Tests\Unit;
 
 use RuntimeException;
+use Web3\Personal;
 use Web3\Tests\TestCase;
 
 class PersonalBatchTest extends TestCase
 {
-    /**
-     * personal
-     *
-     * @var Web3\Personal
-     */
-    protected $personal;
+    protected Personal $personal;
 
     public function setUp(): void
     {
@@ -21,12 +17,8 @@ class PersonalBatchTest extends TestCase
         $this->personal = $this->web3->personal;
     }
 
-    /**
-     * testBatch
-     *
-     * @return void
-     */
-    public function testBatch()
+    /** @test */
+    public function batch(): void
     {
         $personal = $this->personal;
 
@@ -43,12 +35,8 @@ class PersonalBatchTest extends TestCase
         });
     }
 
-    /**
-     * testWrongParam
-     *
-     * @return void
-     */
-    public function testWrongParam()
+    /** @test */
+    public function wrong_param(): void
     {
         $this->expectException(RuntimeException::class);
 

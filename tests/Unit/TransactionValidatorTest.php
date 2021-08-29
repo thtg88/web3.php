@@ -7,25 +7,17 @@ use Web3\Validators\TransactionValidator;
 
 class TransactionValidatorTest extends TestCase
 {
-    /**
-     * validator
-     *
-     * @var \Web3\Validators\TransactionValidator
-     */
-    protected $validator;
+    protected TransactionValidator $validator;
 
     public function setUp(): void
     {
         parent::setUp();
+
         $this->validator = new TransactionValidator();
     }
 
-    /**
-     * testValidate
-     *
-     * @return void
-     */
-    public function testValidate()
+    /** @test */
+    public function validate(): void
     {
         $validator = $this->validator;
 

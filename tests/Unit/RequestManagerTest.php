@@ -7,12 +7,8 @@ use Web3\RequestManagers\RequestManager;
 
 class RequestManagerTest extends TestCase
 {
-    /**
-     * testSetHost
-     *
-     * @return void
-     */
-    public function testSetHost()
+    /** @test */
+    public function set_host(): void
     {
         $requestManager = new RequestManager('http://localhost:8545', 0.1);
         $this->assertEquals($requestManager->host, 'http://localhost:8545');

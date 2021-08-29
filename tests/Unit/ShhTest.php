@@ -11,12 +11,7 @@ use Web3\Shh;
 
 class ShhTest extends TestCase
 {
-    /**
-     * shh
-     *
-     * @var Web3\Shh
-     */
-    protected $shh;
+    protected Shh $shh;
 
     public function setUp(): void
     {
@@ -25,12 +20,8 @@ class ShhTest extends TestCase
         $this->shh = $this->web3->shh;
     }
 
-    /**
-     * testInstance
-     *
-     * @return void
-     */
-    public function testInstance()
+    /** @test */
+    public function instance(): void
     {
         $shh = new Shh($this->testHost);
 
@@ -38,12 +29,8 @@ class ShhTest extends TestCase
         $this->assertTrue($shh->provider->requestManager instanceof RequestManager);
     }
 
-    /**
-     * testSetProvider
-     *
-     * @return void
-     */
-    public function testSetProvider()
+    /** @test */
+    public function set_provider(): void
     {
         $shh = $this->shh;
         $requestManager = new HttpRequestManager('http://localhost:8545');
@@ -56,12 +43,8 @@ class ShhTest extends TestCase
         $this->assertEquals($shh->provider->requestManager->host, 'http://localhost:8545');
     }
 
-    /**
-     * testCallThrowRuntimeException
-     *
-     * @return void
-     */
-    public function testCallThrowRuntimeException()
+    /** @test */
+    public function call_throw_runtime_exception(): void
     {
         $this->expectException(RuntimeException::class);
 

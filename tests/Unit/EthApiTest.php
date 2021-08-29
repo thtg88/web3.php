@@ -2,33 +2,34 @@
 
 namespace Web3\Tests\Unit;
 
-use RuntimeException;
 use InvalidArgumentException;
-use Web3\Tests\TestCase;
 use phpseclib\Math\BigInteger as BigNumber;
+use RuntimeException;
+use Web3\Eth;
+use Web3\Tests\TestCase;
 
 class EthApiTest extends TestCase
 {
-    /**
-     * eth
-     *
-     * @var \Web3\Eth
-     */
-    protected $eth;
+    protected Eth $eth;
+    protected string $coinbase;
 
     public function setUp(): void
     {
         parent::setUp();
 
         $this->eth = $this->web3->eth;
+
+        $this->eth->coinbase(function ($err, $coinbase) {
+            if ($err !== null) {
+                return $this->fail($err->getMessage());
+            }
+
+            $this->coinbase = $coinbase;
+        });
     }
 
-    /**
-     * testProtocolVersion
-     *
-     * @return void
-     */
-    public function testProtocolVersion()
+    /** @test */
+    public function protocol_version(): void
     {
         $eth = $this->eth;
 
@@ -36,16 +37,13 @@ class EthApiTest extends TestCase
             if ($err !== null) {
                 return $this->fail($err->getMessage());
             }
+
             $this->assertTrue($version instanceof BigNumber);
         });
     }
 
-    /**
-     * testSyncing
-     *
-     * @return void
-     */
-    public function testSyncing()
+    /** @test */
+    public function syncing(): void
     {
         $eth = $this->eth;
 
@@ -53,17 +51,14 @@ class EthApiTest extends TestCase
             if ($err !== null) {
                 return $this->fail($err->getMessage());
             }
+
             // due to the result might be object or bool, only test is null
             $this->assertTrue($syncing !== null);
         });
     }
 
-    /**
-     * testCoinbase
-     *
-     * @return void
-     */
-    public function testCoinbase()
+    /** @test */
+    public function coinbase(): void
     {
         $eth = $this->eth;
 
@@ -71,16 +66,13 @@ class EthApiTest extends TestCase
             if ($err !== null) {
                 return $this->fail($err->getMessage());
             }
+
             $this->assertEquals($coinbase, $this->coinbase);
         });
     }
 
-    /**
-     * testMining
-     *
-     * @return void
-     */
-    public function testMining()
+    /** @test */
+    public function mining(): void
     {
         $eth = $this->eth;
 
@@ -88,16 +80,13 @@ class EthApiTest extends TestCase
             if ($err !== null) {
                 return $this->fail($err->getMessage());
             }
+
             $this->assertTrue($mining);
         });
     }
 
-    /**
-     * testHashrate
-     *
-     * @return void
-     */
-    public function testHashrate()
+    /** @test */
+    public function hashrate(): void
     {
         $eth = $this->eth;
 
@@ -105,16 +94,13 @@ class EthApiTest extends TestCase
             if ($err !== null) {
                 return $this->fail($err->getMessage());
             }
+
             $this->assertEquals($hashrate->toString(), '0');
         });
     }
 
-    /**
-     * testGasPrice
-     *
-     * @return void
-     */
-    public function testGasPrice()
+    /** @test */
+    public function gas_price(): void
     {
         $eth = $this->eth;
 
@@ -122,16 +108,13 @@ class EthApiTest extends TestCase
             if ($err !== null) {
                 return $this->fail($err->getMessage());
             }
+
             $this->assertTrue(is_numeric($gasPrice->toString()));
         });
     }
 
-    /**
-     * testAccounts
-     *
-     * @return void
-     */
-    public function testAccounts()
+    /** @test */
+    public function accounts(): void
     {
         $eth = $this->eth;
 
@@ -139,16 +122,13 @@ class EthApiTest extends TestCase
             if ($err !== null) {
                 return $this->fail($err->getMessage());
             }
+
             $this->assertTrue(is_array($accounts));
         });
     }
 
-    /**
-     * testBlockNumber
-     *
-     * @return void
-     */
-    public function testBlockNumber()
+    /** @test */
+    public function block_number(): void
     {
         $eth = $this->eth;
 
@@ -156,16 +136,13 @@ class EthApiTest extends TestCase
             if ($err !== null) {
                 return $this->fail($err->getMessage());
             }
+
             $this->assertTrue(is_numeric($blockNumber->toString()));
         });
     }
 
-    /**
-     * testGetBalance
-     *
-     * @return void
-     */
-    public function testGetBalance()
+    /** @test */
+    public function get_balance(): void
     {
         $eth = $this->eth;
 
@@ -173,16 +150,13 @@ class EthApiTest extends TestCase
             if ($err !== null) {
                 return $this->fail($err->getMessage());
             }
+
             $this->assertTrue(is_numeric($balance->toString()));
         });
     }
 
-    /**
-     * testGetStorageAt
-     *
-     * @return void
-     */
-    public function testGetStorageAt()
+    /** @test  */
+    public function get_storage_at(): void
     {
         $eth = $this->eth;
 
@@ -190,16 +164,13 @@ class EthApiTest extends TestCase
             if ($err !== null) {
                 return $this->fail($err->getMessage());
             }
+
             $this->assertTrue(is_string($storage));
         });
     }
 
-    /**
-     * testGetTransactionCount
-     *
-     * @return void
-     */
-    public function testGetTransactionCount()
+    /** @test */
+    public function get_transaction_count(): void
     {
         $eth = $this->eth;
 
@@ -207,16 +178,13 @@ class EthApiTest extends TestCase
             if ($err !== null) {
                 return $this->fail($err->getMessage());
             }
+
             $this->assertTrue(is_numeric($transactionCount->toString()));
         });
     }
 
-    /**
-     * testGetBlockTransactionCountByHash
-     *
-     * @return void
-     */
-    public function testGetBlockTransactionCountByHash()
+    /** @test */
+    public function get_block_transaction_count_by_hash(): void
     {
         $eth = $this->eth;
 
@@ -224,16 +192,13 @@ class EthApiTest extends TestCase
             if ($err !== null) {
                 return $this->assertTrue($err !== null);
             }
+
             $this->assertTrue(is_numeric($transactionCount->toString()));
         });
     }
 
-    /**
-     * testGetBlockTransactionCountByNumber
-     *
-     * @return void
-     */
-    public function testGetBlockTransactionCountByNumber()
+    /** @test */
+    public function get_block_transaction_count_by_number(): void
     {
         $eth = $this->eth;
 
@@ -241,16 +206,13 @@ class EthApiTest extends TestCase
             if ($err !== null) {
                 return $this->assertTrue($err !== null);
             }
+
             $this->assertTrue(is_numeric($transactionCount->toString()));
         });
     }
 
-    /**
-     * testGetUncleCountByBlockHash
-     *
-     * @return void
-     */
-    public function testGetUncleCountByBlockHash()
+    /** @test */
+    public function get_uncle_count_by_block_hash(): void
     {
         $eth = $this->eth;
 
@@ -258,16 +220,13 @@ class EthApiTest extends TestCase
             if ($err !== null) {
                 return $this->assertTrue($err !== null);
             }
+
             $this->assertTrue(is_numeric($uncleCount->toString()));
         });
     }
 
-    /**
-     * testGetUncleCountByBlockNumber
-     *
-     * @return void
-     */
-    public function testGetUncleCountByBlockNumber()
+    /** @test */
+    public function get_uncle_count_by_block_number(): void
     {
         $eth = $this->eth;
 
@@ -279,12 +238,8 @@ class EthApiTest extends TestCase
         });
     }
 
-    /**
-     * testGetCode
-     *
-     * @return void
-     */
-    public function testGetCode()
+    /** @test */
+    public function get_code(): void
     {
         $eth = $this->eth;
 
@@ -292,34 +247,28 @@ class EthApiTest extends TestCase
             if ($err !== null) {
                 return $this->assertTrue($err !== null);
             }
+
             $this->assertTrue(is_string($code));
         });
     }
 
-    /**
-     * testSign
-     *
-     * @return void
-     */
-    public function testSign()
+    /** @test */
+    public function sign(): void
     {
         $eth = $this->eth;
 
         $eth->sign('0x407d73d8a49eeb85d32cf465507dd71d507100c1', '0xdeadbeaf', function ($err, $sign) {
+            // infura banned us to sign message
             if ($err !== null) {
-                // infura banned us to sign message
                 return $this->assertTrue($err !== null);
             }
+
             $this->assertTrue(is_string($sign));
         });
     }
 
-    /**
-     * testSendTransaction
-     *
-     * @return void
-     */
-    public function testSendTransaction()
+    /** @test */
+    public function send_transaction(): void
     {
         $eth = $this->eth;
 
@@ -331,20 +280,17 @@ class EthApiTest extends TestCase
             'value' => '0x9184e72a',
             'data' => '0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675',
         ], function ($err, $transaction) {
+            // infura banned us to send transaction
             if ($err !== null) {
-                // infura banned us to send transaction
                 return $this->assertTrue($err !== null);
             }
+
             $this->assertTrue(is_string($transaction));
         });
     }
 
-    /**
-     * testSendRawTransaction
-     *
-     * @return void
-     */
-    public function testSendRawTransaction()
+    /** @test */
+    public function send_raw_transaction(): void
     {
         $eth = $this->eth;
 
@@ -352,16 +298,13 @@ class EthApiTest extends TestCase
             if ($err !== null) {
                 return $this->assertTrue($err !== null);
             }
+
             $this->assertTrue(is_string($transaction));
         });
     }
 
-    /**
-     * testCall
-     *
-     * @return void
-     */
-    public function testCall()
+    /** @test */
+    public function call(): void
     {
         $eth = $this->eth;
 
@@ -380,12 +323,8 @@ class EthApiTest extends TestCase
         });
     }
 
-    /**
-     * testEstimateGas
-     *
-     * @return void
-     */
-    public function testEstimateGas()
+    /** @test */
+    public function estimate_gas(): void
     {
         $eth = $this->eth;
 
@@ -400,16 +339,13 @@ class EthApiTest extends TestCase
             if ($err !== null) {
                 return $this->assertTrue($err !== null);
             }
+
             $this->assertTrue(is_numeric($gas->toString()));
         });
     }
 
-    /**
-     * testGetBlockByHash
-     *
-     * @return void
-     */
-    public function testGetBlockByHash()
+    /** @test */
+    public function get_block_by_hash(): void
     {
         $eth = $this->eth;
 
@@ -421,12 +357,8 @@ class EthApiTest extends TestCase
         });
     }
 
-    /**
-     * testGetBlockByNumber
-     *
-     * @return void
-     */
-    public function testGetBlockByNumber()
+    /** @test */
+    public function get_block_by_number(): void
     {
         $eth = $this->eth;
 
@@ -434,17 +366,14 @@ class EthApiTest extends TestCase
             if ($err !== null) {
                 return $this->assertTrue($err !== null);
             }
+
             // weired behavior, see https://github.com/sc0Vu/web3.php/issues/16
             $this->assertTrue($block !== null);
         });
     }
 
-    /**
-     * testGetTransactionByHash
-     *
-     * @return void
-     */
-    public function testGetTransactionByHash()
+    /** @test */
+    public function get_transaction_by_hash(): void
     {
         $eth = $this->eth;
 
@@ -452,16 +381,13 @@ class EthApiTest extends TestCase
             if ($err !== null) {
                 return $this->assertTrue($err !== null);
             }
+
             $this->assertTrue($transaction == null);
         });
     }
 
-    /**
-     * testGetTransactionByBlockHashAndIndex
-     *
-     * @return void
-     */
-    public function testGetTransactionByBlockHashAndIndex()
+    /** @test */
+    public function get_transaction_by_block_hash_and_index(): void
     {
         $eth = $this->eth;
 
@@ -473,12 +399,8 @@ class EthApiTest extends TestCase
         });
     }
 
-    /**
-     * testGetTransactionByBlockNumberAndIndex
-     *
-     * @return void
-     */
-    public function testGetTransactionByBlockNumberAndIndex()
+    /** @test */
+    public function get_transaction_by_block_number_and_index(): void
     {
         $eth = $this->eth;
 
@@ -490,12 +412,8 @@ class EthApiTest extends TestCase
         });
     }
 
-    /**
-     * testGetTransactionReceipt
-     *
-     * @return void
-     */
-    public function testGetTransactionReceipt()
+    /** @test */
+    public function get_transaction_receipt(): void
     {
         $eth = $this->eth;
 
@@ -507,12 +425,8 @@ class EthApiTest extends TestCase
         });
     }
 
-    /**
-     * testGetUncleByBlockHashAndIndex
-     *
-     * @return void
-     */
-    public function testGetUncleByBlockHashAndIndex()
+    /** @test */
+    public function get_uncle_by_block_hash_and_index(): void
     {
         $eth = $this->eth;
 
@@ -524,12 +438,8 @@ class EthApiTest extends TestCase
         });
     }
 
-    /**
-     * testGetUncleByBlockNumberAndIndex
-     *
-     * @return void
-     */
-    public function testGetUncleByBlockNumberAndIndex()
+    /** @test */
+    public function get_uncle_by_block_number_and_index(): void
     {
         $eth = $this->eth;
 
@@ -541,29 +451,22 @@ class EthApiTest extends TestCase
         });
     }
 
-    /**
-     * testCompileSolidity
-     *
-     * @return void
-     */
-    public function testCompileSolidity()
+    /** @test */
+    public function compile_solidity(): void
     {
         $eth = $this->eth;
 
-        $eth->compileSolidity('contract test { function multiply(uint a) returns(uint d) {   return a * 7;   } }', function ($err, $compiled) {
+        $eth->compileSolidity('contract test { function multiply(uint a) returns(uint d) { return a * 7; } }', function ($err, $compiled) {
             if ($err !== null) {
                 return $this->assertTrue($err !== null);
             }
+
             $this->assertTrue(is_string($compiled));
         });
     }
 
-    /**
-     * testCompileLLL
-     *
-     * @return void
-     */
-    public function testCompileLLL()
+    /** @test */
+    public function compile_lll(): void
     {
         $eth = $this->eth;
 
@@ -571,16 +474,13 @@ class EthApiTest extends TestCase
             if ($err !== null) {
                 return $this->assertTrue($err !== null);
             }
+
             $this->assertTrue(is_string($compiled));
         });
     }
 
-    /**
-     * testCompileSerpent
-     *
-     * @return void
-     */
-    public function testCompileSerpent()
+    /** @test */
+    public function compile_serpent(): void
     {
         $eth = $this->eth;
 
@@ -592,12 +492,8 @@ class EthApiTest extends TestCase
         });
     }
 
-    /**
-     * testNewFilter
-     *
-     * @return void
-     */
-    public function testNewFilter()
+    /** @test */
+    public function new_filter(): void
     {
         $eth = $this->eth;
 
@@ -615,12 +511,8 @@ class EthApiTest extends TestCase
         });
     }
 
-    /**
-     * testNewBlockFilter
-     *
-     * @return void
-     */
-    public function testNewBlockFilter()
+    /** @test */
+    public function new_block_filter(): void
     {
         $eth = $this->eth;
 
@@ -633,12 +525,8 @@ class EthApiTest extends TestCase
         });
     }
 
-    /**
-     * testNewPendingTransactionFilter
-     *
-     * @return void
-     */
-    public function testNewPendingTransactionFilter()
+    /** @test */
+    public function new_pending_transaction_filter(): void
     {
         $eth = $this->eth;
 
@@ -651,12 +539,8 @@ class EthApiTest extends TestCase
         });
     }
 
-    /**
-     * testUninstallFilter
-     *
-     * @return void
-     */
-    public function testUninstallFilter()
+    /** @test */
+    public function uninstall_filter(): void
     {
         $eth = $this->eth;
 
@@ -669,12 +553,8 @@ class EthApiTest extends TestCase
         });
     }
 
-    /**
-     * testGetFilterChanges
-     *
-     * @return void
-     */
-    public function testGetFilterChanges()
+    /** @test */
+    public function get_filter_changes(): void
     {
         $eth = $this->eth;
 
@@ -687,12 +567,8 @@ class EthApiTest extends TestCase
         });
     }
 
-    /**
-     * testGetFilterLogs
-     *
-     * @return void
-     */
-    public function testGetFilterLogs()
+    /** @test */
+    public function get_filter_logs(): void
     {
         $eth = $this->eth;
 
@@ -705,12 +581,8 @@ class EthApiTest extends TestCase
         });
     }
 
-    /**
-     * testGetLogs
-     *
-     * @return void
-     */
-    public function testGetLogs()
+    /** @test */
+    public function get_logs(): void
     {
         $eth = $this->eth;
 
@@ -727,12 +599,8 @@ class EthApiTest extends TestCase
         });
     }
 
-    /**
-     * testGetWork
-     *
-     * @return void
-     */
-    public function testGetWork()
+    /** @test */
+    public function get_work(): void
     {
         $eth = $this->eth;
 
@@ -744,12 +612,8 @@ class EthApiTest extends TestCase
         });
     }
 
-    /**
-     * testSubmitWork
-     *
-     * @return void
-     */
-    public function testSubmitWork()
+    /** @test */
+    public function submit_work(): void
     {
         $eth = $this->eth;
 
@@ -766,12 +630,8 @@ class EthApiTest extends TestCase
         );
     }
 
-    /**
-     * testSubmitHashrate
-     *
-     * @return void
-     */
-    public function testSubmitHashrate()
+    /** @test */
+    public function submit_hashrate(): void
     {
         $eth = $this->eth;
 
@@ -787,12 +647,8 @@ class EthApiTest extends TestCase
         );
     }
 
-    /**
-     * testUnallowedMethod
-     *
-     * @return void
-     */
-    public function testUnallowedMethod()
+    /** @test */
+    public function unallowed_method(): void
     {
         $this->expectException(RuntimeException::class);
 
@@ -806,12 +662,8 @@ class EthApiTest extends TestCase
         });
     }
 
-    /**
-     * testWrongCallback
-     *
-     * @return void
-     */
-    public function testWrongCallback()
+    /** @test */
+    public function wrong_callback(): void
     {
         $this->expectException(InvalidArgumentException::class);
 

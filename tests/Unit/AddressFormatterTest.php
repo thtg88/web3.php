@@ -12,15 +12,12 @@ class AddressFormatterTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
+
         $this->formatter = new AddressFormatter();
     }
 
-    /**
-     * testFormat
-     *
-     * @return void
-     */
-    public function testFormat()
+    /** @test */
+    public function format(): void
     {
         $formatter = $this->formatter;
 

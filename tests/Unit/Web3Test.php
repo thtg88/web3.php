@@ -17,32 +17,15 @@ use Web3\RequestManagers\HttpRequestManager;
 class Web3Test extends TestCase
 {
     /**
-     * testHex
      * 'hello world'
      * you can check by call pack('H*', $hex)
-     *
-     * @var string
      */
-    protected $testHex = '0x68656c6c6f20776f726c64';
+    protected string $testHex = '0x68656c6c6f20776f726c64';
 
-    /**
-     * testHash
-     *
-     * @var string
-     */
-    protected $testHash = '0x47173285a8d7341e5e972fc677286384f802f8ef42a5ec5f03bbfa254cb01fad';
+    protected string $testHash = '0x47173285a8d7341e5e972fc677286384f802f8ef42a5ec5f03bbfa254cb01fad';
 
-    public function setUp(): void
-    {
-        parent::setUp();
-    }
-
-    /**
-     * testInstance
-     *
-     * @return void
-     */
-    public function testInstance()
+    /** @test */
+    public function instance(): void
     {
         $requestManager = new HttpRequestManager('http://localhost:8545');
         $web3 = new Web3(new HttpProvider($requestManager));
@@ -56,12 +39,8 @@ class Web3Test extends TestCase
         $this->assertTrue($web3->utils instanceof Utils);
     }
 
-    /**
-     * testSetProvider
-     *
-     * @return void
-     */
-    public function testSetProvider()
+    /** @test */
+    public function set_provider(): void
     {
         $web3 = $this->web3;
         $requestManager = new HttpRequestManager('http://localhost:8545');
@@ -73,12 +52,8 @@ class Web3Test extends TestCase
         $this->assertEquals($web3->provider->requestManager->host, 'http://localhost:8545');
     }
 
-    /**
-     * testCallThrowRuntimeException
-     *
-     * @return void
-     */
-    public function testCallThrowRuntimeException()
+    /** @test */
+    public function call_throw_runtime_exception(): void
     {
         $this->expectException(RuntimeException::class);
 

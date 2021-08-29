@@ -2,17 +2,13 @@
 
 namespace Web3\Tests\Unit;
 
-use Web3\Tests\TestCase;
 use phpseclib\Math\BigInteger as BigNumber;
+use Web3\Net;
+use Web3\Tests\TestCase;
 
 class NetBatchTest extends TestCase
 {
-    /**
-     * net
-     *
-     * @var Web3\Net
-     */
-    protected $net;
+    protected Net $net;
 
     public function setUp(): void
     {
@@ -21,12 +17,8 @@ class NetBatchTest extends TestCase
         $this->net = $this->web3->net;
     }
 
-    /**
-     * testBatch
-     *
-     * @return void
-     */
-    public function testBatch()
+    /** @test */
+    public function batch(): void
     {
         $net = $this->net;
 
@@ -39,6 +31,7 @@ class NetBatchTest extends TestCase
             if ($err !== null) {
                 return $this->fail('Got error!');
             }
+
             $this->assertTrue(is_string($data[0]));
             $this->assertTrue(is_bool($data[1]));
             $this->assertTrue($data[2] instanceof BigNumber);

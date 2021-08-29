@@ -7,25 +7,17 @@ use Web3\Formatters\StringFormatter;
 
 class StringFormatterTest extends TestCase
 {
-    /**
-     * formatter
-     *
-     * @var \Web3\Formatters\StringFormatter
-     */
-    protected $formatter;
+    protected StringFormatter $formatter;
 
     public function setUp(): void
     {
         parent::setUp();
+
         $this->formatter = new StringFormatter();
     }
 
-    /**
-     * testFormat
-     *
-     * @return void
-     */
-    public function testFormat()
+    /** @test */
+    public function format(): void
     {
         $formatter = $this->formatter;
 

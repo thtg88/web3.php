@@ -7,48 +7,12 @@ use Web3\Web3;
 
 class TestCase extends BaseTestCase
 {
-    /**
-     * web3
-     *
-     * @var \Web3\Web3
-     */
-    protected $web3;
-
-    /**
-     * testRinkebyHost
-     *
-     * @var string
-     */
-    protected $testRinkebyHost = 'https://rinkeby.infura.io/vuethexplore';
-
-    /**
-     * testHost
-     *
-     * @var string
-     */
-    protected $testHost = 'http://localhost:8545';
-
-    /**
-     * coinbase
-     *
-     * @var string
-     */
-    protected $coinbase;
+    protected Web3 $web3;
+    protected string $testRinkebyHost = 'https://rinkeby.infura.io/vuethexplore';
+    protected string $testHost = 'http://127.0.0.1:7545';
 
     public function setUp(): void
     {
-        $web3 = new Web3($this->testHost);
-        $this->web3 = $web3;
-
-        $web3->eth->coinbase(function ($err, $coinbase) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
-            $this->coinbase = $coinbase;
-        });
-    }
-
-    public function tearDown(): void
-    {
+        $this->web3 = new Web3($this->testHost);
     }
 }

@@ -11,12 +11,7 @@ use Web3\Personal;
 
 class PersonalTest extends TestCase
 {
-    /**
-     * personal
-     *
-     * @var Web3\Personal
-     */
-    protected $personal;
+    protected Personal $personal;
 
     public function setUp(): void
     {
@@ -25,12 +20,8 @@ class PersonalTest extends TestCase
         $this->personal = $this->web3->personal;
     }
 
-    /**
-     * testInstance
-     *
-     * @return void
-     */
-    public function testInstance()
+    /** @test */
+    public function instance(): void
     {
         $personal = new Personal($this->testHost);
 
@@ -38,12 +29,8 @@ class PersonalTest extends TestCase
         $this->assertTrue($personal->provider->requestManager instanceof RequestManager);
     }
 
-    /**
-     * testSetProvider
-     *
-     * @return void
-     */
-    public function testSetProvider()
+    /** @test */
+    public function set_provider(): void
     {
         $personal = $this->personal;
         $requestManager = new HttpRequestManager('http://localhost:8545');
@@ -56,12 +43,8 @@ class PersonalTest extends TestCase
         $this->assertEquals($personal->provider->requestManager->host, 'http://localhost:8545');
     }
 
-    /**
-     * testCallThrowRuntimeException
-     *
-     * @return void
-     */
-    public function testCallThrowRuntimeException()
+    /** @test */
+    public function call_throw_runtime_exception(): void
     {
         $this->expectException(RuntimeException::class);
 

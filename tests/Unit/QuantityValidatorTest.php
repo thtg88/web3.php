@@ -7,25 +7,17 @@ use Web3\Validators\QuantityValidator;
 
 class QuantityValidatorTest extends TestCase
 {
-    /**
-     * validator
-     *
-     * @var \Web3\Validators\QuantityValidator
-     */
-    protected $validator;
+    protected QuantityValidator $validator;
 
     public function setUp(): void
     {
         parent::setUp();
+
         $this->validator = new QuantityValidator();
     }
 
-    /**
-     * testValidate
-     *
-     * @return void
-     */
-    public function testValidate()
+    /** @test */
+    public function validate(): void
     {
         $validator = $this->validator;
 

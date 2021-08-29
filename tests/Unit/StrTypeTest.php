@@ -2,44 +2,40 @@
 
 namespace Web3\Tests\Unit;
 
-use Web3\Tests\TestCase;
+use Web3\Contracts\SolidityType;
 use Web3\Contracts\Types\Str;
+use Web3\Tests\TestCase;
 
 class StrTypeTest extends TestCase
 {
-    /**
-     * testTypes
-     *
-     * @var array
-     */
-    protected $testTypes = [
+    protected array $testTypes = [
         [
             'value' => 'string',
             'result' => true,
-        ], [
+        ],
+        [
             'value' => 'string[]',
             'result' => true,
-        ], [
+        ],
+        [
             'value' => 'string[4]',
             'result' => true,
-        ], [
+        ],
+        [
             'value' => 'string[][]',
             'result' => true,
-        ], [
+        ],
+        [
             'value' => 'string[3][]',
             'result' => true,
-        ], [
+        ],
+        [
             'value' => 'string[][6][]',
             'result' => true,
         ],
     ];
 
-    /**
-     * solidityType
-     *
-     * @var \Web3\Contracts\SolidityType
-     */
-    protected $solidityType;
+    protected SolidityType $solidityType;
 
     public function setUp(): void
     {
@@ -47,12 +43,8 @@ class StrTypeTest extends TestCase
         $this->solidityType = new Str();
     }
 
-    /**
-     * testIsType
-     *
-     * @return void
-     */
-    public function testIsType()
+    /** @test */
+    public function is_type(): void
     {
         $solidityType = $this->solidityType;
 

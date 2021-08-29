@@ -8,12 +8,8 @@ use Web3\Methods\JSONRPC;
 
 class JSONRPCTest extends TestCase
 {
-    /**
-     * testJSONRPC
-     *
-     * @return void
-     */
-    public function testJSONRPC()
+    /** @test */
+    public function json_rpc(): void
     {
         $id = rand();
         $params = [
@@ -50,12 +46,8 @@ class JSONRPCTest extends TestCase
         $this->assertEquals(json_encode($rpc->toPayload()), (string) $rpc);
     }
 
-    /**
-     * testThrowException
-     *
-     * @return void
-     */
-    public function testThrowException()
+    /** @test */
+    public function throw_exception(): void
     {
         $id = 'zzz';
         $params = [

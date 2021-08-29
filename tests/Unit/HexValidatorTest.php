@@ -7,25 +7,17 @@ use Web3\Validators\HexValidator;
 
 class HexValidatorTest extends TestCase
 {
-    /**
-     * validator
-     *
-     * @var \Web3\Validators\HexValidator
-     */
-    protected $validator;
+    protected HexValidator $validator;
 
     public function setUp(): void
     {
         parent::setUp();
+
         $this->validator = new HexValidator();
     }
 
-    /**
-     * testValidate
-     *
-     * @return void
-     */
-    public function testValidate()
+    /** @test */
+    public function validate(): void
     {
         $validator = $this->validator;
 

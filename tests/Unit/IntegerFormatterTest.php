@@ -7,25 +7,17 @@ use Web3\Formatters\IntegerFormatter;
 
 class IntegerFormatterTest extends TestCase
 {
-    /**
-     * formatter
-     *
-     * @var \Web3\Formatters\IntegerFormatter
-     */
-    protected $formatter;
+    protected IntegerFormatter $formatter;
 
     public function setUp(): void
     {
         parent::setUp();
+
         $this->formatter = new IntegerFormatter();
     }
 
-    /**
-     * testFormat
-     *
-     * @return void
-     */
-    public function testFormat()
+    /** @test */
+    public function format(): void
     {
         $formatter = $this->formatter;
 

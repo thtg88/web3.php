@@ -7,25 +7,17 @@ use Web3\Validators\IdentityValidator;
 
 class IdentityValidatorTest extends TestCase
 {
-    /**
-     * validator
-     *
-     * @var \Web3\Validators\IdentityValidator
-     */
-    protected $validator;
+    protected IdentityValidator $validator;
 
     public function setUp(): void
     {
         parent::setUp();
+
         $this->validator = new IdentityValidator();
     }
 
-    /**
-     * testValidate
-     *
-     * @return void
-     */
-    public function testValidate()
+    /** @test */
+    public function validate(): void
     {
         $validator = $this->validator;
 

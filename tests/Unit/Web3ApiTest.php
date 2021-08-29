@@ -9,32 +9,15 @@ use Web3\Tests\TestCase;
 class Web3ApiTest extends TestCase
 {
     /**
-     * testHex
      * 'hello world'
      * you can check by call pack('H*', $hex)
-     *
-     * @var string
      */
-    protected $testHex = '0x68656c6c6f20776f726c64';
+    protected string $testHex = '0x68656c6c6f20776f726c64';
 
-    /**
-     * testHash
-     *
-     * @var string
-     */
-    protected $testHash = '0x47173285a8d7341e5e972fc677286384f802f8ef42a5ec5f03bbfa254cb01fad';
+    protected string $testHash = '0x47173285a8d7341e5e972fc677286384f802f8ef42a5ec5f03bbfa254cb01fad';
 
-    public function setUp(): void
-    {
-        parent::setUp();
-    }
-
-    /**
-     * testClientVersion
-     *
-     * @return void
-     */
-    public function testClientVersion()
+    /** @test */
+    public function client_version(): void
     {
         $web3 = $this->web3;
 
@@ -46,12 +29,8 @@ class Web3ApiTest extends TestCase
         });
     }
 
-    /**
-     * testSha3
-     *
-     * @return void
-     */
-    public function testSha3()
+    /** @test */
+    public function sha3(): void
     {
         $web3 = $this->web3;
 
@@ -70,12 +49,8 @@ class Web3ApiTest extends TestCase
         });
     }
 
-    /**
-     * testUnallowedMethod
-     *
-     * @return void
-     */
-    public function testUnallowedMethod()
+    /** @test */
+    public function unallowed_method(): void
     {
         $this->expectException(RuntimeException::class);
 
@@ -85,18 +60,15 @@ class Web3ApiTest extends TestCase
             if ($err !== null) {
                 return $this->fail($err->getMessage());
             }
+
             $this->assertTrue(true);
         });
     }
 
     /**
-     * testWrongParam
-     * We transform data and throw invalid argument exception
-     * instead of runtime exception.
-     *
-     * @return void
+     * We transform data and throw it
      */
-    public function testWrongParam()
+    public function wrong_param(): void
     {
         $this->expectException(RuntimeException::class);
 
@@ -110,12 +82,8 @@ class Web3ApiTest extends TestCase
         });
     }
 
-    /**
-     * testWrongCallback
-     *
-     * @return void
-     */
-    public function testWrongCallback()
+    /** @test */
+    public function wrong_callback(): void
     {
         $this->expectException(InvalidArgumentException::class);
 

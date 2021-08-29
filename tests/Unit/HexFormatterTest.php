@@ -7,25 +7,17 @@ use Web3\Formatters\HexFormatter;
 
 class HexFormatterTest extends TestCase
 {
-    /**
-     * formatter
-     *
-     * @var \Web3\Formatters\HexFormatter
-     */
-    protected $formatter;
+    protected HexFormatter $formatter;
 
     public function setUp(): void
     {
         parent::setUp();
+
         $this->formatter = new HexFormatter();
     }
 
-    /**
-     * testFormat
-     *
-     * @return void
-     */
-    public function testFormat()
+    /** @test */
+    public function format(): void
     {
         $formatter = $this->formatter;
 

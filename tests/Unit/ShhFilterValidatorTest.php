@@ -7,12 +7,7 @@ use Web3\Validators\ShhFilterValidator;
 
 class ShhFilterValidatorTest extends TestCase
 {
-    /**
-     * validator
-     *
-     * @var \Web3\Validators\ShhFilterValidator
-     */
-    protected $validator;
+    protected ShhFilterValidator $validator;
 
     public function setUp(): void
     {
@@ -20,12 +15,8 @@ class ShhFilterValidatorTest extends TestCase
         $this->validator = new ShhFilterValidator();
     }
 
-    /**
-     * testValidate
-     *
-     * @return void
-     */
-    public function testValidate()
+    /** @test */
+    public function validate(): void
     {
         $validator = $this->validator;
 

@@ -2,19 +2,15 @@
 
 namespace Web3\Tests\Unit;
 
-use RuntimeException;
 use InvalidArgumentException;
-use Web3\Tests\TestCase;
 use phpseclib\Math\BigInteger as BigNumber;
+use RuntimeException;
+use Web3\Net;
+use Web3\Tests\TestCase;
 
 class NetApiTest extends TestCase
 {
-    /**
-     * net
-     *
-     * @var Web3\Net
-     */
-    protected $net;
+    protected Net $net;
 
     public function setUp(): void
     {
@@ -23,12 +19,8 @@ class NetApiTest extends TestCase
         $this->net = $this->web3->net;
     }
 
-    /**
-     * testVersion
-     *
-     * @return void
-     */
-    public function testVersion()
+    /** @test */
+    public function version(): void
     {
         $net = $this->net;
 
@@ -36,16 +28,13 @@ class NetApiTest extends TestCase
             if ($err !== null) {
                 return $this->fail($err->getMessage());
             }
+
             $this->assertTrue(is_string($version));
         });
     }
 
-    /**
-     * testPeerCount
-     *
-     * @return void
-     */
-    public function testPeerCount()
+    /** @test */
+    public function peer_count(): void
     {
         $net = $this->net;
 
@@ -57,12 +46,8 @@ class NetApiTest extends TestCase
         });
     }
 
-    /**
-     * testListening
-     *
-     * @return void
-     */
-    public function testListening()
+    /** @test */
+    public function listening(): void
     {
         $net = $this->net;
 
@@ -74,12 +59,8 @@ class NetApiTest extends TestCase
         });
     }
 
-    /**
-     * testUnallowedMethod
-     *
-     * @return void
-     */
-    public function testUnallowedMethod()
+    /** @test */
+    public function unallowed_method(): void
     {
         $this->expectException(RuntimeException::class);
 
@@ -89,16 +70,13 @@ class NetApiTest extends TestCase
             if ($err !== null) {
                 return $this->fail($err->getMessage());
             }
+
             $this->assertTrue(true);
         });
     }
 
-    /**
-     * testWrongCallback
-     *
-     * @return void
-     */
-    public function testWrongCallback()
+    /** @test */
+    public function wrong_callback(): void
     {
         $this->expectException(InvalidArgumentException::class);
 

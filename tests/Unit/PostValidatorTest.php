@@ -7,25 +7,17 @@ use Web3\Validators\PostValidator;
 
 class PostValidatorTest extends TestCase
 {
-    /**
-     * validator
-     *
-     * @var \Web3\Validators\PostValidator
-     */
-    protected $validator;
+    protected PostValidator $validator;
 
     public function setUp(): void
     {
         parent::setUp();
+
         $this->validator = new PostValidator();
     }
 
-    /**
-     * testValidate
-     *
-     * @return void
-     */
-    public function testValidate()
+    /** @test */
+    public function validate(): void
     {
         $validator = $this->validator;
 

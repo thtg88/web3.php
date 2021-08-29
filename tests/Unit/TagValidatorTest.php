@@ -7,25 +7,17 @@ use Web3\Validators\TagValidator;
 
 class TagValidatorTest extends TestCase
 {
-    /**
-     * validator
-     *
-     * @var \Web3\Validators\TagValidator
-     */
-    protected $validator;
+    protected TagValidator $validator;
 
     public function setUp(): void
     {
         parent::setUp();
+
         $this->validator = new TagValidator();
     }
 
-    /**
-     * testValidate
-     *
-     * @return void
-     */
-    public function testValidate()
+    /** @test */
+    public function validate(): void
     {
         $validator = $this->validator;
 

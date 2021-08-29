@@ -7,25 +7,17 @@ use Web3\Validators\BooleanValidator;
 
 class BooleanValidatorTest extends TestCase
 {
-    /**
-     * validator
-     *
-     * @var \Web3\Validators\BooleanValidator
-     */
-    protected $validator;
+    protected BooleanValidator $validator;
 
     public function setUp(): void
     {
         parent::setUp();
+
         $this->validator = new BooleanValidator();
     }
 
-    /**
-     * testValidate
-     *
-     * @return void
-     */
-    public function testValidate()
+    /** @test */
+    public function validate(): void
     {
         $validator = $this->validator;
 

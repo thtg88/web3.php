@@ -2,63 +2,58 @@
 
 namespace Web3\Tests\Unit;
 
-use Web3\Tests\TestCase;
+use Web3\Contracts\SolidityType;
 use Web3\Contracts\Types\Uinteger;
+use Web3\Tests\TestCase;
 
 class UintegerTypeTest extends TestCase
 {
-    /**
-     * testTypes
-     *
-     * @var array
-     */
-    protected $testTypes = [
+    protected array $testTypes = [
         [
             'value' => 'uint',
             'result' => true,
-        ], [
+        ],
+        [
             'value' => 'uint[]',
             'result' => true,
-        ], [
+        ],
+        [
             'value' => 'uint[4]',
             'result' => true,
-        ], [
+        ],
+        [
             'value' => 'uint[][]',
             'result' => true,
-        ], [
+        ],
+        [
             'value' => 'uint[3][]',
             'result' => true,
-        ], [
+        ],
+        [
             'value' => 'uint[][6][]',
             'result' => true,
-        ], [
+        ],
+        [
             'value' => 'uint32',
             'result' => true,
-        ], [
+        ],
+        [
             'value' => 'uint64[4]',
             'result' => true,
         ],
     ];
 
-    /**
-     * solidityType
-     *
-     * @var \Web3\Contracts\SolidityType
-     */
-    protected $solidityType;
+    protected SolidityType $solidityType;
 
     public function setUp(): void
     {
         parent::setUp();
+
         $this->solidityType = new Uinteger();
     }
 
-    /**
-     * testIsType
-     *
-     * @return void
-     */
-    public function testIsType()
+    /** @test */
+    public function is_type(): void
     {
         $solidityType = $this->solidityType;
 

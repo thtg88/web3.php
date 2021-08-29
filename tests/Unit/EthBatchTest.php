@@ -2,17 +2,13 @@
 
 namespace Web3\Tests\Unit;
 
-use Web3\Tests\TestCase;
 use phpseclib\Math\BigInteger as BigNumber;
+use Web3\Eth;
+use Web3\Tests\TestCase;
 
 class EthBatchTest extends TestCase
 {
-    /**
-     * eth
-     *
-     * @var \Web3\Eth
-     */
-    protected $eth;
+    protected Eth $eth;
 
     public function setUp(): void
     {
@@ -21,12 +17,8 @@ class EthBatchTest extends TestCase
         $this->eth = $this->web3->eth;
     }
 
-    /**
-     * testBatch
-     *
-     * @return void
-     */
-    public function testBatch()
+    /** @test */
+    public function batch(): void
     {
         $eth = $this->eth;
 
@@ -38,6 +30,7 @@ class EthBatchTest extends TestCase
             if ($err !== null) {
                 return $this->fail('Got error!');
             }
+
             $this->assertTrue($data[0] instanceof BigNumber);
             $this->assertTrue($data[1] !== null);
         });

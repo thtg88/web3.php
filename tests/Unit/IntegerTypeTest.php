@@ -2,50 +2,48 @@
 
 namespace Web3\Tests\Unit;
 
-use Web3\Tests\TestCase;
+use Web3\Contracts\SolidityType;
 use Web3\Contracts\Types\Integer;
+use Web3\Tests\TestCase;
 
 class IntegerTypeTest extends TestCase
 {
-    /**
-     * testTypes
-     *
-     * @var array
-     */
-    protected $testTypes = [
+    protected array $testTypes = [
         [
             'value' => 'int',
             'result' => true,
-        ], [
+        ],
+        [
             'value' => 'int[]',
             'result' => true,
-        ], [
+        ],
+        [
             'value' => 'int[4]',
             'result' => true,
-        ], [
+        ],
+        [
             'value' => 'int[][]',
             'result' => true,
-        ], [
+        ],
+        [
             'value' => 'int[3][]',
             'result' => true,
-        ], [
+        ],
+        [
             'value' => 'int[][6][]',
             'result' => true,
-        ], [
+        ],
+        [
             'value' => 'int32',
             'result' => true,
-        ], [
+        ],
+        [
             'value' => 'int64[4]',
             'result' => true,
         ],
     ];
 
-    /**
-     * solidityType
-     *
-     * @var \Web3\Contracts\SolidityType
-     */
-    protected $solidityType;
+    protected SolidityType $solidityType;
 
     public function setUp(): void
     {
@@ -53,12 +51,8 @@ class IntegerTypeTest extends TestCase
         $this->solidityType = new Integer();
     }
 
-    /**
-     * testIsType
-     *
-     * @return void
-     */
-    public function testIsType()
+    /** @test */
+    public function is_type(): void
     {
         $solidityType = $this->solidityType;
 

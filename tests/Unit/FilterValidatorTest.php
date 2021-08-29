@@ -7,25 +7,17 @@ use Web3\Validators\FilterValidator;
 
 class FilterValidatorTest extends TestCase
 {
-    /**
-     * validator
-     *
-     * @var \Web3\Validators\FilterValidator
-     */
-    protected $validator;
+    protected FilterValidator $validator;
 
     public function setUp(): void
     {
         parent::setUp();
+
         $this->validator = new FilterValidator();
     }
 
-    /**
-     * testValidate
-     *
-     * @return void
-     */
-    public function testValidate()
+    /** @test */
+    public function validate(): void
     {
         $validator = $this->validator;
 

@@ -2,57 +2,50 @@
 
 namespace Web3\Tests\Unit;
 
-use Web3\Tests\TestCase;
+use Web3\Contracts\SolidityType;
 use Web3\Contracts\Types\Boolean;
+use Web3\Tests\TestCase;
 
 class BooleanTypeTest extends TestCase
 {
-    /**
-     * testTypes
-     *
-     * @var array
-     */
-    protected $testTypes = [
+    protected array $testTypes = [
         [
             'value' => 'bool',
             'result' => true,
-        ], [
+        ],
+        [
             'value' => 'bool[]',
             'result' => true,
-        ], [
+        ],
+        [
             'value' => 'bool[4]',
             'result' => true,
-        ], [
+        ],
+        [
             'value' => 'bool[][]',
             'result' => true,
-        ], [
+        ],
+        [
             'value' => 'bool[3][]',
             'result' => true,
-        ], [
+        ],
+        [
             'value' => 'bool[][6][]',
             'result' => true,
         ],
     ];
 
-    /**
-     * solidityType
-     *
-     * @var \Web3\Contracts\SolidityType
-     */
-    protected $solidityType;
+    protected SolidityType $solidityType;
 
     public function setUp(): void
     {
         parent::setUp();
+
         $this->solidityType = new Boolean();
     }
 
-    /**
-     * testIsType
-     *
-     * @return void
-     */
-    public function testIsType()
+    /** @test */
+    public function is_type(): void
     {
         $solidityType = $this->solidityType;
 

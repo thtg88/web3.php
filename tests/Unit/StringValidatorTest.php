@@ -7,12 +7,7 @@ use Web3\Validators\StringValidator;
 
 class StringValidatorTest extends TestCase
 {
-    /**
-     * validator
-     *
-     * @var \Web3\Validators\StringValidator
-     */
-    protected $validator;
+    protected StringValidator $validator;
 
     public function setUp(): void
     {
@@ -20,12 +15,8 @@ class StringValidatorTest extends TestCase
         $this->validator = new StringValidator();
     }
 
-    /**
-     * testValidate
-     *
-     * @return void
-     */
-    public function testValidate()
+    /** @test */
+    public function validate(): void
     {
         $validator = $this->validator;
 

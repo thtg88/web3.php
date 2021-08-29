@@ -10,12 +10,8 @@ use Web3\Methods\Web3\ClientVersion;
 
 class HttpProviderTest extends TestCase
 {
-    /**
-     * testSend
-     *
-     * @return void
-     */
-    public function testSend()
+    /** @test */
+    public function send(): void
     {
         $requestManager = new HttpRequestManager($this->testHost);
         $provider = new HttpProvider($requestManager);
@@ -29,12 +25,8 @@ class HttpProviderTest extends TestCase
         });
     }
 
-    /**
-     * testBatch
-     *
-     * @return void
-     */
-    public function testBatch()
+    /** @test */
+    public function batch(): void
     {
         $requestManager = new HttpRequestManager($this->testHost);
         $provider = new HttpProvider($requestManager);

@@ -7,25 +7,17 @@ use Web3\Validators\AddressValidator;
 
 class AddressValidatorTest extends TestCase
 {
-    /**
-     * validator
-     *
-     * @var \Web3\Validators\AddressValidator
-     */
-    protected $validator;
+    protected AddressValidator $validator;
 
     public function setUp(): void
     {
         parent::setUp();
+
         $this->validator = new AddressValidator();
     }
 
-    /**
-     * testValidate
-     *
-     * @return void
-     */
-    public function testValidate()
+    /** @test */
+    public function validate(): void
     {
         $validator = $this->validator;
 

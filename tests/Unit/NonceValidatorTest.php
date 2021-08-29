@@ -7,12 +7,7 @@ use Web3\Validators\NonceValidator;
 
 class NonceValidatorTest extends TestCase
 {
-    /**
-     * validator
-     *
-     * @var \Web3\Validators\NonceValidator
-     */
-    protected $validator;
+    protected NonceValidator $validator;
 
     public function setUp(): void
     {
@@ -20,12 +15,8 @@ class NonceValidatorTest extends TestCase
         $this->validator = new NonceValidator();
     }
 
-    /**
-     * testValidate
-     *
-     * @return void
-     */
-    public function testValidate()
+    /** @test */
+    public function validate(): void
     {
         $validator = $this->validator;
 

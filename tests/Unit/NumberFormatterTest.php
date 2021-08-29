@@ -7,25 +7,17 @@ use Web3\Formatters\NumberFormatter;
 
 class NumberFormatterTest extends TestCase
 {
-    /**
-     * formatter
-     *
-     * @var \Web3\Formatters\NumberFormatter
-     */
     protected $formatter;
 
     public function setUp(): void
     {
         parent::setUp();
+
         $this->formatter = new NumberFormatter();
     }
 
-    /**
-     * testFormat
-     *
-     * @return void
-     */
-    public function testFormat()
+    /** @test */
+    public function format(): void
     {
         $formatter = $this->formatter;
 

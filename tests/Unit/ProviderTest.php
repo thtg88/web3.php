@@ -8,12 +8,8 @@ use Web3\Providers\Provider;
 
 class ProviderTest extends TestCase
 {
-    /**
-     * testSetRequestManager
-     *
-     * @return void
-     */
-    public function testSetRequestManager()
+    /** @test */
+    public function set_request_manager(): void
     {
         $requestManager = new RequestManager('http://localhost:8545');
         $provider = new Provider($requestManager);

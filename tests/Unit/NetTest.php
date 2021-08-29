@@ -11,12 +11,7 @@ use Web3\Net;
 
 class NetTest extends TestCase
 {
-    /**
-     * net
-     *
-     * @var Web3\Net
-     */
-    protected $net;
+    protected Net $net;
 
     public function setUp(): void
     {
@@ -25,12 +20,8 @@ class NetTest extends TestCase
         $this->net = $this->web3->net;
     }
 
-    /**
-     * testInstance
-     *
-     * @return void
-     */
-    public function testInstance()
+    /** @test */
+    public function instance(): void
     {
         $net = new Net($this->testHost);
 
@@ -38,12 +29,8 @@ class NetTest extends TestCase
         $this->assertTrue($net->provider->requestManager instanceof RequestManager);
     }
 
-    /**
-     * testSetProvider
-     *
-     * @return void
-     */
-    public function testSetProvider()
+    /** @test */
+    public function set_provider(): void
     {
         $net = $this->net;
         $requestManager = new HttpRequestManager('http://localhost:8545');
@@ -56,12 +43,8 @@ class NetTest extends TestCase
         $this->assertEquals($net->provider->requestManager->host, 'http://localhost:8545');
     }
 
-    /**
-     * testCallThrowRuntimeException
-     *
-     * @return void
-     */
-    public function testCallThrowRuntimeException()
+    /** @test */
+    public function call_throw_runtime_exception(): void
     {
         $this->expectException(RuntimeException::class);
 

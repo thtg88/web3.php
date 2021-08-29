@@ -2,57 +2,48 @@
 
 namespace Web3\Tests\Unit;
 
-use RuntimeException;
 use InvalidArgumentException;
+use RuntimeException;
+use Web3\Personal;
 use Web3\Tests\TestCase;
 
 class PersonalApiTest extends TestCase
 {
-    /**
-     * personal
-     *
-     * @var Web3\Personal
-     */
-    protected $personal;
-
-    /**
-     * newAccount
-     *
-     * @var string
-     */
-    protected $newAccount;
+    protected Personal $personal;
+    protected string $newAccount;
 
     public function setUp(): void
     {
         parent::setUp();
 
         $this->personal = $this->web3->personal;
+
+        $this->web3->eth->coinbase(function ($err, $coinbase) {
+            if ($err !== null) {
+                return $this->fail($err->getMessage());
+            }
+
+            $this->coinbase = $coinbase;
+        });
     }
 
-    /**
-     * testListAccounts
-     *
-     * @return void
-     */
-    public function testListAccounts()
+    /** @test */
+    public function list_accounts(): void
     {
         $personal = $this->personal;
 
         $personal->listAccounts(function ($err, $accounts) {
+            // infura banned us to use list accounts
             if ($err !== null) {
-                // infura banned us to use list accounts
                 return $this->assertTrue($err->getCode() === 405);
             }
+
             $this->assertTrue(is_array($accounts));
         });
     }
 
-    /**
-     * testNewAccount
-     *
-     * @return void
-     */
-    public function testNewAccount()
+    /** @test */
+    public function new_account(): void
     {
         $personal = $this->personal;
 
@@ -60,16 +51,13 @@ class PersonalApiTest extends TestCase
             if ($err !== null) {
                 return $this->fail($err->getMessage());
             }
+
             $this->assertTrue(is_string($account));
         });
     }
 
-    /**
-     * testUnlockAccount
-     *
-     * @return void
-     */
-    public function testUnlockAccount()
+    /** @test */
+    public function unlock_account(): void
     {
         $personal = $this->personal;
 
@@ -78,6 +66,7 @@ class PersonalApiTest extends TestCase
             if ($err !== null) {
                 return $this->fail($err->getMessage());
             }
+
             $this->newAccount = $account;
             $this->assertTrue(is_string($account));
         });
@@ -86,16 +75,13 @@ class PersonalApiTest extends TestCase
             if ($err !== null) {
                 return $this->fail($err->getMessage());
             }
+
             $this->assertTrue($unlocked);
         });
     }
 
-    /**
-     * testUnlockAccountWithDuration
-     *
-     * @return void
-     */
-    public function testUnlockAccountWithDuration()
+    /** @test */
+    public function unlock_account_with_duration(): void
     {
         $personal = $this->personal;
 
@@ -104,6 +90,7 @@ class PersonalApiTest extends TestCase
             if ($err !== null) {
                 return $this->fail($err->getMessage());
             }
+
             $this->newAccount = $account;
             $this->assertTrue(is_string($account));
         });
@@ -112,16 +99,13 @@ class PersonalApiTest extends TestCase
             if ($err !== null) {
                 return $this->fail($err->getMessage());
             }
+
             $this->assertTrue($unlocked);
         });
     }
 
-    /**
-     * testLockAccount
-     *
-     * @return void
-     */
-    public function testLockAccount()
+    /** @test */
+    public function lock_account(): void
     {
         $personal = $this->personal;
 
@@ -149,12 +133,8 @@ class PersonalApiTest extends TestCase
         });
     }
 
-    /**
-     * testSendTransaction
-     *
-     * @return void
-     */
-    public function testSendTransaction()
+    /** @test */
+    public function send_transaction(): void
     {
         $personal = $this->personal;
 
@@ -163,6 +143,7 @@ class PersonalApiTest extends TestCase
             if ($err !== null) {
                 return $this->fail($err->getMessage());
             }
+
             $this->newAccount = $account;
             $this->assertTrue(is_string($account));
         });
@@ -175,6 +156,7 @@ class PersonalApiTest extends TestCase
             if ($err !== null) {
                 return $this->fail($err->getMessage());
             }
+
             $this->assertTrue(is_string($transaction));
             $this->assertTrue(mb_strlen($transaction) === 66);
         });
@@ -187,17 +169,14 @@ class PersonalApiTest extends TestCase
             if ($err !== null) {
                 return $this->fail($err->getMessage());
             }
+
             $this->assertTrue(is_string($transaction));
             $this->assertTrue(mb_strlen($transaction) === 66);
         });
     }
 
-    /**
-     * testUnallowedMethod
-     *
-     * @return void
-     */
-    public function testUnallowedMethod()
+    /** @test */
+    public function unallowed_method(): void
     {
         $this->expectException(RuntimeException::class);
 
@@ -211,12 +190,8 @@ class PersonalApiTest extends TestCase
         });
     }
 
-    /**
-     * testWrongParam
-     *
-     * @return void
-     */
-    public function testWrongParam()
+    /** @test */
+    public function wrong_param(): void
     {
         $this->expectException(RuntimeException::class);
 
@@ -230,12 +205,8 @@ class PersonalApiTest extends TestCase
         });
     }
 
-    /**
-     * testWrongCallback
-     *
-     * @return void
-     */
-    public function testWrongCallback()
+    /** @test */
+    public function wrong_callback(): void
     {
         $this->expectException(InvalidArgumentException::class);
 

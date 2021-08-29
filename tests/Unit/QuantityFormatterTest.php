@@ -7,25 +7,17 @@ use Web3\Formatters\QuantityFormatter;
 
 class QuantityFormatterTest extends TestCase
 {
-    /**
-     * formatter
-     *
-     * @var \Web3\Formatters\QuantityFormatter
-     */
-    protected $formatter;
+    protected QuantityFormatter $formatter;
 
     public function setUp(): void
     {
         parent::setUp();
+
         $this->formatter = new QuantityFormatter();
     }
 
-    /**
-     * testFormat
-     *
-     * @return void
-     */
-    public function testFormat()
+    /** @test */
+    public function format(): void
     {
         $formatter = $this->formatter;
 

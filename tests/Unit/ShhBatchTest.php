@@ -3,16 +3,12 @@
 namespace Web3\Tests\Unit;
 
 use RuntimeException;
+use Web3\Shh;
 use Web3\Tests\TestCase;
 
 class ShhBatchTest extends TestCase
 {
-    /**
-     * shh
-     *
-     * @var Web3\Shh
-     */
-    protected $shh;
+    protected Shh $shh;
 
     public function setUp(): void
     {
@@ -21,12 +17,8 @@ class ShhBatchTest extends TestCase
         $this->shh = $this->web3->shh;
     }
 
-    /**
-     * testBatch
-     *
-     * @return void
-     */
-    public function testBatch()
+    /** @test */
+    public function batch(): void
     {
         $shh = $this->shh;
 
@@ -43,12 +35,8 @@ class ShhBatchTest extends TestCase
         });
     }
 
-    /**
-     * testWrongParam
-     *
-     * @return void
-     */
-    // public function testWrongParam()
+    /** @test */
+    // public function wrong_param(): void
     // {
     //     $this->expectException(RuntimeException::class);
 

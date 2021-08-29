@@ -7,25 +7,17 @@ use Web3\Validators\BlockHashValidator;
 
 class BlockHashValidatorTest extends TestCase
 {
-    /**
-     * validator
-     *
-     * @var \Web3\Validators\BlockHashValidator
-     */
-    protected $validator;
+    protected BlockHashValidator $validator;
 
     public function setUp(): void
     {
         parent::setUp();
+
         $this->validator = new BlockHashValidator();
     }
 
-    /**
-     * testValidate
-     *
-     * @return void
-     */
-    public function testValidate()
+    /** @test */
+    public function validate(): void
     {
         $validator = $this->validator;
 

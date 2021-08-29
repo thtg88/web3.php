@@ -2,57 +2,50 @@
 
 namespace Web3\Tests\Unit;
 
-use Web3\Tests\TestCase;
+use Web3\Contracts\SolidityType;
 use Web3\Contracts\Types\Address;
+use Web3\Tests\TestCase;
 
 class AddressTypeTest extends TestCase
 {
-    /**
-     * testTypes
-     *
-     * @var array
-     */
-    protected $testTypes = [
+    protected array $testTypes = [
         [
             'value' => 'address',
             'result' => true,
-        ], [
+        ],
+        [
             'value' => 'address[]',
             'result' => true,
-        ], [
+        ],
+        [
             'value' => 'address[4]',
             'result' => true,
-        ], [
+        ],
+        [
             'value' => 'address[][]',
             'result' => true,
-        ], [
+        ],
+        [
             'value' => 'address[3][]',
             'result' => true,
-        ], [
+        ],
+        [
             'value' => 'address[][6][]',
             'result' => true,
         ],
     ];
 
-    /**
-     * solidityType
-     *
-     * @var \Web3\Contracts\SolidityType
-     */
-    protected $solidityType;
+    protected SolidityType $solidityType;
 
     public function setUp(): void
     {
         parent::setUp();
+
         $this->solidityType = new Address();
     }
 
-    /**
-     * testIsType
-     *
-     * @return void
-     */
-    public function testIsType()
+    /** @test */
+    public function is_type(): void
     {
         $solidityType = $this->solidityType;
 

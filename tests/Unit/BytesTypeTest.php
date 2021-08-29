@@ -2,50 +2,48 @@
 
 namespace Web3\Tests\Unit;
 
-use Web3\Tests\TestCase;
+use Web3\Contracts\SolidityType;
 use Web3\Contracts\Types\Bytes;
+use Web3\Tests\TestCase;
 
 class BytesTypeTest extends TestCase
 {
-    /**
-     * testTypes
-     *
-     * @var array
-     */
-    protected $testTypes = [
+    protected array $testTypes = [
         [
             'value' => 'bytes',
             'result' => false,
-        ], [
+        ],
+        [
             'value' => 'bytes[]',
             'result' => false,
-        ], [
+        ],
+        [
             'value' => 'bytes[4]',
             'result' => false,
-        ], [
+        ],
+        [
             'value' => 'bytes[][]',
             'result' => false,
-        ], [
+        ],
+        [
             'value' => 'bytes[3][]',
             'result' => false,
-        ], [
+        ],
+        [
             'value' => 'bytes[][6][]',
             'result' => false,
-        ], [
+        ],
+        [
             'value' => 'bytes32',
             'result' => true,
-        ], [
+        ],
+        [
             'value' => 'bytes8[4]',
             'result' => true,
         ],
     ];
 
-    /**
-     * solidityType
-     *
-     * @var \Web3\Contracts\SolidityType
-     */
-    protected $solidityType;
+    protected SolidityType $solidityType;
 
     public function setUp(): void
     {
@@ -53,12 +51,8 @@ class BytesTypeTest extends TestCase
         $this->solidityType = new Bytes();
     }
 
-    /**
-     * testIsType
-     *
-     * @return void
-     */
-    public function testIsType()
+    /** @test */
+    public function is_type(): void
     {
         $solidityType = $this->solidityType;
 

@@ -9,12 +9,7 @@ use Web3\Shh;
 
 class ShhApiTest extends TestCase
 {
-    /**
-     * shh
-     *
-     * @var Web3\Shh
-     */
-    protected $shh;
+    protected Shh $shh;
 
     public function setUp(): void
     {
@@ -23,12 +18,8 @@ class ShhApiTest extends TestCase
         $this->shh = $this->web3->shh;
     }
 
-    /**
-     * testVersion
-     *
-     * @return void
-     */
-    public function testVersion()
+    /** @test */
+    public function version(): void
     {
         $shh = $this->shh;
 
@@ -36,17 +27,17 @@ class ShhApiTest extends TestCase
             if ($err !== null) {
                 return $this->fail($err->getMessage());
             }
+
             $this->assertTrue(is_string($version));
         });
     }
 
     /**
-     * testNewIdentity
      * Comment because ganache-cli only implement shh_version.
      *
-     * @return void
+     * @test
      */
-    // public function testNewIdentity()
+    // public function new_identity(): void
     // {
     //     $shh = $this->shh;
 
@@ -59,12 +50,11 @@ class ShhApiTest extends TestCase
     // }
 
     /**
-     * testHasIdentity
      * Comment because ganache-cli only implement shh_version.
      *
-     * @return void
+     * @test
      */
-    // public function testHasIdentity()
+    // public function has_identity(): void
     // {
     //     $shh = $this->shh;
     //     $newIdentity = '0x' . implode('', array_fill(0, 120, '0'));
@@ -93,12 +83,8 @@ class ShhApiTest extends TestCase
     //     });
     // }
 
-    /**
-     * testNewGroup
-     *
-     * @return void
-     */
-    // public function testNewGroup()
+    /** @test */
+    // public function new_group(): void
     // {
     //     $shh = $this->shh;
 
@@ -110,12 +96,8 @@ class ShhApiTest extends TestCase
     //     });
     // }
 
-    /**
-     * testAddToGroup
-     *
-     * @return void
-     */
-    // public function testAddToGroup()
+    /** @test */
+    // public function add_to_group(): void
     // {
     //     $shh = $this->shh;
     //     $newIdentity = '';
@@ -138,12 +120,11 @@ class ShhApiTest extends TestCase
     // }
 
     /**
-     * testPost
      * Comment because ganache-cli only implement shh_version.
      *
-     * @return void
+     * @test
      */
-    // public function testPost()
+    // public function post(): void
     // {
     //     $shh = $this->shh;
     //     $fromIdentity = '';
@@ -197,12 +178,11 @@ class ShhApiTest extends TestCase
     // }
 
     /**
-     * testNewFilter
      * Comment because ganache-cli only implement shh_version.
      *
-     * @return void
+     * @test
      */
-    // public function testNewFilter()
+    // public function new_filter(): void
     // {
     //     $shh = $this->shh;
     //     $toIdentity = '';
@@ -249,12 +229,11 @@ class ShhApiTest extends TestCase
     // }
 
     /**
-     * testUninstallFilter
      * Comment because ganache-cli only implement shh_version.
      *
-     * @return void
+     * @test
      */
-    // public function testUninstallFilter()
+    // public function uninstall_filter(): void
     // {
     //     $shh = $this->shh;
     //     $toIdentity = '';
@@ -291,12 +270,11 @@ class ShhApiTest extends TestCase
     // }
 
     /**
-     * testGetFilterChanges
      * Comment because ganache-cli only implement shh_version.
      *
-     * @return void
+     * @test
      */
-    // public function testGetFilterChanges()
+    // public function get_filter_changes(): void
     // {
     //     $shh = $this->shh;
     //     $fromIdentity = '';
@@ -365,12 +343,11 @@ class ShhApiTest extends TestCase
     // }
 
     /**
-     * testGetMessages
      * Comment because ganache-cli only implement shh_version.
      *
-     * @return void
+     * @test
      */
-    // public function testGetMessages()
+    // public function get_messages(): void
     // {
     //     $shh = $this->shh;
     //     $fromIdentity = '';
@@ -441,13 +418,12 @@ class ShhApiTest extends TestCase
     // }
 
     /**
-     * testWrongParam
      * We transform data and throw invalid argument exception
      * instead of runtime exception.
      *
-     * @return void
+     * @test
      */
-    // public function testWrongParam()
+    // public function wrong_param(): void
     // {
     //     $this->expectException(RuntimeException::class);
 
@@ -460,12 +436,9 @@ class ShhApiTest extends TestCase
     //         $this->assertTrue(true);
     //     });
     // }
-    /**
-     * testUnallowedMethod
-     *
-     * @return void
-     */
-    public function testUnallowedMethod()
+
+    /** @test */
+    public function unallowed_method(): void
     {
         $this->expectException(RuntimeException::class);
 
@@ -479,12 +452,8 @@ class ShhApiTest extends TestCase
         });
     }
 
-    /**
-     * testWrongCallback
-     *
-     * @return void
-     */
-    public function testWrongCallback()
+    /** @test */
+    public function wrong_callback(): void
     {
         $this->expectException(InvalidArgumentException::class);
 
