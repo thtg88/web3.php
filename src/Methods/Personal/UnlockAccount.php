@@ -22,11 +22,15 @@ use Web3\Formatters\NumberFormatter;
 class UnlockAccount extends EthMethod
 {
     protected array $validators = [
-        AddressValidator::class, StringValidator::class, QuantityValidator::class,
+        AddressValidator::class,
+        StringValidator::class,
+        QuantityValidator::class,
     ];
 
     protected array $inputFormatters = [
-        AddressFormatter::class, StringFormatter::class, NumberFormatter::class,
+        AddressFormatter::class,
+        StringFormatter::class,
+        NumberFormatter::class,
     ];
 
     protected array $defaultValues = [

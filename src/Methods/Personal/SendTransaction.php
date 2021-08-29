@@ -20,10 +20,12 @@ use Web3\Formatters\StringFormatter;
 class SendTransaction extends EthMethod
 {
     protected array $validators = [
-        TransactionValidator::class, StringValidator::class,
+        TransactionValidator::class,
+        StringValidator::class,
     ];
 
     protected array $inputFormatters = [
-        TransactionFormatter::class, StringFormatter::class,
+        TransactionFormatter::class,
+        StringFormatter::class,
     ];
 }
