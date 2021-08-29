@@ -39,40 +39,15 @@ class Contract
      */
     protected $provider;
 
-    /**
-     * abi
-     *
-     * @var array
-     */
-    protected $abi;
+    protected array $abi;
 
-    /**
-     * constructor
-     *
-     * @var array
-     */
-    protected $constructor = [];
+    protected array $constructor = [];
 
-    /**
-     * functions
-     *
-     * @var array
-     */
-    protected $functions = [];
+    protected array $functions = [];
 
-    /**
-     * events
-     *
-     * @var array
-     */
-    protected $events = [];
+    protected array $events = [];
 
-    /**
-     * toAddress
-     *
-     * @var string
-     */
-    protected $toAddress;
+    protected string $toAddress;
 
     /**
      * bytecode
@@ -95,11 +70,7 @@ class Contract
      */
     protected $ethabi;
 
-    /**
-     * defaultBlock
-     *
-     */
-    protected $defaultBlock;
+    protected string $defaultBlock;
 
     /**
      * construct
@@ -177,8 +148,6 @@ class Contract
     // }
 
     /**
-     * get
-     *
      * @param string $name
      */
     public function __get($name)
@@ -193,8 +162,6 @@ class Contract
     }
 
     /**
-     * set
-     *
      * @param string $name
      */
     public function __set($name, $value)
@@ -208,23 +175,15 @@ class Contract
         return false;
     }
 
-    /**
-     * getProvider
-     *
-     * @return \Web3\Providers\Provider
-     */
-    public function getProvider()
+    public function getProvider(): Provider
     {
         return $this->provider;
     }
 
     /**
-     * setProvider
-     *
      * @param \Web3\Providers\Provider $provider
-     * @return $this
      */
-    public function setProvider($provider)
+    public function setProvider($provider): self
     {
         if ($provider instanceof Provider) {
             $this->provider = $provider;
@@ -233,12 +192,7 @@ class Contract
         return $this;
     }
 
-    /**
-     * getDefaultBlock
-     *
-     * @return string
-     */
-    public function getDefaultBlock()
+    public function getDefaultBlock(): string
     {
         return $this->defaultBlock;
     }
