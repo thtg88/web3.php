@@ -21,13 +21,16 @@ use Web3\Formatters\OptionalQuantityFormatter;
 class Call extends EthMethod
 {
     protected array $validators = [
-        CallValidator::class, [
-            TagValidator::class, QuantityValidator::class,
+        CallValidator::class,
+        [
+            TagValidator::class,
+            QuantityValidator::class,
         ],
     ];
 
     protected array $inputFormatters = [
-        TransactionFormatter::class, OptionalQuantityFormatter::class,
+        TransactionFormatter::class,
+        OptionalQuantityFormatter::class,
     ];
 
     protected array $defaultValues = [

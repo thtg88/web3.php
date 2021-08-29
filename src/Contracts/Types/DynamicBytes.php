@@ -17,53 +17,32 @@ use Web3\Contracts\SolidityType;
 
 class DynamicBytes extends SolidityType implements IType
 {
-    /**
-     * construct
-     *
-     * @return void
-     */
-    public function __construct()
+    public function isType(string $name): bool
     {
+        return preg_match('/^bytes(\[([0-9]*)\])*$/', $name) === 1;
     }
 
-    /**
-     * isType
-     *
-     * @param string $name
-     * @return bool
-     */
-    public function isType($name)
-    {
-        return (preg_match('/^bytes(\[([0-9]*)\])*$/', $name) === 1);
-    }
-
-    /**
-     * isDynamicType
-     *
-     * @return bool
-     */
-    public function isDynamicType()
+    public function isDynamicType(): bool
     {
         return true;
     }
 
     /**
-     * inputFormat
-     *
      * @param string $name
-     * @return string
      */
-    public function inputFormat($value, $name)
+    public function inputFormat($value, $name): string
     {
         if (!Utils::isHex($value)) {
             throw new InvalidArgumentException('The value to inputFormat must be hex bytes.');
         }
+
         $value = Utils::stripZero($value);
 
         if (mb_strlen($value) % 2 !== 0) {
             $value = '0' . $value;
             // throw new InvalidArgumentException('The value to inputFormat has invalid length.');
         }
+
         $bn = Utils::toBn(floor(mb_strlen($value) / 2));
         $bnHex = $bn->toHex(true);
         $padded = mb_substr($bnHex, 0, 1);
@@ -71,6 +50,7 @@ class DynamicBytes extends SolidityType implements IType
         if ($padded !== '0' && $padded !== 'f') {
             $padded = '0';
         }
+
         $l = floor((mb_strlen($value) + 63) / 64);
         $padding = (($l * 64 - mb_strlen($value) + 1) >= 0) ? $l * 64 - mb_strlen($value) : 0;
 
@@ -78,12 +58,9 @@ class DynamicBytes extends SolidityType implements IType
     }
 
     /**
-     * outputFormat
-     *
      * @param string $name
-     * @return string
      */
-    public function outputFormat($value, $name)
+    public function outputFormat($value, $name): string
     {
         $checkZero = str_replace('0', '', $value);
 

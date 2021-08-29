@@ -65,13 +65,6 @@ class Utils
     // const NEGATIVE1 = new BigNumber(-1);
 
     /**
-     * construct
-     *
-     * @return void
-     */
-    // public function __construct() {}
-
-    /**
      * Encoding string or integer or numeric string(is not zero prefixed) or big number to hex.
      *
      * @param string|int|BigNumber $value

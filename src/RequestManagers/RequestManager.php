@@ -14,13 +14,7 @@ namespace Web3\RequestManagers;
 class RequestManager
 {
     protected string $host;
-
-    /**
-     * timeout
-     *
-     * @var float
-     */
-    protected $timeout;
+    protected float $timeout;
 
     public function __construct(string $host, float $timeout=1)
     {

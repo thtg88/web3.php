@@ -14,8 +14,6 @@ namespace Web3\Validators;
 class PostValidator
 {
     /**
-     * validate
-     *
      * @param array $value
      */
     public static function validate($value): bool

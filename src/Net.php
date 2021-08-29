@@ -18,12 +18,7 @@ use Web3\RequestManagers\HttpRequestManager;
 
 class Net
 {
-    /**
-     * provider
-     *
-     * @var \Web3\Providers\Provider
-     */
-    protected $provider;
+    protected Provider $provider;
 
     private array $methods = [];
 
@@ -53,9 +48,8 @@ class Net
     /**
      * @param string $name
      * @param array $arguments
-     * @return void
      */
-    public function __call($name, $arguments)
+    public function __call($name, $arguments): void
     {
         if (empty($this->provider)) {
             throw new \RuntimeException('Please set provider first.');

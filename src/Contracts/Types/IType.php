@@ -13,20 +13,8 @@ namespace Web3\Contracts\Types;
 
 interface IType
 {
-    /**
-     * isType
-     *
-     * @param string $name
-     * @return bool
-     */
-    public function isType($name);
-
-    /**
-     * isDynamicType
-     *
-     * @return bool
-     */
-    public function isDynamicType();
+    public function isType(string $name): bool;
+    public function isDynamicType(): bool;
 
     /**
      * inputFormat

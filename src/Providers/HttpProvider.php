@@ -11,6 +11,8 @@
 
 namespace Web3\Providers;
 
+use RuntimeException;
+use Web3\Methods\IMethod;
 use Web3\RequestManagers\RequestManager;
 
 class HttpProvider extends Provider implements IProvider
@@ -66,7 +68,7 @@ class HttpProvider extends Provider implements IProvider
     public function execute(callable $callback): void
     {
         if (!$this->isBatch) {
-            throw new \RuntimeException('Please batch json rpc first.');
+            throw new RuntimeException('Please batch json rpc first.');
         }
 
         $methods = $this->methods;

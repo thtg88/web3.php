@@ -19,21 +19,9 @@ use GuzzleHttp\Client;
 
 class HttpRequestManager extends RequestManager implements IRequestManager
 {
-    /**
-     * client
-     *
-     * @var \GuzzleHttp\Client
-     */
-    protected $client;
+    protected Client $client;
 
-    /**
-     * construct
-     *
-     * @param string $host
-     * @param int $timeout
-     * @return void
-     */
-    public function __construct($host, $timeout = 1)
+    public function __construct(string $host, float $timeout = 1)
     {
         parent::__construct($host, $timeout);
 
@@ -41,13 +29,9 @@ class HttpRequestManager extends RequestManager implements IRequestManager
     }
 
     /**
-     * sendPayload
-     *
      * @param string $payload
-     * @param callable $callback
-     * @return void
      */
-    public function sendPayload($payload, $callback)
+    public function sendPayload($payload, callable $callback): void
     {
         if (!is_string($payload)) {
             throw new \InvalidArgumentException('Payload must be string.');

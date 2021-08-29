@@ -18,15 +18,6 @@ use Web3\Utils;
 class SolidityType
 {
     /**
-     * construct
-     *
-     * @return void
-     */
-    // public function  __construct() {}
-
-    /**
-     * get
-     *
      * @param string $name
      */
     public function __get($name)
@@ -41,10 +32,8 @@ class SolidityType
     }
 
     /**
-     * set
-     *
      * @param string $name
-     * @return mixed;
+     * @return mixed
      */
     public function __set($name, $value)
     {
@@ -58,16 +47,6 @@ class SolidityType
     }
 
     /**
-     * callStatic
-     *
-     * @param string $name
-     * @return void
-     */
-    // public static function __callStatic($name, $arguments) {}
-
-    /**
-     * nestedTypes
-     *
      * @param string $name
      */
     public function nestedTypes($name)
@@ -75,6 +54,7 @@ class SolidityType
         if (!is_string($name)) {
             throw new InvalidArgumentException('nestedTypes name must string.');
         }
+
         $matches = [];
 
         if (preg_match_all('/(\[[0-9]*\])/', $name, $matches, PREG_PATTERN_ORDER) >= 1) {
@@ -85,8 +65,6 @@ class SolidityType
     }
 
     /**
-     * nestedName
-     *
      * @param string $name
      * @return string
      */
@@ -95,6 +73,7 @@ class SolidityType
         if (!is_string($name)) {
             throw new InvalidArgumentException('nestedName name must string.');
         }
+
         $nestedTypes = $this->nestedTypes($name);
 
         if ($nestedTypes === false) {
@@ -105,12 +84,9 @@ class SolidityType
     }
 
     /**
-     * isDynamicArray
-     *
      * @param string $name
-     * @return bool
      */
-    public function isDynamicArray($name)
+    public function isDynamicArray($name): bool
     {
         $nestedTypes = $this->nestedTypes($name);
 
@@ -118,12 +94,9 @@ class SolidityType
     }
 
     /**
-     * isStaticArray
-     *
      * @param string $name
-     * @return bool
      */
-    public function isStaticArray($name)
+    public function isStaticArray($name): bool
     {
         $nestedTypes = $this->nestedTypes($name);
 
@@ -131,18 +104,16 @@ class SolidityType
     }
 
     /**
-     * staticArrayLength
-     *
      * @param string $name
-     * @return int
      */
-    public function staticArrayLength($name)
+    public function staticArrayLength($name): int
     {
         $nestedTypes = $this->nestedTypes($name);
 
         if ($nestedTypes === false) {
             return 1;
         }
+
         $match = [];
 
         if (preg_match('/[0-9]{1,}/', $nestedTypes[count($nestedTypes) - 1], $match) === 1) {
@@ -153,18 +124,16 @@ class SolidityType
     }
 
     /**
-     * staticPartLength
-     *
      * @param string $name
-     * @return int
      */
-    public function staticPartLength($name)
+    public function staticPartLength($name): int
     {
         $nestedTypes = $this->nestedTypes($name);
 
         if ($nestedTypes === false) {
             $nestedTypes = ['[1]'];
         }
+
         $count = 32;
 
         foreach ($nestedTypes as $type) {
@@ -175,18 +144,14 @@ class SolidityType
             } else {
                 $num = intval($num);
             }
+
             $count *= $num;
         }
 
         return $count;
     }
 
-    /**
-     * isDynamicType
-     *
-     * @return bool
-     */
-    public function isDynamicType()
+    public function isDynamicType(): bool
     {
         return false;
     }
@@ -210,7 +175,9 @@ class SolidityType
             }
 
             return $result;
-        } elseif ($this->isStaticArray($name)) {
+        }
+
+        if ($this->isStaticArray($name)) {
             $length = $this->staticArrayLength($name);
             $nestedName = $this->nestedName($name);
             $result = [];
@@ -249,7 +216,9 @@ class SolidityType
             }
 
             return $result;
-        } elseif ($this->isStaticArray($name)) {
+        }
+
+        if ($this->isStaticArray($name)) {
             $length = $this->staticArrayLength($name);
             $arrayStart = $offset;
 
@@ -263,7 +232,9 @@ class SolidityType
             }
 
             return $result;
-        } elseif ($this->isDynamicType()) {
+        }
+
+        if ($this->isDynamicType()) {
             $dynamicOffset = (int) Utils::toBn('0x' . mb_substr($value, $offset * 2, 64))->toString();
             $length = (int) Utils::toBn('0x' . mb_substr($value, $dynamicOffset * 2, 64))->toString();
             $roundedLength = floor(($length + 31) / 32);
@@ -271,6 +242,7 @@ class SolidityType
 
             return $this->outputFormat($param, $name);
         }
+
         $length = $this->staticPartLength($name);
         $param = mb_substr($value, $offset * 2, $length * 2);
 

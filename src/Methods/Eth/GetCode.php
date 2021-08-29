@@ -21,7 +21,8 @@ use Web3\Formatters\OptionalQuantityFormatter;
 class GetCode extends EthMethod
 {
     protected array $validators = [
-        AddressValidator::class, [
+        AddressValidator::class,
+        [
             TagValidator::class,
             QuantityValidator::class,
         ],

@@ -18,43 +18,17 @@ use Web3\Formatters\BigNumberFormatter;
 
 class Str extends SolidityType implements IType
 {
-    /**
-     * construct
-     *
-     * @return void
-     */
-    public function __construct()
+    public function isType(string $name): bool
     {
+        return preg_match('/^string(\[([0-9]*)\])*$/', $name) === 1;
     }
 
-    /**
-     * isType
-     *
-     * @param string $name
-     * @return bool
-     */
-    public function isType($name)
-    {
-        return (preg_match('/^string(\[([0-9]*)\])*$/', $name) === 1);
-    }
-
-    /**
-     * isDynamicType
-     *
-     * @return bool
-     */
-    public function isDynamicType()
+    public function isDynamicType(): bool
     {
         return true;
     }
 
-    /**
-     * inputFormat
-     *
-     * @param string $name
-     * @return string
-     */
-    public function inputFormat($value, $name)
+    public function inputFormat($value, $name): string
     {
         $value = Utils::toHex($value);
         $prefix = IntegerFormatter::format(mb_strlen($value) / 2);
@@ -65,20 +39,18 @@ class Str extends SolidityType implements IType
     }
 
     /**
-     * outputFormat
-     *
      * @param string $name
-     * @return string
      */
-    public function outputFormat($value, $name)
+    public function outputFormat($value, $name): string
     {
         $strLen = mb_substr($value, 0, 64);
         $strValue = mb_substr($value, 64);
         $match = [];
 
         if (preg_match('/^[0]+([a-f0-9]+)$/', $strLen, $match) === 1) {
-            $strLen = BigNumberFormatter::format('0x' . $match[1])->toString();
+            $strLen = BigNumberFormatter::format('0x' . $match[1]);
         }
+
         $strValue = mb_substr($strValue, 0, (int) $strLen * 2);
 
         return Utils::hexToBin($strValue);

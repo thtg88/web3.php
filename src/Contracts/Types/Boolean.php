@@ -16,55 +16,28 @@ use Web3\Contracts\SolidityType;
 
 class Boolean extends SolidityType implements IType
 {
-    /**
-     * construct
-     *
-     * @return void
-     */
-    public function __construct()
+    public function isType(string $name): bool
     {
+        return preg_match('/^bool(\[([0-9]*)\])*$/', $name) === 1;
     }
 
-    /**
-     * isType
-     *
-     * @param string $name
-     * @return bool
-     */
-    public function isType($name)
-    {
-        return (preg_match('/^bool(\[([0-9]*)\])*$/', $name) === 1);
-    }
-
-    /**
-     * isDynamicType
-     *
-     * @return bool
-     */
-    public function isDynamicType()
+    public function isDynamicType(): bool
     {
         return false;
     }
 
-    /**
-     * inputFormat
-     *
-     * @param string $name
-     * @return string
-     */
-    public function inputFormat($value, $name)
+    public function inputFormat($value, $name): string
     {
         if (!is_bool($value)) {
             throw new InvalidArgumentException('The value to inputFormat function must be boolean.');
         }
+
         $value = (int) $value;
 
         return '000000000000000000000000000000000000000000000000000000000000000' . $value;
     }
 
     /**
-     * outputFormat
-     *
      * @param string $name
      * @return string
      */

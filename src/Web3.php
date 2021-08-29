@@ -11,29 +11,19 @@
 
 namespace Web3;
 
-use Web3\Providers\Provider;
+use RuntimeException;
 use Web3\Providers\HttpProvider;
+use Web3\Providers\Provider;
 use Web3\RequestManagers\HttpRequestManager;
 
 class Web3
 {
-    /**
-     * provider
-     *
-     * @var \Web3\Providers\Provider
-     */
-    protected $provider;
-
+    protected Provider $provider;
     protected Eth $eth;
-
     protected Net $net;
-
     protected Personal $personal;
-
     protected Shh $shh;
-
     protected Utils $utils;
-
     private array $methods = [];
 
     private array $allowedMethods = [
@@ -42,14 +32,11 @@ class Web3
     ];
 
     /**
-     * construct
-     *
      * @param string|\Web3\Providers\Provider $provider
-     * @return void
      */
     public function __construct($provider)
     {
-        if (is_string($provider) && (filter_var($provider, FILTER_VALIDATE_URL) !== false)) {
+        if (is_string($provider) && filter_var($provider, FILTER_VALIDATE_URL) !== false) {
             // check the uri schema
             if (preg_match('/^https?:\/\//', $provider) === 1) {
                 $requestManager = new HttpRequestManager($provider);
@@ -62,16 +49,13 @@ class Web3
     }
 
     /**
-     * call
-     *
      * @param string $name
      * @param array $arguments
-     * @return void
      */
-    public function __call($name, $arguments)
+    public function __call($name, $arguments): void
     {
         if (empty($this->provider)) {
-            throw new \RuntimeException('Please set provider first.');
+            throw new RuntimeException('Please set provider first.');
         }
 
         $class = explode('\\', get_class());
@@ -183,12 +167,9 @@ class Web3
     }
 
     /**
-     * batch
-     *
      * @param bool $status
-     * @return void
      */
-    public function batch($status)
+    public function batch($status): void
     {
         $status = is_bool($status);
 

@@ -15,29 +15,12 @@ use Web3\RequestManagers\RequestManager;
 
 class Provider
 {
-    /**
-     * requestManager
-     *
-     * @var \Web3\RequestManagers\RequestManager
-     */
-    protected $requestManager;
-
-    /**
-     * isBatch
-     *
-     * @var bool
-     */
-    protected $isBatch = false;
-
+    protected RequestManager $requestManager;
+    protected bool $isBatch = false;
     protected array $batch = [];
-
     protected string $rpcVersion = '2.0';
 
-    /**
-     * id
-     *
-     * @var integer
-     */
+    /** @var int */
     protected $id = 0;
 
     public function __construct(RequestManager $requestManager)
@@ -74,18 +57,12 @@ class Provider
         return false;
     }
 
-    /**
-     * @return \Web3\RequestManagers\RequestManager
-     */
-    public function getRequestManager()
+    public function getRequestManager(): RequestManager
     {
         return $this->requestManager;
     }
 
-    /**
-     * @return bool
-     */
-    public function getIsBatch()
+    public function getIsBatch(): bool
     {
         return $this->isBatch;
     }

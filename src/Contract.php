@@ -32,21 +32,11 @@ use Web3\Formatters\AddressFormatter;
 
 class Contract
 {
-    /**
-     * provider
-     *
-     * @var \Web3\Providers\Provider
-     */
-    protected $provider;
-
+    protected Provider $provider;
     protected array $abi;
-
     protected array $constructor = [];
-
     protected array $functions = [];
-
     protected array $events = [];
-
     protected string $toAddress;
 
     /**
@@ -56,19 +46,9 @@ class Contract
      */
     protected $bytecode;
 
-    /**
-     * eth
-     *
-     * @var \Web3\Eth
-     */
-    protected $eth;
+    protected Eth $eth;
 
-    /**
-     * ethabi
-     *
-     * @var \Web3\Contracts\Ethabi
-     */
-    protected $ethabi;
+    protected Ethabi $ethabi;
 
     protected string $defaultBlock;
 

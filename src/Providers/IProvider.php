@@ -19,9 +19,8 @@ interface IProvider
 
     /**
      * @param bool $status
-     * @return void
      */
-    public function batch($status);
+    public function batch($status): void;
 
     public function execute(callable $callback): void;
 }

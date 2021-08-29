@@ -19,13 +19,7 @@ use Web3\RequestManagers\HttpRequestManager;
 
 class Shh
 {
-    /**
-     * provider
-     *
-     * @var \Web3\Providers\Provider
-     */
-    protected $provider;
-
+    protected Provider $provider;
     private array $methods = [];
 
     private array $allowedMethods = [

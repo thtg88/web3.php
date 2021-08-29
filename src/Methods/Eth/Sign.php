@@ -20,10 +20,12 @@ use Web3\Formatters\HexFormatter;
 class Sign extends EthMethod
 {
     protected array $validators = [
-        AddressValidator::class, HexValidator::class,
+        AddressValidator::class,
+        HexValidator::class,
     ];
 
     protected array $inputFormatters = [
-        AddressFormatter::class, HexFormatter::class,
+        AddressFormatter::class,
+        HexFormatter::class,
     ];
 }

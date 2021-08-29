@@ -7,12 +7,7 @@ use Web3\Formatters\AddressFormatter;
 
 class AddressFormatterTest extends TestCase
 {
-    /**
-     * formatter
-     *
-     * @var \Web3\Formatters\AddressFormatter
-     */
-    protected $formatter;
+    protected AddressFormatter $formatter;
 
     public function setUp(): void
     {

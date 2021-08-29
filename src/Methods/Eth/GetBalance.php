@@ -22,7 +22,8 @@ use Web3\Formatters\BigNumberFormatter;
 class GetBalance extends EthMethod
 {
     protected array $validators = [
-        AddressValidator::class, [
+        AddressValidator::class,
+        [
             TagValidator::class,
             QuantityValidator::class,
         ],

@@ -17,44 +17,22 @@ use Web3\Formatters\IntegerFormatter;
 
 class Address extends SolidityType implements IType
 {
-    /**
-     * construct
-     *
-     * @return void
-     */
-    public function __construct()
+    public function isType(string $name): bool
     {
+        return preg_match('/^address(\[([0-9]*)\])*$/', $name) === 1;
     }
 
-    /**
-     * isType
-     *
-     * @param string $name
-     * @return bool
-     */
-    public function isType($name)
-    {
-        return (preg_match('/^address(\[([0-9]*)\])*$/', $name) === 1);
-    }
-
-    /**
-     * isDynamicType
-     *
-     * @return bool
-     */
-    public function isDynamicType()
+    public function isDynamicType(): bool
     {
         return false;
     }
 
     /**
-     * inputFormat
      * to do: iban
      *
      * @param string $name
-     * @return string
      */
-    public function inputFormat($value, $name)
+    public function inputFormat($value, $name): string
     {
         $value = (string) $value;
 
@@ -65,18 +43,16 @@ class Address extends SolidityType implements IType
                 $value = Utils::stripZero($value);
             }
         }
+
         $value = IntegerFormatter::format($value);
 
         return $value;
     }
 
     /**
-     * outputFormat
-     *
      * @param string $name
-     * @return string
      */
-    public function outputFormat($value, $name)
+    public function outputFormat($value, $name): string
     {
         return '0x' . mb_substr($value, 24, 40);
     }

@@ -19,6 +19,6 @@ class QuantityValidator
     public static function validate($value): bool
     {
         // maybe change is_int and is_float and preg_match future
-        return (is_int($value) || is_float($value) || preg_match('/^0x[a-fA-F0-9]*$/', $value) >= 1);
+        return is_int($value) || is_float($value) || preg_match('/^0x[a-fA-F0-9]*$/', $value) >= 1;
     }
 }

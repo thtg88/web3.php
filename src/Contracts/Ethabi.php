@@ -18,30 +18,14 @@ use Web3\Formatters\IntegerFormatter;
 
 class Ethabi
 {
-    /**
-     * types
-     *
-     * @var array
-     */
-    protected $types = [];
+    protected array $types = [];
 
-    /**
-     * construct
-     *
-     * @param array $types
-     * @return void
-     */
-    public function __construct($types=[])
+    public function __construct(array $types = [])
     {
-        if (!is_array($types)) {
-            $types = [];
-        }
         $this->types = $types;
     }
 
     /**
-     * get
-     *
      * @param string $name
      */
     public function __get($name)
@@ -56,8 +40,6 @@ class Ethabi
     }
 
     /**
-     * set
-     *
      * @param string $name
      */
     public function __set($name, $value)
@@ -72,8 +54,6 @@ class Ethabi
     }
 
     /**
-     * callStatic
-     *
      * @param string $name
      * @param array $arguments
      * @return void
@@ -83,12 +63,9 @@ class Ethabi
     }
 
     /**
-     * encodeFunctionSignature
-     *
      * @param string|stdClass|array $functionName
-     * @return string
      */
-    public function encodeFunctionSignature($functionName)
+    public function encodeFunctionSignature($functionName): string
     {
         if (!is_string($functionName)) {
             $functionName = Utils::jsonMethodToString($functionName);
@@ -98,13 +75,12 @@ class Ethabi
     }
 
     /**
-     * encodeEventSignature
      * TODO: Fix same event name with different params
      *
      * @param string|stdClass|array $functionName
      * @return string
      */
-    public function encodeEventSignature($functionName)
+    public function encodeEventSignature($functionName): string
     {
         if (!is_string($functionName)) {
             $functionName = Utils::jsonMethodToString($functionName);
@@ -114,12 +90,9 @@ class Ethabi
     }
 
     /**
-     * encodeParameter
-     *
      * @param string $type
-     * @return string
      */
-    public function encodeParameter($type, $param)
+    public function encodeParameter($type, $param): string
     {
         if (!is_string($type)) {
             throw new InvalidArgumentException('The type to encodeParameter must be string.');
@@ -129,18 +102,16 @@ class Ethabi
     }
 
     /**
-     * encodeParameters
-     *
      * @param stdClass|array $types
      * @param array $params
-     * @return string
      */
-    public function encodeParameters($types, $params)
+    public function encodeParameters($types, $params): string
     {
         // change json to array
         if ($types instanceof stdClass && isset($types->inputs)) {
             $types = Utils::jsonToArray($types, 2);
         }
+
         if (is_array($types) && isset($types['inputs'])) {
             $inputTypes = $types;
             $types = [];
@@ -154,6 +125,7 @@ class Ethabi
         if (count($types) !== count($params)) {
             throw new InvalidArgumentException('encodeParameters number of types must equal to number of params.');
         }
+
         $typesLength = count($types);
         $solidityTypes = $this->getSolidityTypes($types);
         $encodes = array_fill(0, $typesLength, '');
@@ -178,12 +150,9 @@ class Ethabi
     }
 
     /**
-     * decodeParameter
-     *
      * @param string $type
-     * @return string
      */
-    public function decodeParameter($type, $param)
+    public function decodeParameter($type, $param): string
     {
         if (!is_string($type)) {
             throw new InvalidArgumentException('The type to decodeParameter must be string.');
@@ -193,12 +162,9 @@ class Ethabi
     }
 
     /**
-     * decodeParameters
-     *
      * @param string $param
-     * @return string
      */
-    public function decodeParameters($types, $param)
+    public function decodeParameters($types, $param): array
     {
         if (!is_string($param)) {
             throw new InvalidArgumentException('The type or param to decodeParameters must be string.');
@@ -245,13 +211,7 @@ class Ethabi
         return $result;
     }
 
-    /**
-     * getSolidityTypes
-     *
-     * @param array $types
-     * @return array
-     */
-    protected function getSolidityTypes($types)
+    protected function getSolidityTypes(array $types): array
     {
         if (!is_array($types)) {
             throw new InvalidArgumentException('Types must be array');
@@ -261,29 +221,32 @@ class Ethabi
         foreach ($types as $key => $type) {
             $match = [];
 
-            if (preg_match('/^([a-zA-Z]+)/', $type, $match) === 1) {
-                if (isset($this->types[$match[0]])) {
-                    $className = $this->types[$match[0]];
-
-                    if (call_user_func([$this->types[$match[0]], 'isType'], $type) === false) {
-                        // check dynamic bytes
-                        if ($match[0] === 'bytes') {
-                            $className = $this->types['dynamicBytes'];
-                        } else {
-                            throw new InvalidArgumentException('Unsupport solidity parameter type: ' . $type);
-                        }
-                    }
-                    $solidityTypes[$key] = $className;
-                }
+            if (preg_match('/^([a-zA-Z]+)/', $type, $match) !== 1) {
+                continue;
             }
+
+            if (!isset($this->types[$match[0]])) {
+                continue;
+            }
+
+            $className = $this->types[$match[0]];
+
+            // check dynamic bytes
+            if (call_user_func([$this->types[$match[0]], 'isType'], $type) === false) {
+                if ($match[0] !== 'bytes') {
+                    throw new InvalidArgumentException('Unsupport solidity parameter type: ' . $type);
+                }
+
+                $className = $this->types['dynamicBytes'];
+            }
+
+            $solidityTypes[$key] = $className;
         }
 
         return $solidityTypes;
     }
 
     /**
-     * encodeWithOffset
-     *
      * @param string $type
      * @param \Web3\Contracts\SolidityType $solidityType
      * @param int $offset
@@ -320,50 +283,50 @@ class Ethabi
             }
 
             return mb_substr($result, 64);
-        } elseif ($solidityType->isStaticArray($type)) {
-            $nestedName = $solidityType->nestedName($type);
-            $nestedStaticPartLength = $solidityType->staticPartLength($type);
-            $result = '';
-
-            if ($solidityType->isDynamicArray($nestedName)) {
-                $previousLength = 0;
-
-                for ($i=0; $i<count($encoded); $i++) {
-                    if (isset($encoded[$i - 1])) {
-                        $previousLength += abs($encoded[$i - 1])[0];
-                    }
-                    $result .= IntegerFormatter::format($offset + $i * $nestedStaticPartLength + $previousLength * 32);
-                }
-            }
-            for ($i=0; $i<count($encoded); $i++) {
-                // $bn = Utils::toBn($result);
-                // $divided = $bn->divide(Utils::toBn(2));
-
-                // if (is_array($divided)) {
-                //     $additionalOffset = (int) $divided[0]->toString();
-                // } else {
-                //     $additionalOffset = 0;
-                // }
-                $additionalOffset = floor(mb_strlen($result) / 2);
-                $result .= $this->encodeWithOffset($nestedName, $solidityType, $encoded[$i], $offset + $additionalOffset);
-            }
-
-            return $result;
         }
 
-        return $encoded;
+        if (!$solidityType->isStaticArray($type)) {
+            return $encoded;
+        }
+
+        $nestedName = $solidityType->nestedName($type);
+        $nestedStaticPartLength = $solidityType->staticPartLength($type);
+        $result = '';
+
+        if ($solidityType->isDynamicArray($nestedName)) {
+            $previousLength = 0;
+
+            for ($i=0; $i<count($encoded); $i++) {
+                if (isset($encoded[$i - 1])) {
+                    $previousLength += abs($encoded[$i - 1])[0];
+                }
+                $result .= IntegerFormatter::format($offset + $i * $nestedStaticPartLength + $previousLength * 32);
+            }
+        }
+
+        for ($i=0; $i<count($encoded); $i++) {
+            // $bn = Utils::toBn($result);
+            // $divided = $bn->divide(Utils::toBn(2));
+
+            // if (is_array($divided)) {
+            //     $additionalOffset = (int) $divided[0]->toString();
+            // } else {
+            //     $additionalOffset = 0;
+            // }
+            $additionalOffset = floor(mb_strlen($result) / 2);
+            $result .= $this->encodeWithOffset($nestedName, $solidityType, $encoded[$i], $offset + $additionalOffset);
+        }
+
+        return $result;
     }
 
     /**
-     * encodeMultiWithOffset
-     *
      * @param array $types
      * @param array $solidityTypes
      * @param array $encodes
      * @param int $dynamicOffset
-     * @return string
      */
-    protected function encodeMultiWithOffset($types, $solidityTypes, $encodes, $dynamicOffset)
+    protected function encodeMultiWithOffset($types, $solidityTypes, $encodes, $dynamicOffset): string
     {
         $result = '';
 

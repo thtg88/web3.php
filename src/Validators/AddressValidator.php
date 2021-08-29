@@ -22,6 +22,6 @@ class AddressValidator
             return false;
         }
 
-        return (preg_match('/^0x[a-fA-F0-9]{40}$/', $value) >= 1);
+        return preg_match('/^0x[a-fA-F0-9]{40}$/', $value) >= 1;
     }
 }
