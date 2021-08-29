@@ -38,18 +38,9 @@ class Contract
     protected array $functions = [];
     protected array $events = [];
     protected string $toAddress;
-
-    /**
-     * bytecode
-     *
-     * @var string
-     */
-    protected $bytecode;
-
+    protected string $bytecode;
     protected Eth $eth;
-
     protected Ethabi $ethabi;
-
     protected string $defaultBlock;
 
     /**
@@ -83,14 +74,24 @@ class Contract
             $abiArray = Utils::jsonToArray($abi);
         }
         foreach ($abiArray as $item) {
-            if (isset($item['type'])) {
-                if ($item['type'] === 'function') {
-                    $this->functions[] = $item;
-                } elseif ($item['type'] === 'constructor') {
-                    $this->constructor = $item;
-                } elseif ($item['type'] === 'event') {
-                    $this->events[$item['name']] = $item;
-                }
+            if (!isset($item['type'])) {
+                continue;
+            }
+
+            if ($item['type'] === 'function') {
+                $this->functions[] = $item;
+
+                continue;
+            }
+
+            if ($item['type'] === 'constructor') {
+                $this->constructor = $item;
+
+                continue;
+            }
+
+            if ($item['type'] === 'event') {
+                $this->events[$item['name']] = $item;
             }
         }
         if (TagValidator::validate($defaultBlock) || QuantityValidator::validate($defaultBlock)) {
@@ -495,17 +496,15 @@ class Contract
             throw new InvalidArgumentException('Please make sure the method is string.');
         }
 
-        $functions = [];
-        foreach ($this->functions as $function) {
-            if ($function['name'] === $method) {
-                $functions[] = $function;
-            }
-        };
+        $functions = array_filter(
+            $this->functions,
+            fn ($function) => $function['name'] === $method
+        );
         if (count($functions) < 1) {
             throw new InvalidArgumentException('Please make sure the method exists.');
         }
         if (is_callable($callback) !== true) {
-            throw new \InvalidArgumentException('The last param must be callback function.');
+            throw new InvalidArgumentException('The last param must be callback function.');
         }
 
         // check the arguments
