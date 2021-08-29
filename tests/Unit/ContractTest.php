@@ -651,10 +651,11 @@ class ContractTest extends TestCase
 
         $contract->call('data', function ($err, $res) {
             if ($err !== null) {
-                echo 'Error when call ' . $function['name'] . '. Message: ' . $err->getMessage() . "\n";
+                echo 'Error when call data. Message: ' . $err->getMessage() . "\n";
 
                 return;
             }
+
             $this->assertEquals('0', $res[0]);
         });
 
@@ -686,7 +687,7 @@ class ContractTest extends TestCase
 
         $contract->call('data', function ($err, $res) {
             if ($err !== null) {
-                echo 'Error when call ' . $function['name'] . '. Message: ' . $err->getMessage() . "\n";
+                echo 'Error when call data. Message: ' . $err->getMessage() . "\n";
 
                 return;
             }
@@ -769,7 +770,7 @@ class ContractTest extends TestCase
 
                 $contract->call('number', function ($err, $res) use ($testNumber) {
                     if ($err !== null) {
-                        echo 'Error when call ' . $function['name'] . '. Message: ' . $err->getMessage() . "\n";
+                        echo 'Error when call number. Message: ' . $err->getMessage() . "\n";
 
                         return;
                     }
@@ -813,7 +814,7 @@ class ContractTest extends TestCase
                 $blockNumber = Utils::toBn($transaction->blockNumber);
                 $contract->call('number', Utils::toHex($blockNumber, true), function ($err, $res) use ($testNumber) {
                     if ($err !== null) {
-                        echo 'Error when call ' . $function['name'] . '. Message: ' . $err->getMessage() . "\n";
+                        echo 'Error when call number. Message: ' . $err->getMessage() . "\n";
 
                         return;
                     }
@@ -824,7 +825,7 @@ class ContractTest extends TestCase
                 $blockNumber = $blockNumber->subtract(Utils::toBn(1));
                 $contract->call('number', Utils::toHex($blockNumber, true), function ($err, $res) use ($testNumber) {
                     if ($err !== null) {
-                        echo 'Error when call ' . $function['name'] . '. Message: ' . $err->getMessage() . "\n";
+                        echo 'Error when call number. Message: ' . $err->getMessage() . "\n";
 
                         return;
                     }
