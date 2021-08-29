@@ -483,7 +483,7 @@ class ContractTest extends TestCase
             if ($result) {
                 $this->assertEquals($result['firstName'], 'Peter');
                 $this->assertEquals($result['lastName'], 'Lai');
-                $this->assertEquals($result['age']->toString(), '18');
+                $this->assertEquals($result['age'], '18');
             }
         });
     }
