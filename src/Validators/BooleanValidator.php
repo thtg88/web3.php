@@ -14,11 +14,9 @@ namespace Web3\Validators;
 class BooleanValidator
 {
     /**
-     * validate
-     *
-     * @return bool
+     * @param mixed $value
      */
-    public static function validate($value)
+    public static function validate($value): bool
     {
         return is_bool($value);
     }

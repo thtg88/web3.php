@@ -14,12 +14,9 @@ namespace Web3\Validators;
 class StringValidator
 {
     /**
-     * validate
-     *
      * @param string $value
-     * @return bool
      */
-    public static function validate($value)
+    public static function validate($value): bool
     {
         return is_string($value);
     }

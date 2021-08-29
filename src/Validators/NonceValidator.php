@@ -13,13 +13,7 @@ namespace Web3\Validators;
 
 class NonceValidator
 {
-    /**
-     * validate
-     *
-     * @param string $value
-     * @return bool
-     */
-    public static function validate($value)
+    public static function validate($value): bool
     {
         if (!is_string($value)) {
             return false;

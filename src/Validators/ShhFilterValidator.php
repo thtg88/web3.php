@@ -14,22 +14,22 @@ namespace Web3\Validators;
 class ShhFilterValidator
 {
     /**
-     * validate
-     *
      * @param array $value
-     * @return bool
      */
-    public static function validate($value)
+    public static function validate($value): bool
     {
         if (!is_array($value)) {
             return false;
         }
+
         if (isset($value['to']) && IdentityValidator::validate($value['to']) === false) {
             return false;
         }
+
         if (!isset($value['topics']) || !is_array($value['topics'])) {
             return false;
         }
+
         foreach ($value['topics'] as $topic) {
             if (is_array($topic)) {
                 foreach ($topic as $subTopic) {
