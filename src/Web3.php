@@ -11,6 +11,7 @@
 
 namespace Web3;
 
+use InvalidArgumentException;
 use RuntimeException;
 use Web3\Providers\HttpProvider;
 use Web3\Providers\Provider;
@@ -31,15 +32,27 @@ class Web3
         'web3_sha3',
     ];
 
-    /**
-     * @param string|\Web3\Providers\Provider $provider
-     */
-    public function __construct($provider)
+    public function __construct(Provider|string $provider)
     {
-        if (is_string($provider) && filter_var($provider, FILTER_VALIDATE_URL) !== false) {
-            // check the uri schema
-            if (preg_match('/^https?:\/\//', $provider) === 1) {
-                $requestManager = new HttpRequestManager($provider);
+        if ($provider instanceof Provider) {
+            $this->provider = $provider;
+
+            return;
+        }
+
+        // check the uri schema
+        if (
+            filter_var($provider, FILTER_VALIDATE_URL) !== false &&
+            preg_match('/^https?:\/\//', $provider) === 1
+        ) {
+            $requestManager = new HttpRequestManager($provider);
+
+            $this->provider = new HttpProvider($requestManager);
+        }
+
+        throw new InvalidArgumentException('Please set a valid provider.');
+    }
+
 
                 $this->provider = new HttpProvider($requestManager);
             }
