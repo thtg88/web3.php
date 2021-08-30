@@ -60,7 +60,7 @@ abstract class EthMethod extends JSONRPC implements IMethod
 
             if (!is_array($rule)) {
                 if (call_user_func([$rule, 'validate'], $this->arguments[$key]) === false) {
-                    throw new RuntimeException("Wrong type of " . $this->method . " method argument {$key}.");
+                    throw new RuntimeException('Wrong type of ' . $this->method . " method argument {$key}.");
                 }
 
                 continue;
@@ -76,7 +76,7 @@ abstract class EthMethod extends JSONRPC implements IMethod
                 }
             }
             if ($isError) {
-                throw new RuntimeException("Wrong type of " . $this->method . " method argument {$key}.");
+                throw new RuntimeException('Wrong type of ' . $this->method . " method argument {$key}.");
             }
         }
 
