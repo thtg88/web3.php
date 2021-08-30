@@ -14,7 +14,7 @@ namespace Web3\Methods;
 use InvalidArgumentException;
 use RuntimeException;
 
-class EthMethod extends JSONRPC implements IMethod
+abstract class EthMethod extends JSONRPC implements IMethod
 {
     protected array $validators = [];
     protected array $inputFormatters = [];
