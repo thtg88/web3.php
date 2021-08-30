@@ -31,15 +31,15 @@ abstract class EthMethod extends JSONRPC implements IMethod
         return $this->outputFormatters;
     }
 
-    public function validate(array &$data): bool
+    public function validate(): bool
     {
         $rules = $this->validators;
 
-        if (count($data) < count($rules)) {
         if (count($this->arguments) > count($rules)) {
             throw new InvalidArgumentException('The params are more than validators.');
         }
 
+        if (count($this->arguments) < count($rules)) {
             if (!isset($this->defaultValues) || empty($this->defaultValues)) {
                 throw new InvalidArgumentException('The params are less than validators.');
             }
@@ -47,20 +47,20 @@ abstract class EthMethod extends JSONRPC implements IMethod
             $defaultValues = $this->defaultValues;
 
             foreach ($defaultValues as $key => $value) {
-                if (!isset($data[$key])) {
-                    $data[$key] = $value;
+                if (!isset($this->arguments[$key])) {
+                    $this->arguments[$key] = $value;
                 }
             }
         }
 
         foreach ($rules as $key => $rule) {
-            if (!isset($data[$key])) {
                 throw new RuntimeException($this->method . ' method argument ' . $key . ' doesn\'t have default value.');
+            if (!isset($this->arguments[$key])) {
             }
 
             if (!is_array($rule)) {
-                if (call_user_func([$rule, 'validate'], $data[$key]) === false) {
                     throw new RuntimeException('Wrong type of ' . $this->method . ' method argument ' . $key . '.');
+                if (call_user_func([$rule, 'validate'], $this->arguments[$key]) === false) {
                 }
 
                 continue;
@@ -69,7 +69,7 @@ abstract class EthMethod extends JSONRPC implements IMethod
             $isError = true;
 
             foreach ($rule as $subRule) {
-                if (call_user_func([$subRule, 'validate'], $data[$key]) === true) {
+                if (call_user_func([$subRule, 'validate'], $this->arguments[$key]) === true) {
                     $isError = false;
 
                     break;
