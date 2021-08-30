@@ -13,7 +13,7 @@ namespace Web3\Methods;
 
 use InvalidArgumentException;
 
-class JSONRPC implements IRPC
+abstract class JSONRPC implements IRPC
 {
     /**
      * id
