@@ -69,7 +69,7 @@ class Web3
 
         $this->method = new ClientVersion(arguments: $arguments);
 
-        $this->provider->send($this->method, $this->callback);
+        $this->send();
     }
 
     public function sha3(...$arguments): void
@@ -88,7 +88,7 @@ class Web3
 
         $this->method = new Sha3(arguments: $arguments);
 
-        $this->provider->send($this->method, $this->callback);
+        $this->send();
     }
 
     public function send(): void
