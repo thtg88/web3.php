@@ -129,8 +129,6 @@ abstract class JSONRPC implements IRPC
 
     public function toPayloadString(): string
     {
-        $payload = $this->toPayload();
-
-        return json_encode($payload);
+        return json_encode($this->toPayload());
     }
 }
