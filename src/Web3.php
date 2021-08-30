@@ -112,10 +112,6 @@ class Web3
      */
     public function __call($name, $arguments): void
     {
-        if (empty($this->provider)) {
-            throw new RuntimeException('Please set provider first.');
-        }
-
         $method_name = 'web3_' . $name;
 
         if (!array_key_exists($method_name, $this->methods)) {
