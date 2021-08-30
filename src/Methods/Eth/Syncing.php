@@ -15,4 +15,8 @@ use Web3\Methods\EthMethod;
 
 class Syncing extends EthMethod
 {
+    public function getMethod(): string
+    {
+        return 'eth_syncing';
+    }
 }

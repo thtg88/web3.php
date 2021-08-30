@@ -24,4 +24,9 @@ class GetFilterChanges extends EthMethod
     protected array $inputFormatters = [
         QuantityFormatter::class,
     ];
+
+    public function getMethod(): string
+    {
+        return 'eth_getFilterChanges';
+    }
 }

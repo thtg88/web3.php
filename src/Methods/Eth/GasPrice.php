@@ -19,4 +19,9 @@ class GasPrice extends EthMethod
     protected array $outputFormatters = [
         BigNumberFormatter::class,
     ];
+
+    public function getMethod(): string
+    {
+        return 'eth_gasPrice';
+    }
 }

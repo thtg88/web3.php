@@ -20,4 +20,9 @@ class SubmitHashrate extends EthMethod
         BlockHashValidator::class,
         BlockHashValidator::class,
     ];
+
+    public function getMethod(): string
+    {
+        return 'eth_submitHashrate';
+    }
 }

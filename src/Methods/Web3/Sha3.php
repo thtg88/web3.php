@@ -24,4 +24,9 @@ class Sha3 extends EthMethod
     protected array $inputFormatters = [
         HexFormatter::class,
     ];
+
+    public function getMethod(): string
+    {
+        return 'web3_sha3';
+    }
 }

@@ -39,4 +39,9 @@ class GetStorageAt extends EthMethod
     protected array $defaultValues = [
         2 => 'latest',
     ];
+
+    public function getMethod(): string
+    {
+        return 'eth_getStorageAt';
+    }
 }

@@ -36,4 +36,9 @@ class GetBlockByNumber extends EthMethod
     protected array $defaultValues = [
         0 => 'latest',
     ];
+
+    public function getMethod(): string
+    {
+        return 'eth_getBlockByNumber';
+    }
 }

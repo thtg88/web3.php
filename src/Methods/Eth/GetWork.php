@@ -15,4 +15,8 @@ use Web3\Methods\EthMethod;
 
 class GetWork extends EthMethod
 {
+    public function getMethod(): string
+    {
+        return 'eth_getWork';
+    }
 }

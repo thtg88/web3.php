@@ -28,4 +28,9 @@ class Sign extends EthMethod
         AddressFormatter::class,
         HexFormatter::class,
     ];
+
+    public function getMethod(): string
+    {
+        return 'eth_sign';
+    }
 }

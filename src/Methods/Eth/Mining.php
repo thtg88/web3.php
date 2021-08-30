@@ -15,4 +15,8 @@ use Web3\Methods\EthMethod;
 
 class Mining extends EthMethod
 {
+    public function getMethod(): string
+    {
+        return 'eth_mining';
+    }
 }

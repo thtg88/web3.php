@@ -24,4 +24,9 @@ class CompileLLL extends EthMethod
     protected array $inputFormatters = [
         StringFormatter::class,
     ];
+
+    public function getMethod(): string
+    {
+        return 'eth_compileLLL';
+    }
 }

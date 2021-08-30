@@ -31,4 +31,9 @@ class GetTransactionByBlockNumberAndIndex extends EthMethod
         OptionalQuantityFormatter::class,
         QuantityFormatter::class,
     ];
+
+    public function getMethod(): string
+    {
+        return 'eth_getTransactionByBlockNumberAndIndex';
+    }
 }

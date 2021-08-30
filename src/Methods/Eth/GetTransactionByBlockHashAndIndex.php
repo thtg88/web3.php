@@ -28,4 +28,9 @@ class GetTransactionByBlockHashAndIndex extends EthMethod
         HexFormatter::class,
         QuantityFormatter::class,
     ];
+
+    public function getMethod(): string
+    {
+        return 'eth_getTransactionByBlockHashAndIndex';
+    }
 }

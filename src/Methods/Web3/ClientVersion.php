@@ -15,4 +15,8 @@ use Web3\Methods\EthMethod;
 
 class ClientVersion extends EthMethod
 {
+    public function getMethod(): string
+    {
+        return 'web3_clientVersion';
+    }
 }

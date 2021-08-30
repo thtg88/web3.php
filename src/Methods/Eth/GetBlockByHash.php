@@ -28,4 +28,9 @@ class GetBlockByHash extends EthMethod
         HexFormatter::class,
         BooleanFormatter::class,
     ];
+
+    public function getMethod(): string
+    {
+        return 'eth_getBlockByHash';
+    }
 }

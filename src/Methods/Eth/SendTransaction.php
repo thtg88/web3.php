@@ -24,4 +24,9 @@ class SendTransaction extends EthMethod
     protected array $inputFormatters = [
         TransactionFormatter::class,
     ];
+
+    public function getMethod(): string
+    {
+        return 'eth_sendTransaction';
+    }
 }

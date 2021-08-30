@@ -29,4 +29,9 @@ class GetBlockTransactionCountByHash extends EthMethod
     protected array $outputFormatters = [
         BignumberFormatter::class,
     ];
+
+    public function getMethod(): string
+    {
+        return 'eth_getBlockTransactionCountByHash';
+    }
 }

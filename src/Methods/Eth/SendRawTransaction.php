@@ -24,4 +24,9 @@ class SendRawTransaction extends EthMethod
     protected array $inputFormatters = [
         HexFormatter::class,
     ];
+
+    public function getMethod(): string
+    {
+        return 'eth_sendRawTransaction';
+    }
 }

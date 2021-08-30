@@ -15,4 +15,8 @@ use Web3\Methods\EthMethod;
 
 class Coinbase extends EthMethod
 {
+    public function getMethod(): string
+    {
+        return 'eth_coinbase';
+    }
 }
