@@ -13,6 +13,9 @@ namespace Web3;
 
 use InvalidArgumentException;
 use RuntimeException;
+use Web3\Methods\IMethod;
+use Web3\Methods\Web3\ClientVersion;
+use Web3\Methods\Web3\Sha3;
 use Web3\Providers\HttpProvider;
 use Web3\Providers\Provider;
 use Web3\RequestManagers\HttpRequestManager;
@@ -26,11 +29,8 @@ class Web3
     protected Shh $shh;
     protected Utils $utils;
     private array $methods = [];
-
-    private array $allowedMethods = [
-        'web3_clientVersion',
-        'web3_sha3',
-    ];
+    private IMethod $method;
+    private $callback;
 
     public function __construct(Provider|string $provider)
     {
@@ -53,15 +53,60 @@ class Web3
         throw new InvalidArgumentException('Please set a valid provider.');
     }
 
+    public function clientVersion(...$arguments): void
+    {
+        $callback = array_pop($arguments);
 
-                $this->provider = new HttpProvider($requestManager);
-            }
-        } elseif ($provider instanceof Provider) {
-            $this->provider = $provider;
+        if (is_callable($callback) !== true) {
+            throw new InvalidArgumentException('The last param must be callback function.');
         }
+
+        $this->callback = $callback;
+
+        $this->method = new ClientVersion(arguments: $arguments);
+
+        if ($this->isBatch) {
+            $this->__call('clientVersion', $arguments);
+        }
+
+        $this->provider->send($this->method, $this->callback);
+    }
+
+    public function sha3(...$arguments): void
+    {
+        $callback = array_pop($arguments);
+
+        if (is_callable($callback) !== true) {
+            throw new InvalidArgumentException('The last param must be callback function.');
+        }
+
+        $this->callback = $callback;
+
+        $this->method = new Sha3(arguments: $arguments);
+
+        if ($this->isBatch) {
+            $this->__call('sha3', $arguments);
+        }
+
+        $this->provider->send($this->method, $this->callback);
+    }
+
+    public function send(): void
+    {
+        if ($this->method === null) {
+            throw new RuntimeException('Please set a method.');
+        }
+
+        if($this->callback === null) {
+            throw new RuntimeException('Please set a callback function.');
+        }
+
+        $this->provider->send($this->method, $this->callback);
     }
 
     /**
+     * Please note: this is only used for batch request.
+     *
      * @param string $name
      * @param array $arguments
      */
@@ -71,44 +116,24 @@ class Web3
             throw new RuntimeException('Please set provider first.');
         }
 
-        $class = explode('\\', get_class());
+        $method_name = 'web3_' . $name;
 
-        if (preg_match('/^[a-zA-Z0-9]+$/', $name) !== 1) {
-            return;
-        }
-
-        $method = strtolower($class[1]) . '_' . $name;
-
-        if (!in_array($method, $this->allowedMethods)) {
-            throw new \RuntimeException('Unallowed rpc method: ' . $method);
-        }
-
-        if ($this->provider->isBatch) {
-            $callback = null;
-        } else {
-            $callback = array_pop($arguments);
-
-            if (is_callable($callback) !== true) {
-                throw new \InvalidArgumentException('The last param must be callback function.');
-            }
-        }
-
-        if (!array_key_exists($method, $this->methods)) {
+        if (!array_key_exists($method_name, $this->methods)) {
             // new the method
-            $methodClass = sprintf("\Web3\Methods\%s\%s", ucfirst($class[1]), ucfirst($name));
-            $methodObject = new $methodClass($method, $arguments);
-            $this->methods[$method] = $methodObject;
+            $methodClass = sprintf("\Web3\Methods\Web3\%s", ucfirst($name));
+            $method = new $methodClass(arguments: $arguments);
+            $this->methods[$method_name] = $method;
         } else {
-            $methodObject = $this->methods[$method];
+            $method = $this->methods[$method_name];
         }
 
-        if (!$methodObject->validate($arguments)) {
+        if (!$method->validate()) {
             return;
         }
 
-        $inputs = $methodObject->transform($arguments, $methodObject->inputFormatters);
-        $methodObject->arguments = $inputs;
-        $this->provider->send($methodObject, $callback);
+        $method->transform($method->inputFormatters);
+
+        $this->provider->send($method, null);
     }
 
     /**
