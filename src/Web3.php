@@ -97,7 +97,7 @@ class Web3
             throw new RuntimeException('Please set a method.');
         }
 
-        if($this->callback === null) {
+        if ($this->callback === null) {
             throw new RuntimeException('Please set a callback function.');
         }
 
