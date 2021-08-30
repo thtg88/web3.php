@@ -33,27 +33,23 @@ abstract class EthMethod extends JSONRPC implements IMethod
 
     public function validate(): bool
     {
-        $rules = $this->validators;
-
-        if (count($this->arguments) > count($rules)) {
+        if (count($this->arguments) > count($this->validators)) {
             throw new InvalidArgumentException('The params are more than validators.');
         }
 
-        if (count($this->arguments) < count($rules)) {
+        if (count($this->arguments) < count($this->validators)) {
             if (!isset($this->defaultValues) || empty($this->defaultValues)) {
                 throw new InvalidArgumentException('The params are less than validators.');
             }
 
-            $defaultValues = $this->defaultValues;
-
-            foreach ($defaultValues as $key => $value) {
+            foreach ($this->defaultValues as $key => $value) {
                 if (!isset($this->arguments[$key])) {
                     $this->arguments[$key] = $value;
                 }
             }
         }
 
-        foreach ($rules as $key => $rule) {
+        foreach ($this->validators as $key => $rule) {
             if (!isset($this->arguments[$key])) {
                 throw new RuntimeException($this->method . " method argument {$key} doesn't have default value.");
             }
@@ -88,6 +84,7 @@ abstract class EthMethod extends JSONRPC implements IMethod
         foreach ($this->arguments as $key => $param) {
             if (isset($rules[$key])) {
                 $formatted = call_user_func([$rules[$key], 'format'], $param);
+
                 $this->arguments[$key] = $formatted;
             }
         }
