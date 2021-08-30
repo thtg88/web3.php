@@ -13,5 +13,5 @@ namespace Web3\Methods;
 
 interface IMethod
 {
-    public function transform(array $data, array $rules): array;
+    public function transform(array $rules): array;
 }
