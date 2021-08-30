@@ -50,42 +50,18 @@ class Eth
      */
     public function __call($name, $arguments): void
     {
-        $class = explode('\\', get_class());
+        $method_name = 'eth_' . $name;
 
-        if (preg_match('/^[a-zA-Z0-9]+$/', $name) !== 1) {
-            return;
-        }
-
-        $method = strtolower($class[1]) . '_' . $name;
-
-        if (!in_array($method, $this->allowedMethods)) {
-            throw new RuntimeException('Unallowed rpc method: ' . $method);
-        }
-
-        if ($this->provider->isBatch) {
-            $callback = null;
-        } else {
-            $callback = array_pop($arguments);
-
-            if (is_callable($callback) !== true) {
-                throw new InvalidArgumentException('The last param must be callback function.');
-            }
-        }
-
-        if (!array_key_exists($method, $this->methods)) {
+        if (!array_key_exists($method_name, $this->methods)) {
             // new the method
-            $methodClass = sprintf("\Web3\Methods\%s\%s", ucfirst($class[1]), ucfirst($name));
-            $methodObject = new $methodClass($method, $arguments);
-            $this->methods[$method] = $methodObject;
+            $methodClass = sprintf("\Web3\Methods\Eth\%s", ucfirst($name));
+            $method = new $methodClass(arguments: $arguments);
+            $this->methods[$method_name] = $method;
         } else {
-            $methodObject = $this->methods[$method];
+            $method = $this->methods[$method_name];
         }
 
-        if ($methodObject->validate($arguments)) {
-            $inputs = $methodObject->transform($arguments, $methodObject->inputFormatters);
-            $methodObject->arguments = $inputs;
-            $this->provider->send($methodObject, $callback);
-        }
+        $this->provider->send($method, null);
     }
 
     /**
