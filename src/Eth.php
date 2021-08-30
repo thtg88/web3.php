@@ -88,7 +88,6 @@ class Eth
 
         throw new InvalidArgumentException('Please set a valid provider.');
     }
-    }
 
     /**
      * @param string $name
