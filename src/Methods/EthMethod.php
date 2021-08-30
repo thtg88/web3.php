@@ -36,6 +36,10 @@ abstract class EthMethod extends JSONRPC implements IMethod
         $rules = $this->validators;
 
         if (count($data) < count($rules)) {
+        if (count($this->arguments) > count($rules)) {
+            throw new InvalidArgumentException('The params are more than validators.');
+        }
+
             if (!isset($this->defaultValues) || empty($this->defaultValues)) {
                 throw new InvalidArgumentException('The params are less than validators.');
             }
@@ -47,8 +51,6 @@ abstract class EthMethod extends JSONRPC implements IMethod
                     $data[$key] = $value;
                 }
             }
-        } elseif (count($data) > count($rules)) {
-            throw new InvalidArgumentException('The params are more than validators.');
         }
 
         foreach ($rules as $key => $rule) {
