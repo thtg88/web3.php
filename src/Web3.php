@@ -55,6 +55,10 @@ class Web3
 
     public function clientVersion(...$arguments): void
     {
+        if ($this->provider->isBatch) {
+            $this->__call('clientVersion', $arguments);
+        }
+
         $callback = array_pop($arguments);
 
         if (is_callable($callback) !== true) {
@@ -65,15 +69,15 @@ class Web3
 
         $this->method = new ClientVersion(arguments: $arguments);
 
-        if ($this->isBatch) {
-            $this->__call('clientVersion', $arguments);
-        }
-
         $this->provider->send($this->method, $this->callback);
     }
 
     public function sha3(...$arguments): void
     {
+        if ($this->provider->isBatch) {
+            $this->__call('sha3', $arguments);
+        }
+
         $callback = array_pop($arguments);
 
         if (is_callable($callback) !== true) {
@@ -83,10 +87,6 @@ class Web3
         $this->callback = $callback;
 
         $this->method = new Sha3(arguments: $arguments);
-
-        if ($this->isBatch) {
-            $this->__call('sha3', $arguments);
-        }
 
         $this->provider->send($this->method, $this->callback);
     }
