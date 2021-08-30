@@ -13,18 +13,12 @@ namespace Web3\Providers;
 
 use RuntimeException;
 use Web3\Methods\IMethod;
-use Web3\RequestManagers\RequestManager;
 
 class HttpProvider extends Provider implements IProvider
 {
     protected array $methods = [];
 
-    public function __construct(RequestManager $requestManager)
-    {
-        parent::__construct($requestManager);
-    }
-
-    public function send(IMethod $method, callable $callback): void
+    public function send(IMethod $method, ?callable $callback): void
     {
         $payload = $method->toPayloadString();
 
