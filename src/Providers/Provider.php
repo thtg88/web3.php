@@ -13,7 +13,7 @@ namespace Web3\Providers;
 
 use Web3\RequestManagers\RequestManager;
 
-class Provider
+abstract class Provider implements IProvider
 {
     protected RequestManager $requestManager;
     protected bool $isBatch = false;
