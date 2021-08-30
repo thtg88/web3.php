@@ -32,8 +32,6 @@ abstract class JSONRPC implements IRPC
     }
 
     /**
-     * get
-     *
      * @param string $name
      */
     public function __get($name)
@@ -48,8 +46,6 @@ abstract class JSONRPC implements IRPC
     }
 
     /**
-     * set
-     *
      * @param string $name
      */
     public function __set($name, $value)
@@ -64,8 +60,6 @@ abstract class JSONRPC implements IRPC
     }
 
     /**
-     * __toString
-     *
      * @return string
      */
     public function __toString()
