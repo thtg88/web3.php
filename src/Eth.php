@@ -96,10 +96,6 @@ class Eth
      */
     public function __call($name, $arguments): void
     {
-        if (empty($this->provider)) {
-            throw new \RuntimeException('Please set provider first.');
-        }
-
         $class = explode('\\', get_class());
 
         if (preg_match('/^[a-zA-Z0-9]+$/', $name) !== 1) {
