@@ -127,12 +127,6 @@ class Web3
             $method = $this->methods[$method_name];
         }
 
-        if (!$method->validate()) {
-            return;
-        }
-
-        $method->transform($method->inputFormatters);
-
         $this->provider->send($method, null);
     }
 
