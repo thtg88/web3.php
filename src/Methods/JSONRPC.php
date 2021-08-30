@@ -15,27 +15,9 @@ use InvalidArgumentException;
 
 abstract class JSONRPC implements IRPC
 {
-    /**
-     * id
-     *
-     * @var int
-     */
-    protected $id = 0;
-
-    /**
-     * rpcVersion
-     *
-     * @var string
-     */
-    protected $rpcVersion = '2.0';
-
-    /**
-     * method
-     *
-     * @var string
-     */
-    protected $method = '';
-
+    protected int $id = 0;
+    protected string $rpcVersion = '2.0';
+    protected string $method = '';
     protected array $arguments = [];
 
     /**
