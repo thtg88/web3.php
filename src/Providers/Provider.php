@@ -18,10 +18,6 @@ abstract class Provider implements IProvider
     protected RequestManager $requestManager;
     protected bool $isBatch = false;
     protected array $batch = [];
-    protected string $rpcVersion = '2.0';
-
-    /** @var int */
-    protected $id = 0;
 
     public function __construct(RequestManager $requestManager)
     {
