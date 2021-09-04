@@ -11,7 +11,6 @@
 
 namespace Web3\Contracts;
 
-use InvalidArgumentException;
 use Web3\Contracts\Types\IType;
 use Web3\Formatters\IntegerFormatter;
 use Web3\Utils;
