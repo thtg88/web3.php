@@ -186,6 +186,17 @@ class Shh
         $this->send($callback);
     }
 
+    public function send(callable $callback): void
+    {
+        if ($this->method === null) {
+            throw new RuntimeException('Please set a method.');
+        }
+
+        $this->provider->send($this->method, $callback);
+
+        $this->method = null;
+    }
+
     /**
      * @param string $name
      * @param array $arguments
