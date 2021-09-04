@@ -18,7 +18,7 @@ class HttpProvider extends Provider implements IProvider
 {
     protected array $methods = [];
 
-    public function send(IMethod $method, ?callable $callback): void
+    public function send(IMethod $method, ?callable $callback = null): void
     {
         $payload = $method->toPayloadString();
 
