@@ -51,12 +51,12 @@ abstract class EthMethod extends JSONRPC implements IMethod
 
         foreach ($this->validators as $key => $rule) {
             if (!isset($this->arguments[$key])) {
-                throw new RuntimeException($this->method . " method argument {$key} doesn't have default value.");
+                throw new RuntimeException($this->getMethod() . " method argument {$key} doesn't have default value.");
             }
 
             if (!is_array($rule)) {
                 if (call_user_func([$rule, 'validate'], $this->arguments[$key]) === false) {
-                    throw new RuntimeException('Wrong type of ' . $this->method . " method argument {$key}.");
+                    throw new RuntimeException('Wrong type of ' . $this->getMethod() . " method argument {$key}.");
                 }
 
                 continue;
@@ -72,7 +72,7 @@ abstract class EthMethod extends JSONRPC implements IMethod
                 }
             }
             if ($isError) {
-                throw new RuntimeException('Wrong type of ' . $this->method . " method argument {$key}.");
+                throw new RuntimeException('Wrong type of ' . $this->getMethod() . " method argument {$key}.");
             }
         }
 

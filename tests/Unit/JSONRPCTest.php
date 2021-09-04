@@ -15,18 +15,22 @@ class JSONRPCTest extends TestCase
         $params = [
             'hello world',
         ];
-        $method = 'echo';
-        $rpc = new JSONRPC($method, $params);
+        $rpc = new class($params) extends JSONRPC {
+            public function getMethod(): string
+            {
+                return 'echo';
+            }
+        };
         $rpc->id = $id;
 
         $this->assertEquals($id, $rpc->id);
         $this->assertEquals('2.0', $rpc->rpcVersion);
-        $this->assertEquals($method, $rpc->method);
+        $this->assertEquals('echo', $rpc->getMethod());
         $this->assertEquals($params, $rpc->arguments);
         $this->assertEquals([
             'id' => $id,
             'jsonrpc' => '2.0',
-            'method' => $method,
+            'method' => 'echo',
             'params' => $params,
         ], $rpc->toPayload());
         $this->assertEquals(json_encode($rpc->toPayload()), (string) $rpc);
@@ -40,7 +44,7 @@ class JSONRPCTest extends TestCase
         $this->assertEquals([
             'id' => $id,
             'jsonrpc' => '2.0',
-            'method' => $method,
+            'method' => 'echo',
             'params' => $params,
         ], $rpc->toPayload());
         $this->assertEquals(json_encode($rpc->toPayload()), (string) $rpc);
@@ -53,8 +57,12 @@ class JSONRPCTest extends TestCase
         $params = [
            'hello world',
         ];
-        $method = 'echo';
-        $rpc = new JSONRPC($method, $params);
+        $rpc = new class($params) extends JSONRPC {
+            public function getMethod(): string
+            {
+                return 'echo';
+            }
+        };
 
         try {
             // id is not integer

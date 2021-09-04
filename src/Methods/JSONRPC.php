@@ -22,7 +22,6 @@ abstract class JSONRPC implements IRPC
 
     public function __construct(array $arguments)
     {
-        $this->method = $this->getMethod();
         $this->arguments = $arguments;
     }
 
@@ -81,10 +80,7 @@ abstract class JSONRPC implements IRPC
         return $this->rpcVersion;
     }
 
-    public function getMethod(): string
-    {
-        return $this->method;
-    }
+    abstract public function getMethod(): string;
 
     public function setArguments(array $arguments): self
     {
@@ -100,10 +96,6 @@ abstract class JSONRPC implements IRPC
 
     public function toPayload(): array
     {
-        if (empty($this->method) || !is_string($this->method)) {
-            throw new InvalidArgumentException('Please check the method set properly.');
-        }
-
         if (empty($this->id)) {
             $id = rand();
         } else {
@@ -113,7 +105,7 @@ abstract class JSONRPC implements IRPC
         $rpc = [
             'id' => $id,
             'jsonrpc' => $this->rpcVersion,
-            'method' => $this->method,
+            'method' => $this->getMethod(),
         ];
         if (count($this->arguments) > 0) {
             $rpc['params'] = $this->arguments;
