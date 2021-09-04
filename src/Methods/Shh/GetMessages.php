@@ -24,4 +24,9 @@ class GetMessages extends EthMethod
     protected array $inputFormatters = [
         QuantityFormatter::class,
     ];
+
+    public function getMethod(): string
+    {
+        return 'shh_getMessages';
+    }
 }

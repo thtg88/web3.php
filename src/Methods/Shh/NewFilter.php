@@ -19,4 +19,9 @@ class NewFilter extends EthMethod
     protected array $validators = [
         ShhFilterValidator::class,
     ];
+
+    public function getMethod(): string
+    {
+        return 'shh_newFilter';
+    }
 }

@@ -24,4 +24,9 @@ class Post extends EthMethod
     protected array $inputFormatters = [
         PostFormatter::class,
     ];
+
+    public function getMethod(): string
+    {
+        return 'shh_post';
+    }
 }

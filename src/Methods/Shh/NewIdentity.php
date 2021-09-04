@@ -15,4 +15,8 @@ use Web3\Methods\EthMethod;
 
 class NewIdentity extends EthMethod
 {
+    public function getMethod(): string
+    {
+        return 'shh_newIdentity';
+    }
 }

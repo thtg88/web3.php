@@ -19,4 +19,9 @@ class HasIdentity extends EthMethod
     protected array $validators = [
         IdentityValidator::class,
     ];
+
+    public function getMethod(): string
+    {
+        return 'shh_hasIdentity';
+    }
 }
