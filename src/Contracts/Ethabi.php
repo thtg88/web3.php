@@ -74,7 +74,7 @@ class Ethabi
         return Utils::sha3($functionName);
     }
 
-    public function encodeParameter(string $type, mixed $param): string
+    public function encodeParameter(string $type, $param): string
     {
         if (!is_string($type)) {
             throw new InvalidArgumentException('The type to encodeParameter must be string.');
