@@ -56,9 +56,7 @@ abstract class JSONRPC implements IRPC
      */
     public function __toString()
     {
-        $payload = $this->toPayload();
-
-        return json_encode($payload);
+        return $this->toPayloadString();
     }
 
     public function setId(int $id): self
