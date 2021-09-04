@@ -29,7 +29,7 @@ class HttpProviderTest extends TestCase
     {
         $requestManager = new HttpRequestManager($this->testHost);
         $provider = new HttpProvider($requestManager);
-        $method = new ClientVersion('web3_clientVersion', []);
+        $method = new ClientVersion([]);
 
         $provider->send($method, function ($err, $version) {
             if ($err !== null) {
@@ -44,7 +44,7 @@ class HttpProviderTest extends TestCase
     {
         $requestManager = new HttpRequestManager($this->testHost);
         $provider = new HttpProvider($requestManager);
-        $method = new ClientVersion('web3_clientVersion', []);
+        $method = new ClientVersion([]);
         $callback = function ($err, $data) {
             if ($err !== null) {
                 $this->fail($err->getMessage());
