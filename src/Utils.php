@@ -14,7 +14,7 @@ namespace Web3;
 use InvalidArgumentException;
 use stdClass;
 use kornrunner\Keccak;
-use phpseclib\Math\BigInteger as BigNumber;
+use phpseclib\Math\BigInteger;
 
 class Utils
 {
@@ -60,12 +60,12 @@ class Utils
      *
      * @const
      */
-    // const NEGATIVE1 = new BigNumber(-1);
+    // const NEGATIVE1 = new BigInteger(-1);
 
     /**
      * Encoding string or integer or numeric string(is not zero prefixed) or big number to hex.
      *
-     * @param string|int|BigNumber $value
+     * @param string|int|BigInteger $value
      */
     public static function toHex($value, bool $isPrefix = false): string
     {
@@ -87,7 +87,7 @@ class Utils
             return $isPrefix ? '0x' . $hex : $hex;
         }
 
-        if ($value instanceof BigNumber) {
+        if ($value instanceof BigInteger) {
             $hex = $value->toHex(true);
 
             $hex = preg_replace('/^0+(?!$)/', '', $hex);
@@ -212,13 +212,13 @@ class Utils
      * $wei = Utils::toWei('1', 'kwei');
      * $wei->toString(); // 1000
      *
-     * @param BigNumber|string $number
+     * @param BigInteger|string $number
      * @param string $unit
      * @return \phpseclib\Math\BigInteger
      */
     public static function toWei($number, $unit)
     {
-        if (!is_string($number) && !($number instanceof BigNumber)) {
+        if (!is_string($number) && !($number instanceof BigInteger)) {
             throw new InvalidArgumentException('toWei number must be string or bignumber.');
         }
 
@@ -232,7 +232,7 @@ class Utils
             throw new InvalidArgumentException('toWei doesn\'t support ' . $unit . ' unit.');
         }
 
-        $bnt = new BigNumber(self::UNITS[$unit]);
+        $bnt = new BigInteger(self::UNITS[$unit]);
 
         if (!is_array($bn)) {
             return $bn->multiply($bnt);
@@ -250,7 +250,7 @@ class Utils
         // Maybe implement own biginteger in the future
         // See 2.0 BigInteger: https://github.com/phpseclib/phpseclib/blob/2.0/phpseclib/Math/BigInteger.php
         // See dev-master BigInteger: https://github.com/phpseclib/phpseclib/blob/master/phpseclib/Math/BigInteger.php#L700
-        // $base = (new BigNumber(10))->pow(new BigNumber($fractionLength));
+        // $base = (new BigInteger(10))->pow(new BigInteger($fractionLength));
 
         // So we switch phpseclib special global param, change in the future
         /** @psalm-suppress UndefinedConstant */
@@ -268,7 +268,7 @@ class Utils
 
                 break;
         }
-        $base = new BigNumber($powerBase);
+        $base = new BigInteger($powerBase);
         $fraction = $fraction->multiply($bnt)->divide($base)[0];
 
         if ($negative1 !== false) {
@@ -284,14 +284,14 @@ class Utils
      * list($bnq, $bnr) = Utils::toEther('1', 'kether');
      * $bnq->toString(); // 1000
      *
-     * @param BigNumber|string|int $number
+     * @param BigInteger|string|int $number
      * @param string $unit
      * @return array
      */
     public static function toEther($number, $unit)
     {
         $wei = self::toWei($number, $unit);
-        $bnt = new BigNumber(self::UNITS['ether']);
+        $bnt = new BigInteger(self::UNITS['ether']);
 
         return $wei->divide($bnt);
     }
@@ -302,7 +302,7 @@ class Utils
      * list($bnq, $bnr) = Utils::fromWei('1000', 'kwei');
      * $bnq->toString(); // 1
      *
-     * @param BigNumber|string|int $number
+     * @param BigInteger|string|int $number
      * @param string $unit
      * @return \phpseclib\Math\BigInteger
      */
@@ -318,7 +318,7 @@ class Utils
             throw new InvalidArgumentException('fromWei doesn\'t support ' . $unit . ' unit.');
         }
 
-        $bnt = new BigNumber(self::UNITS[$unit]);
+        $bnt = new BigInteger(self::UNITS[$unit]);
 
         return $bn->divide($bnt);
     }
@@ -404,14 +404,14 @@ class Utils
     /**
      * Change number or number string to bignumber.
      */
-    public static function toBn(BigNumber|string|int $number): BigNumber
+    public static function toBn(BigInteger|string|int $number): BigInteger
     {
-        if ($number instanceof BigNumber) {
+        if ($number instanceof BigInteger) {
             return $number;
         }
 
         if (is_int($number)) {
-            return new BigNumber($number);
+            return new BigInteger($number);
         }
 
         if (is_numeric($number)) {
@@ -420,7 +420,7 @@ class Utils
             if (self::isNegative($number)) {
                 $count = 1;
                 $number = str_replace('-', '', $number, $count);
-                $negative1 = new BigNumber(-1);
+                $negative1 = new BigInteger(-1);
             }
             if (strpos($number, '.') > 0) {
                 $comps = explode('.', $number);
@@ -432,13 +432,13 @@ class Utils
                 $fraction = $comps[1];
 
                 return [
-                    new BigNumber($whole),
-                    new BigNumber($fraction),
+                    new BigInteger($whole),
+                    new BigInteger($fraction),
                     strlen($comps[1]),
                     isset($negative1) ? $negative1 : false,
                 ];
             } else {
-                $bn = new BigNumber($number);
+                $bn = new BigInteger($number);
             }
             if (isset($negative1)) {
                 $bn = $bn->multiply($negative1);
@@ -452,13 +452,13 @@ class Utils
         if (self::isNegative($number)) {
             $count = 1;
             $number = str_replace('-', '', $number, $count);
-            $negative1 = new BigNumber(-1);
+            $negative1 = new BigInteger(-1);
         }
         if (self::isZeroPrefixed($number) || preg_match('/[a-f]+/', $number) === 1) {
             $number = self::stripZero($number);
-            $bn = new BigNumber($number, 16);
+            $bn = new BigInteger($number, 16);
         } elseif (empty($number)) {
-            $bn = new BigNumber(0);
+            $bn = new BigInteger(0);
         } else {
             throw new InvalidArgumentException('toBn number must be valid hex string.');
         }
