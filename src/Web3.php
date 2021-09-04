@@ -99,6 +99,10 @@ class Web3
      */
     public function __call($name, $arguments): void
     {
+        if (!$this->provider->isBatch) {
+            throw new RuntimeException('Method not supported.');
+        }
+
         $methodClass = sprintf("\Web3\Methods\Web3\%s", ucfirst($name));
         $method = new $methodClass($arguments);
 

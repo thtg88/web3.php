@@ -111,6 +111,10 @@ class Net
      */
     public function __call($name, $arguments): void
     {
+        if (!$this->provider->isBatch) {
+            throw new RuntimeException('Method not supported.');
+        }
+
         $methodClass = sprintf("\Web3\Methods\Net\%s", ucfirst($name));
         $method = new $methodClass($arguments);
 
