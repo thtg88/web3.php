@@ -63,15 +63,9 @@ class Web3
 
         $callback = array_pop($arguments);
 
-        if (is_callable($callback) !== true) {
-            throw new InvalidArgumentException('The last param must be callback function.');
-        }
-
-        $this->callback = $callback;
-
         $this->method = new ClientVersion(arguments: $arguments);
 
-        $this->send();
+        $this->send($callback);
     }
 
     public function sha3(...$arguments): void
@@ -82,28 +76,20 @@ class Web3
 
         $callback = array_pop($arguments);
 
-        if (is_callable($callback) !== true) {
-            throw new InvalidArgumentException('The last param must be callback function.');
-        }
-
-        $this->callback = $callback;
-
         $this->method = new Sha3(arguments: $arguments);
 
-        $this->send();
+        $this->send($callback);
     }
 
-    public function send(): void
+    public function send(callable $callback): void
     {
         if ($this->method === null) {
             throw new RuntimeException('Please set a method.');
         }
 
-        if ($this->callback === null) {
-            throw new RuntimeException('Please set a callback function.');
-        }
+        $this->provider->send($this->method, $callback);
 
-        $this->provider->send($this->method, $this->callback);
+        $this->method = null;
     }
 
     /**
