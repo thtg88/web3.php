@@ -83,9 +83,6 @@ class Ethabi
         return $this->encodeParameters([$type], [$param]);
     }
 
-    /**
-     * @param array $params
-     */
     public function encodeParameters(stdClass|array $types, array $params): string
     {
         // change json to array
