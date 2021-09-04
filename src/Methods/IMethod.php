@@ -13,7 +13,7 @@ namespace Web3\Methods;
 
 interface IMethod
 {
-    public function transform(array $rules): array;
+    public function transform(array $arguments, array $rules): array;
     public function validate(): bool;
     public function toPayloadString(): string;
 }

@@ -34,7 +34,10 @@ class HttpProvider extends Provider implements IProvider
             return;
         }
 
-        $method->transform($method->inputFormatters);
+        $method->arguments = $method->transform(
+            $method->arguments,
+            $method->inputFormatters
+        );
 
         $proxy = function ($err, $res) use ($method, $callback) {
             if ($err !== null) {

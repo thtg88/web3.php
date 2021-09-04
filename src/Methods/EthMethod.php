@@ -79,16 +79,16 @@ abstract class EthMethod extends JSONRPC implements IMethod
         return true;
     }
 
-    public function transform(array $rules): array
+    public function transform(array $arguments, array $rules): array
     {
-        foreach ($this->arguments as $key => $param) {
+        foreach ($arguments as $key => $param) {
             if (isset($rules[$key])) {
                 $formatted = call_user_func([$rules[$key], 'format'], $param);
 
-                $this->arguments[$key] = $formatted;
+                $arguments[$key] = $formatted;
             }
         }
 
-        return $this->arguments;
+        return $arguments;
     }
 }
