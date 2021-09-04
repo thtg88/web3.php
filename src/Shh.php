@@ -71,7 +71,7 @@ class Shh
 
         $callback = array_pop($arguments);
 
-        $this->method = new GetFilterChanges(arguments: $arguments);
+        $this->method = new GetFilterChanges($arguments);
 
         $this->send($callback);
     }
@@ -86,7 +86,7 @@ class Shh
 
         $callback = array_pop($arguments);
 
-        $this->method = new GetMessages(arguments: $arguments);
+        $this->method = new GetMessages($arguments);
 
         $this->send($callback);
     }
@@ -101,7 +101,7 @@ class Shh
 
         $callback = array_pop($arguments);
 
-        $this->method = new HasIdentity(arguments: $arguments);
+        $this->method = new HasIdentity($arguments);
 
         $this->send($callback);
     }
@@ -116,7 +116,7 @@ class Shh
 
         $callback = array_pop($arguments);
 
-        $this->method = new NewFilter(arguments: $arguments);
+        $this->method = new NewFilter($arguments);
 
         $this->send($callback);
     }
@@ -136,7 +136,7 @@ class Shh
 
         $callback = array_pop($arguments);
 
-        $this->method = new NewIdentity(arguments: $arguments);
+        $this->method = new NewIdentity($arguments);
 
         $this->send($callback);
     }
@@ -151,7 +151,7 @@ class Shh
 
         $callback = array_pop($arguments);
 
-        $this->method = new Post(arguments: $arguments);
+        $this->method = new Post($arguments);
 
         $this->send($callback);
     }
@@ -166,7 +166,7 @@ class Shh
 
         $callback = array_pop($arguments);
 
-        $this->method = new UninstallFilter(arguments: $arguments);
+        $this->method = new UninstallFilter($arguments);
 
         $this->send($callback);
     }
@@ -181,7 +181,7 @@ class Shh
 
         $callback = array_pop($arguments);
 
-        $this->method = new Version(arguments: $arguments);
+        $this->method = new Version($arguments);
 
         $this->send($callback);
     }

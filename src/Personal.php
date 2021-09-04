@@ -63,7 +63,7 @@ class Personal
 
         $callback = array_pop($arguments);
 
-        $this->method = new ListAccounts(arguments: $arguments);
+        $this->method = new ListAccounts($arguments);
 
         $this->send($callback);
     }
@@ -78,7 +78,7 @@ class Personal
 
         $callback = array_pop($arguments);
 
-        $this->method = new NewAccount(arguments: $arguments);
+        $this->method = new NewAccount($arguments);
 
         $this->send($callback);
     }
@@ -93,7 +93,7 @@ class Personal
 
         $callback = array_pop($arguments);
 
-        $this->method = new UnlockAccount(arguments: $arguments);
+        $this->method = new UnlockAccount($arguments);
 
         $this->send($callback);
     }
@@ -108,7 +108,7 @@ class Personal
 
         $callback = array_pop($arguments);
 
-        $this->method = new LockAccount(arguments: $arguments);
+        $this->method = new LockAccount($arguments);
 
         $this->send($callback);
     }
@@ -123,7 +123,7 @@ class Personal
 
         $callback = array_pop($arguments);
 
-        $this->method = new SendTransaction(arguments: $arguments);
+        $this->method = new SendTransaction($arguments);
 
         $this->send($callback);
     }

@@ -63,7 +63,7 @@ class Web3
 
         $callback = array_pop($arguments);
 
-        $this->method = new ClientVersion(arguments: $arguments);
+        $this->method = new ClientVersion($arguments);
 
         $this->send($callback);
     }
@@ -76,7 +76,7 @@ class Web3
 
         $callback = array_pop($arguments);
 
-        $this->method = new Sha3(arguments: $arguments);
+        $this->method = new Sha3($arguments);
 
         $this->send($callback);
     }

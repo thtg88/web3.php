@@ -100,7 +100,7 @@ class Eth
 
         $callback = array_pop($arguments);
 
-        $this->method = new Accounts(arguments: $arguments);
+        $this->method = new Accounts($arguments);
 
         $this->send($callback);
     }
@@ -115,7 +115,7 @@ class Eth
 
         $callback = array_pop($arguments);
 
-        $this->method = new BlockNumber(arguments: $arguments);
+        $this->method = new BlockNumber($arguments);
 
         $this->send($callback);
     }
@@ -130,7 +130,7 @@ class Eth
 
         $callback = array_pop($arguments);
 
-        $this->method = new Call(arguments: $arguments);
+        $this->method = new Call($arguments);
 
         $this->send($callback);
     }
@@ -145,7 +145,7 @@ class Eth
 
         $callback = array_pop($arguments);
 
-        $this->method = new Coinbase(arguments: $arguments);
+        $this->method = new Coinbase($arguments);
 
         $this->send($callback);
     }
@@ -160,7 +160,7 @@ class Eth
 
         $callback = array_pop($arguments);
 
-        $this->method = new CompileLLL(arguments: $arguments);
+        $this->method = new CompileLLL($arguments);
 
         $this->send($callback);
     }
@@ -175,7 +175,7 @@ class Eth
 
         $callback = array_pop($arguments);
 
-        $this->method = new CompileSerpent(arguments: $arguments);
+        $this->method = new CompileSerpent($arguments);
 
         $this->send($callback);
     }
@@ -190,7 +190,7 @@ class Eth
 
         $callback = array_pop($arguments);
 
-        $this->method = new CompileSolidity(arguments: $arguments);
+        $this->method = new CompileSolidity($arguments);
 
         $this->send($callback);
     }
@@ -205,7 +205,7 @@ class Eth
 
         $callback = array_pop($arguments);
 
-        $this->method = new EstimateGas(arguments: $arguments);
+        $this->method = new EstimateGas($arguments);
 
         $this->send($callback);
     }
@@ -220,7 +220,7 @@ class Eth
 
         $callback = array_pop($arguments);
 
-        $this->method = new GasPrice(arguments: $arguments);
+        $this->method = new GasPrice($arguments);
 
         $this->send($callback);
     }
@@ -235,7 +235,7 @@ class Eth
 
         $callback = array_pop($arguments);
 
-        $this->method = new GetBalance(arguments: $arguments);
+        $this->method = new GetBalance($arguments);
 
         $this->send($callback);
     }
@@ -250,7 +250,7 @@ class Eth
 
         $callback = array_pop($arguments);
 
-        $this->method = new GetBlockByHash(arguments: $arguments);
+        $this->method = new GetBlockByHash($arguments);
 
         $this->send($callback);
     }
@@ -265,7 +265,7 @@ class Eth
 
         $callback = array_pop($arguments);
 
-        $this->method = new GetBlockByNumber(arguments: $arguments);
+        $this->method = new GetBlockByNumber($arguments);
 
         $this->send($callback);
     }
@@ -280,7 +280,7 @@ class Eth
 
         $callback = array_pop($arguments);
 
-        $this->method = new GetBlockTransactionCountByHash(arguments: $arguments);
+        $this->method = new GetBlockTransactionCountByHash($arguments);
 
         $this->send($callback);
     }
@@ -295,7 +295,7 @@ class Eth
 
         $callback = array_pop($arguments);
 
-        $this->method = new GetBlockTransactionCountByNumber(arguments: $arguments);
+        $this->method = new GetBlockTransactionCountByNumber($arguments);
 
         $this->send($callback);
     }
@@ -310,7 +310,7 @@ class Eth
 
         $callback = array_pop($arguments);
 
-        $this->method = new GetCode(arguments: $arguments);
+        $this->method = new GetCode($arguments);
 
         $this->send($callback);
     }
@@ -325,7 +325,7 @@ class Eth
 
         $callback = array_pop($arguments);
 
-        $this->method = new GetFilterChanges(arguments: $arguments);
+        $this->method = new GetFilterChanges($arguments);
 
         $this->send($callback);
     }
@@ -340,7 +340,7 @@ class Eth
 
         $callback = array_pop($arguments);
 
-        $this->method = new GetFilterLogs(arguments: $arguments);
+        $this->method = new GetFilterLogs($arguments);
 
         $this->send($callback);
     }
@@ -355,7 +355,7 @@ class Eth
 
         $callback = array_pop($arguments);
 
-        $this->method = new GetLogs(arguments: $arguments);
+        $this->method = new GetLogs($arguments);
 
         $this->send($callback);
     }
@@ -370,7 +370,7 @@ class Eth
 
         $callback = array_pop($arguments);
 
-        $this->method = new GetStorageAt(arguments: $arguments);
+        $this->method = new GetStorageAt($arguments);
 
         $this->send($callback);
     }
@@ -385,7 +385,7 @@ class Eth
 
         $callback = array_pop($arguments);
 
-        $this->method = new GetTransactionByBlockHashAndIndex(arguments: $arguments);
+        $this->method = new GetTransactionByBlockHashAndIndex($arguments);
 
         $this->send($callback);
     }
@@ -400,7 +400,7 @@ class Eth
 
         $callback = array_pop($arguments);
 
-        $this->method = new GetTransactionByBlockNumberAndIndex(arguments: $arguments);
+        $this->method = new GetTransactionByBlockNumberAndIndex($arguments);
 
         $this->send($callback);
     }
@@ -415,7 +415,7 @@ class Eth
 
         $callback = array_pop($arguments);
 
-        $this->method = new GetTransactionByHash(arguments: $arguments);
+        $this->method = new GetTransactionByHash($arguments);
 
         $this->send($callback);
     }
@@ -430,7 +430,7 @@ class Eth
 
         $callback = array_pop($arguments);
 
-        $this->method = new GetTransactionCount(arguments: $arguments);
+        $this->method = new GetTransactionCount($arguments);
 
         $this->send($callback);
     }
@@ -445,7 +445,7 @@ class Eth
 
         $callback = array_pop($arguments);
 
-        $this->method = new GetTransactionReceipt(arguments: $arguments);
+        $this->method = new GetTransactionReceipt($arguments);
 
         $this->send($callback);
     }
@@ -460,7 +460,7 @@ class Eth
 
         $callback = array_pop($arguments);
 
-        $this->method = new GetUncleByBlockHashAndIndex(arguments: $arguments);
+        $this->method = new GetUncleByBlockHashAndIndex($arguments);
 
         $this->send($callback);
     }
@@ -475,7 +475,7 @@ class Eth
 
         $callback = array_pop($arguments);
 
-        $this->method = new GetUncleByBlockNumberAndIndex(arguments: $arguments);
+        $this->method = new GetUncleByBlockNumberAndIndex($arguments);
 
         $this->send($callback);
     }
@@ -490,7 +490,7 @@ class Eth
 
         $callback = array_pop($arguments);
 
-        $this->method = new GetUncleCountByBlockHash(arguments: $arguments);
+        $this->method = new GetUncleCountByBlockHash($arguments);
 
         $this->send($callback);
     }
@@ -505,7 +505,7 @@ class Eth
 
         $callback = array_pop($arguments);
 
-        $this->method = new GetUncleCountByBlockNumber(arguments: $arguments);
+        $this->method = new GetUncleCountByBlockNumber($arguments);
 
         $this->send($callback);
     }
@@ -520,7 +520,7 @@ class Eth
 
         $callback = array_pop($arguments);
 
-        $this->method = new GetWork(arguments: $arguments);
+        $this->method = new GetWork($arguments);
 
         $this->send($callback);
     }
@@ -535,7 +535,7 @@ class Eth
 
         $callback = array_pop($arguments);
 
-        $this->method = new Hashrate(arguments: $arguments);
+        $this->method = new Hashrate($arguments);
 
         $this->send($callback);
     }
@@ -550,7 +550,7 @@ class Eth
 
         $callback = array_pop($arguments);
 
-        $this->method = new Mining(arguments: $arguments);
+        $this->method = new Mining($arguments);
 
         $this->send($callback);
     }
@@ -565,7 +565,7 @@ class Eth
 
         $callback = array_pop($arguments);
 
-        $this->method = new NewBlockFilter(arguments: $arguments);
+        $this->method = new NewBlockFilter($arguments);
 
         $this->send($callback);
     }
@@ -580,7 +580,7 @@ class Eth
 
         $callback = array_pop($arguments);
 
-        $this->method = new NewFilter(arguments: $arguments);
+        $this->method = new NewFilter($arguments);
 
         $this->send($callback);
     }
@@ -595,7 +595,7 @@ class Eth
 
         $callback = array_pop($arguments);
 
-        $this->method = new NewPendingTransactionFilter(arguments: $arguments);
+        $this->method = new NewPendingTransactionFilter($arguments);
 
         $this->send($callback);
     }
@@ -610,7 +610,7 @@ class Eth
 
         $callback = array_pop($arguments);
 
-        $this->method = new ProtocolVersion(arguments: $arguments);
+        $this->method = new ProtocolVersion($arguments);
 
         $this->send($callback);
     }
@@ -625,7 +625,7 @@ class Eth
 
         $callback = array_pop($arguments);
 
-        $this->method = new SendRawTransaction(arguments: $arguments);
+        $this->method = new SendRawTransaction($arguments);
 
         $this->send($callback);
     }
@@ -640,7 +640,7 @@ class Eth
 
         $callback = array_pop($arguments);
 
-        $this->method = new SendTransaction(arguments: $arguments);
+        $this->method = new SendTransaction($arguments);
 
         $this->send($callback);
     }
@@ -655,7 +655,7 @@ class Eth
 
         $callback = array_pop($arguments);
 
-        $this->method = new Sign(arguments: $arguments);
+        $this->method = new Sign($arguments);
 
         $this->send($callback);
     }
@@ -670,7 +670,7 @@ class Eth
 
         $callback = array_pop($arguments);
 
-        $this->method = new SubmitWork(arguments: $arguments);
+        $this->method = new SubmitWork($arguments);
 
         $this->send($callback);
     }
@@ -685,7 +685,7 @@ class Eth
 
         $callback = array_pop($arguments);
 
-        $this->method = new SubmitHashrate(arguments: $arguments);
+        $this->method = new SubmitHashrate($arguments);
 
         $this->send($callback);
     }
@@ -700,7 +700,7 @@ class Eth
 
         $callback = array_pop($arguments);
 
-        $this->method = new Syncing(arguments: $arguments);
+        $this->method = new Syncing($arguments);
 
         $this->send($callback);
     }
@@ -715,7 +715,7 @@ class Eth
 
         $callback = array_pop($arguments);
 
-        $this->method = new UninstallFilter(arguments: $arguments);
+        $this->method = new UninstallFilter($arguments);
 
         $this->send($callback);
     }

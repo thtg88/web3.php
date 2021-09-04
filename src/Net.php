@@ -61,7 +61,7 @@ class Net
 
         $callback = array_pop($arguments);
 
-        $this->method = new Listening(arguments: $arguments);
+        $this->method = new Listening($arguments);
 
         $this->send($callback);
     }
@@ -76,7 +76,7 @@ class Net
 
         $callback = array_pop($arguments);
 
-        $this->method = new PeerCount(arguments: $arguments);
+        $this->method = new PeerCount($arguments);
 
         $this->send($callback);
     }
@@ -91,7 +91,7 @@ class Net
 
         $callback = array_pop($arguments);
 
-        $this->method = new Version(arguments: $arguments);
+        $this->method = new Version($arguments);
 
         $this->send($callback);
     }
