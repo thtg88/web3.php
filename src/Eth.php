@@ -85,550 +85,550 @@ class Eth
         throw new InvalidArgumentException('Please set a valid provider.');
     }
 
-    public function accounts(...$arguments): void
+    public function accounts(...$arguments): array|self|null
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new Accounts($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new Accounts($arguments), $callback);
+        return $this->provider->send(new Accounts($arguments), $callback);
     }
 
-    public function blockNumber(...$arguments): void
+    public function blockNumber(...$arguments): array|self|null
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new BlockNumber($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new BlockNumber($arguments), $callback);
+        return $this->provider->send(new BlockNumber($arguments), $callback);
     }
 
-    public function call(...$arguments): void
+    public function call(...$arguments): array|self|null
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new Call($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new Call($arguments), $callback);
+        return $this->provider->send(new Call($arguments), $callback);
     }
 
-    public function coinbase(...$arguments): void
+    public function coinbase(...$arguments): array|self|null
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new Coinbase($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new Coinbase($arguments), $callback);
+        return $this->provider->send(new Coinbase($arguments), $callback);
     }
 
-    public function compileLLL(...$arguments): void
+    public function compileLLL(...$arguments): array|self|null
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new CompileLLL($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new CompileLLL($arguments), $callback);
+        return $this->provider->send(new CompileLLL($arguments), $callback);
     }
 
-    public function compileSerpent(...$arguments): void
+    public function compileSerpent(...$arguments): array|self|null
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new CompileSerpent($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new CompileSerpent($arguments), $callback);
+        return $this->provider->send(new CompileSerpent($arguments), $callback);
     }
 
-    public function compileSolidity(...$arguments): void
+    public function compileSolidity(...$arguments): array|self|null
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new CompileSolidity($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new CompileSolidity($arguments), $callback);
+        return $this->provider->send(new CompileSolidity($arguments), $callback);
     }
 
-    public function estimateGas(...$arguments): void
+    public function estimateGas(...$arguments): array|self|null
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new EstimateGas($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new EstimateGas($arguments), $callback);
+        return $this->provider->send(new EstimateGas($arguments), $callback);
     }
 
-    public function gasPrice(...$arguments): void
+    public function gasPrice(...$arguments): array|self|null
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new GasPrice($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new GasPrice($arguments), $callback);
+        return $this->provider->send(new GasPrice($arguments), $callback);
     }
 
-    public function getBalance(...$arguments): void
+    public function getBalance(...$arguments): array|self|null
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new GetBalance($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new GetBalance($arguments), $callback);
+        return $this->provider->send(new GetBalance($arguments), $callback);
     }
 
-    public function getBlockByHash(...$arguments): void
+    public function getBlockByHash(...$arguments): array|self|null
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new GetBlockByHash($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new GetBlockByHash($arguments), $callback);
+        return $this->provider->send(new GetBlockByHash($arguments), $callback);
     }
 
-    public function getBlockByNumber(...$arguments): void
+    public function getBlockByNumber(...$arguments): array|self|null
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new GetBlockByNumber($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new GetBlockByNumber($arguments), $callback);
+        return $this->provider->send(new GetBlockByNumber($arguments), $callback);
     }
 
-    public function getBlockTransactionCountByHash(...$arguments): void
+    public function getBlockTransactionCountByHash(...$arguments): array|self|null
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new GetBlockTransactionCountByHash($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new GetBlockTransactionCountByHash($arguments), $callback);
+        return $this->provider->send(new GetBlockTransactionCountByHash($arguments), $callback);
     }
 
-    public function getBlockTransactionCountByNumber(...$arguments): void
+    public function getBlockTransactionCountByNumber(...$arguments): array|self|null
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new GetBlockTransactionCountByNumber($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new GetBlockTransactionCountByNumber($arguments), $callback);
+        return $this->provider->send(new GetBlockTransactionCountByNumber($arguments), $callback);
     }
 
-    public function getCode(...$arguments): void
+    public function getCode(...$arguments): array|self|null
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new GetCode($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new GetCode($arguments), $callback);
+        return $this->provider->send(new GetCode($arguments), $callback);
     }
 
-    public function getFilterChanges(...$arguments): void
+    public function getFilterChanges(...$arguments): array|self|null
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new GetFilterChanges($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new GetFilterChanges($arguments), $callback);
+        return $this->provider->send(new GetFilterChanges($arguments), $callback);
     }
 
-    public function getFilterLogs(...$arguments): void
+    public function getFilterLogs(...$arguments): array|self|null
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new GetFilterLogs($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new GetFilterLogs($arguments), $callback);
+        return $this->provider->send(new GetFilterLogs($arguments), $callback);
     }
 
-    public function getLogs(...$arguments): void
+    public function getLogs(...$arguments): array|self|null
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new GetLogs($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new GetLogs($arguments), $callback);
+        return $this->provider->send(new GetLogs($arguments), $callback);
     }
 
-    public function getStorageAt(...$arguments): void
+    public function getStorageAt(...$arguments): array|self|null
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new GetStorageAt($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new GetStorageAt($arguments), $callback);
+        return $this->provider->send(new GetStorageAt($arguments), $callback);
     }
 
-    public function getTransactionByBlockHashAndIndex(...$arguments): void
+    public function getTransactionByBlockHashAndIndex(...$arguments): array|self|null
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new GetTransactionByBlockHashAndIndex($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new GetTransactionByBlockHashAndIndex($arguments), $callback);
+        return $this->provider->send(new GetTransactionByBlockHashAndIndex($arguments), $callback);
     }
 
-    public function getTransactionByBlockNumberAndIndex(...$arguments): void
+    public function getTransactionByBlockNumberAndIndex(...$arguments): array|self|null
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new GetTransactionByBlockNumberAndIndex($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new GetTransactionByBlockNumberAndIndex($arguments), $callback);
+        return $this->provider->send(new GetTransactionByBlockNumberAndIndex($arguments), $callback);
     }
 
-    public function getTransactionByHash(...$arguments): void
+    public function getTransactionByHash(...$arguments): array|self|null
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new GetTransactionByHash($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new GetTransactionByHash($arguments), $callback);
+        return $this->provider->send(new GetTransactionByHash($arguments), $callback);
     }
 
-    public function getTransactionCount(...$arguments): void
+    public function getTransactionCount(...$arguments): array|self|null
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new GetTransactionCount($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new GetTransactionCount($arguments), $callback);
+        return $this->provider->send(new GetTransactionCount($arguments), $callback);
     }
 
-    public function getTransactionReceipt(...$arguments): void
+    public function getTransactionReceipt(...$arguments): array|self|null
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new GetTransactionReceipt($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new GetTransactionReceipt($arguments), $callback);
+        return $this->provider->send(new GetTransactionReceipt($arguments), $callback);
     }
 
-    public function getUncleByBlockHashAndIndex(...$arguments): void
+    public function getUncleByBlockHashAndIndex(...$arguments): array|self|null
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new GetUncleByBlockHashAndIndex($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new GetUncleByBlockHashAndIndex($arguments), $callback);
+        return $this->provider->send(new GetUncleByBlockHashAndIndex($arguments), $callback);
     }
 
-    public function getUncleByBlockNumberAndIndex(...$arguments): void
+    public function getUncleByBlockNumberAndIndex(...$arguments): array|self|null
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new GetUncleByBlockNumberAndIndex($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new GetUncleByBlockNumberAndIndex($arguments), $callback);
+        return $this->provider->send(new GetUncleByBlockNumberAndIndex($arguments), $callback);
     }
 
-    public function getUncleCountByBlockHash(...$arguments): void
+    public function getUncleCountByBlockHash(...$arguments): array|self|null
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new GetUncleCountByBlockHash($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new GetUncleCountByBlockHash($arguments), $callback);
+        return $this->provider->send(new GetUncleCountByBlockHash($arguments), $callback);
     }
 
-    public function getUncleCountByBlockNumber(...$arguments): void
+    public function getUncleCountByBlockNumber(...$arguments): array|self|null
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new GetUncleCountByBlockNumber($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new GetUncleCountByBlockNumber($arguments), $callback);
+        return $this->provider->send(new GetUncleCountByBlockNumber($arguments), $callback);
     }
 
-    public function getWork(...$arguments): void
+    public function getWork(...$arguments): array|self|null
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new GetWork($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new GetWork($arguments), $callback);
+        return $this->provider->send(new GetWork($arguments), $callback);
     }
 
-    public function hashrate(...$arguments): void
+    public function hashrate(...$arguments): array|self|null
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new Hashrate($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new Hashrate($arguments), $callback);
+        return $this->provider->send(new Hashrate($arguments), $callback);
     }
 
-    public function mining(...$arguments): void
+    public function mining(...$arguments): array|self|null
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new Mining($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new Mining($arguments), $callback);
+        return $this->provider->send(new Mining($arguments), $callback);
     }
 
-    public function newBlockFilter(...$arguments): void
+    public function newBlockFilter(...$arguments): array|self|null
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new NewBlockFilter($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new NewBlockFilter($arguments), $callback);
+        return $this->provider->send(new NewBlockFilter($arguments), $callback);
     }
 
-    public function newFilter(...$arguments): void
+    public function newFilter(...$arguments): array|self|null
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new NewFilter($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new NewFilter($arguments), $callback);
+        return $this->provider->send(new NewFilter($arguments), $callback);
     }
 
-    public function newPendingTransactionFilter(...$arguments): void
+    public function newPendingTransactionFilter(...$arguments): array|self|null
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new NewPendingTransactionFilter($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new NewPendingTransactionFilter($arguments), $callback);
+        return $this->provider->send(new NewPendingTransactionFilter($arguments), $callback);
     }
 
-    public function protocolVersion(...$arguments): void
+    public function protocolVersion(...$arguments): array|self|null
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new ProtocolVersion($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new ProtocolVersion($arguments), $callback);
+        return $this->provider->send(new ProtocolVersion($arguments), $callback);
     }
 
-    public function sendRawTransaction(...$arguments): void
+    public function sendRawTransaction(...$arguments): array|self|null
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new SendRawTransaction($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new SendRawTransaction($arguments), $callback);
+        return $this->provider->send(new SendRawTransaction($arguments), $callback);
     }
 
-    public function sendTransaction(...$arguments): void
+    public function sendTransaction(...$arguments): array|self|null
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new SendTransaction($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new SendTransaction($arguments), $callback);
+        return $this->provider->send(new SendTransaction($arguments), $callback);
     }
 
-    public function sign(...$arguments): void
+    public function sign(...$arguments): array|self|null
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new Sign($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new Sign($arguments), $callback);
+        return $this->provider->send(new Sign($arguments), $callback);
     }
 
-    public function submitWork(...$arguments): void
+    public function submitWork(...$arguments): array|self|null
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new SubmitWork($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new SubmitWork($arguments), $callback);
+        return $this->provider->send(new SubmitWork($arguments), $callback);
     }
 
-    public function submitHashrate(...$arguments): void
+    public function submitHashrate(...$arguments): array|self|null
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new SubmitHashrate($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new SubmitHashrate($arguments), $callback);
+        return $this->provider->send(new SubmitHashrate($arguments), $callback);
     }
 
-    public function syncing(...$arguments): void
+    public function syncing(...$arguments): array|self|null
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new Syncing($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new Syncing($arguments), $callback);
+        return $this->provider->send(new Syncing($arguments), $callback);
     }
 
-    public function uninstallFilter(...$arguments): void
+    public function uninstallFilter(...$arguments): array|self|null
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new UninstallFilter($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new UninstallFilter($arguments), $callback);
+        return $this->provider->send(new UninstallFilter($arguments), $callback);
     }
 
     /**

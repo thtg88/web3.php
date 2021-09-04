@@ -15,7 +15,7 @@ use Web3\Methods\IMethod;
 
 interface IProvider
 {
-    public function send(IMethod $method, ?callable $callback = null): void;
+    public function send(IMethod $method, ?callable $callback = null): ?array;
 
     /**
      * @param bool $status

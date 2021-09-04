@@ -18,7 +18,7 @@ class HttpProvider extends Provider implements IProvider
 {
     protected array $methods = [];
 
-    public function send(IMethod $method, ?callable $callback = null): void
+    public function send(IMethod $method, ?callable $callback = null): ?array
     {
         $payload = $method->toPayloadString();
 
@@ -26,12 +26,12 @@ class HttpProvider extends Provider implements IProvider
             $this->methods[] = $method;
             $this->batch[] = $payload;
 
-            return;
+            return null;
         }
 
         // TODO: should it throw?
         if (!$method->validate()) {
-            return;
+            return ['Validation failed', null];
         }
 
         $method->arguments = $method->transform(
@@ -55,7 +55,7 @@ class HttpProvider extends Provider implements IProvider
             return call_user_func($callback, null, $res);
         };
 
-        $this->requestManager->sendPayload($payload, $proxy);
+        return $this->requestManager->sendPayload($payload, $proxy);
     }
 
     /**

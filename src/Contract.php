@@ -280,10 +280,10 @@ class Contract
     /**
      * Deploy a contract with params.
      */
-    public function new(...$arguments): void
+    public function new(...$arguments): ?array
     {
         if (!isset($this->constructor)) {
-            return;
+            return null;
         }
 
         $constructor = $this->constructor;
@@ -313,19 +313,25 @@ class Contract
 
         $transaction['data'] = '0x' . $this->bytecode . Utils::stripZero($data);
 
-        $this->eth->sendTransaction($transaction, function ($err, $transaction) use ($callback) {
-            if ($err !== null) {
-                return call_user_func($callback, $err, null);
-            }
-
-            return call_user_func($callback, null, $transaction);
+        [$err, $transaction] = $this->eth->sendTransaction($transaction, function () {
         });
+
+        if ($err !== null) {
+            call_user_func($callback, $err, null);
+
+            return [$err, null];
+        }
+
+        call_user_func($callback, null, $transaction);
+
+        return [null, $transaction];
     }
 
-    public function send(...$arguments): void
+    public function send(...$arguments): ?array
     {
+        // TODO: throw?
         if (!isset($this->functions)) {
-            return;
+            return null;
         }
 
         $method = array_splice($arguments, 0, 1)[0];
@@ -407,19 +413,24 @@ class Contract
         $transaction['to'] = $this->toAddress;
         $transaction['data'] = $functionSignature . Utils::stripZero($data);
 
-        $this->eth->sendTransaction($transaction, function ($err, $transaction) use ($callback) {
-            if ($err !== null) {
-                return call_user_func($callback, $err, null);
-            }
-
-            return call_user_func($callback, null, $transaction);
+        [$err, $transaction] = $this->eth->sendTransaction($transaction, function () {
         });
+
+        if ($err !== null) {
+            call_user_func($callback, $err, null);
+
+            return [$err, null];
+        }
+
+        call_user_func($callback, null, $transaction);
+
+        return [null, $transaction];
     }
 
-    public function call(...$arguments): void
+    public function call(...$arguments): ?array
     {
         if (!isset($this->functions)) {
-            return;
+            return null;
         }
 
         $method = array_splice($arguments, 0, 1)[0];
@@ -500,20 +511,27 @@ class Contract
         $transaction['to'] = $this->toAddress;
         $transaction['data'] = $functionSignature . Utils::stripZero($data);
 
-        $this->eth->call($transaction, $defaultBlock, function ($err, $transaction) use ($callback, $function) {
-            if ($err !== null) {
-                return call_user_func($callback, $err, null);
-            }
-            $decodedTransaction = $this->ethabi->decodeParameters($function, $transaction);
-
-            return call_user_func($callback, null, $decodedTransaction);
+        [$err, $transaction] = $this->eth->call($transaction, $defaultBlock, function () {
         });
+
+        if ($err !== null) {
+            call_user_func($callback, $err, null);
+
+            return [$err, null];
+        }
+
+        $decodedTransaction = $this->ethabi->decodeParameters($function, $transaction);
+
+        call_user_func($callback, null, $decodedTransaction);
+
+        return [null, $transaction];
     }
 
-    public function estimateGas(...$arguments): void
+    public function estimateGas(...$arguments): ?array
     {
+        // TODO: throw?
         if (!isset($this->functions) && !isset($this->constructor)) {
-            return;
+            return null;
         }
 
         $callback = array_pop($arguments);
@@ -618,13 +636,18 @@ class Contract
             $transaction['data'] = $functionSignature . Utils::stripZero($data);
         }
 
-        $this->eth->estimateGas($transaction, function ($err, $gas) use ($callback) {
-            if ($err !== null) {
-                return call_user_func($callback, $err, null);
-            }
-
-            return call_user_func($callback, null, $gas);
+        [$err, $gas] = $this->eth->estimateGas($transaction, function () {
         });
+
+        if ($err !== null) {
+            call_user_func($callback, $err, null);
+
+            return [$err, null];
+        }
+
+        call_user_func($callback, null, $gas);
+
+        return [null, $gas];
     }
 
     /**

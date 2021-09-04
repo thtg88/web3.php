@@ -48,69 +48,69 @@ class Personal
         throw new InvalidArgumentException('Please set a valid provider.');
     }
 
-    public function listAccounts(...$arguments): void
+    public function listAccounts(...$arguments): array|null|self
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new ListAccounts($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new ListAccounts($arguments), $callback);
+        return $this->provider->send(new ListAccounts($arguments), $callback);
     }
 
-    public function newAccount(...$arguments): void
+    public function newAccount(...$arguments): array|null|self
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new NewAccount($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new NewAccount($arguments), $callback);
+        return $this->provider->send(new NewAccount($arguments), $callback);
     }
 
-    public function unlockAccount(...$arguments): void
+    public function unlockAccount(...$arguments): array|null|self
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new UnlockAccount($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new UnlockAccount($arguments), $callback);
+        return $this->provider->send(new UnlockAccount($arguments), $callback);
     }
 
-    public function lockAccount(...$arguments): void
+    public function lockAccount(...$arguments): array|null|self
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new LockAccount($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new LockAccount($arguments), $callback);
+        return $this->provider->send(new LockAccount($arguments), $callback);
     }
 
-    public function sendTransaction(...$arguments): void
+    public function sendTransaction(...$arguments): array|null|self
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new SendTransaction($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new SendTransaction($arguments), $callback);
+        return $this->provider->send(new SendTransaction($arguments), $callback);
     }
 
     /**

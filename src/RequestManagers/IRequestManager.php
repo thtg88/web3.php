@@ -13,8 +13,5 @@ namespace Web3\RequestManagers;
 
 interface IRequestManager
 {
-    /**
-     * @param string $payload
-     */
-    public function sendPayload($payload, callable $callback): void;
+    public function sendPayload(string $payload, callable $callback): array;
 }
