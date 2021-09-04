@@ -23,8 +23,6 @@ class Utils
     /**
      * UNITS
      * from ethjs-unit
-     *
-     * @const array
      */
     public const UNITS = [
         'noether' => '0',
@@ -137,7 +135,10 @@ class Utils
             return false;
         }
 
-        if (preg_match('/^(0x|0X)?[a-f0-9]{40}$/', $value) === 1 || preg_match('/^(0x|0X)?[A-F0-9]{40}$/', $value) === 1) {
+        if (
+            preg_match('/^(0x|0X)?[a-f0-9]{40}$/', $value) === 1 ||
+            preg_match('/^(0x|0X)?[A-F0-9]{40}$/', $value) === 1
+        ) {
             return true;
         }
 
@@ -325,7 +326,7 @@ class Utils
     /**
      * @param stdClass|array $json
      */
-    public static function jsonMethodToString($json): string
+    public static function jsonMethodToString(stdClass|array $json): string
     {
         if ($json instanceof stdClass) {
             // one way to change whole json stdClass to array type
@@ -350,12 +351,12 @@ class Utils
             }
 
             return $json['name'] . '(' . implode(',', $typeName) . ')';
-        } elseif (!is_array($json)) {
-            throw new InvalidArgumentException('jsonMethodToString json must be array or stdClass.');
         }
+
         if (isset($json['name']) && strpos($json['name'], '(') > 0) {
             return $json['name'];
         }
+
         $typeName = [];
 
         foreach ($json['inputs'] as $param) {
@@ -367,11 +368,7 @@ class Utils
         return $json['name'] . '(' . implode(',', $typeName) . ')';
     }
 
-    /**
-     * @param stdClass|array $json
-     * @return array
-     */
-    public static function jsonToArray($json)
+    public static function jsonToArray(stdClass|array $json): array
     {
         if ($json instanceof stdClass) {
             $json = (array) $json;
@@ -406,11 +403,8 @@ class Utils
 
     /**
      * Change number or number string to bignumber.
-     *
-     * @param BigNumber|string|int $number
-     * @return array|\phpseclib\Math\BigInteger
      */
-    public static function toBn($number)
+    public static function toBn(BigNumber|string|int $number): BigNumber
     {
         if ($number instanceof BigNumber) {
             return $number;
@@ -453,29 +447,25 @@ class Utils
             return $bn;
         }
 
-        if (is_string($number)) {
-            $number = mb_strtolower($number);
+        $number = mb_strtolower($number);
 
-            if (self::isNegative($number)) {
-                $count = 1;
-                $number = str_replace('-', '', $number, $count);
-                $negative1 = new BigNumber(-1);
-            }
-            if (self::isZeroPrefixed($number) || preg_match('/[a-f]+/', $number) === 1) {
-                $number = self::stripZero($number);
-                $bn = new BigNumber($number, 16);
-            } elseif (empty($number)) {
-                $bn = new BigNumber(0);
-            } else {
-                throw new InvalidArgumentException('toBn number must be valid hex string.');
-            }
-            if (isset($negative1)) {
-                $bn = $bn->multiply($negative1);
-            }
-
-            return $bn;
+        if (self::isNegative($number)) {
+            $count = 1;
+            $number = str_replace('-', '', $number, $count);
+            $negative1 = new BigNumber(-1);
+        }
+        if (self::isZeroPrefixed($number) || preg_match('/[a-f]+/', $number) === 1) {
+            $number = self::stripZero($number);
+            $bn = new BigNumber($number, 16);
+        } elseif (empty($number)) {
+            $bn = new BigNumber(0);
+        } else {
+            throw new InvalidArgumentException('toBn number must be valid hex string.');
+        }
+        if (isset($negative1)) {
+            $bn = $bn->multiply($negative1);
         }
 
-        throw new InvalidArgumentException('toBn number must be BigNumber, string or int.');
+        return $bn;
     }
 }
