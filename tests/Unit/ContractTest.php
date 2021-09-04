@@ -79,10 +79,6 @@ class ContractTest extends TestCase
         $contract->provider = new HttpProvider($requestManager);
 
         $this->assertEquals($contract->provider->requestManager->host, 'http://localhost:8545');
-
-        $contract->provider = null;
-
-        $this->assertEquals($contract->provider->requestManager->host, 'http://localhost:8545');
     }
 
     /** @test */
