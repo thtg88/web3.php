@@ -44,6 +44,8 @@ class Net
             $requestManager = new HttpRequestManager($provider);
 
             $this->provider = new HttpProvider($requestManager);
+
+            return;
         }
 
         throw new InvalidArgumentException('Please set a valid provider.');
