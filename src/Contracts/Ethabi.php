@@ -151,20 +151,20 @@ class Ethabi
         $solidityTypes = $this->getSolidityTypes($types);
         $offsets = array_fill(0, $typesLength, 0);
 
-        for ($i=0; $i<$typesLength; $i++) {
+        for ($i = 0; $i < $typesLength; $i++) {
             $offsets[$i] = $solidityTypes[$i]->staticPartLength($types[$i]);
         }
         for ($i=1; $i<$typesLength; $i++) {
             $offsets[$i] += $offsets[$i - 1];
         }
-        for ($i=0; $i<$typesLength; $i++) {
+        for ($i = 0; $i < $typesLength; $i++) {
             $offsets[$i] -= $solidityTypes[$i]->staticPartLength($types[$i]);
         }
 
         $result = [];
         $param = mb_strtolower(Utils::stripZero($param));
 
-        for ($i=0; $i<$typesLength; $i++) {
+        for ($i = 0; $i < $typesLength; $i++) {
             if (isset($outputTypes['outputs'][$i]['name']) && empty($outputTypes['outputs'][$i]['name']) === false) {
                 $result[$outputTypes['outputs'][$i]['name']] = $solidityTypes[$i]->decode($param, $offsets[$i], $types[$i]);
             } else {
@@ -217,14 +217,14 @@ class Ethabi
             if ($solidityType->isDynamicArray($nestedName)) {
                 $previousLength = 2;
 
-                for ($i=0; $i<count($encoded); $i++) {
+                for ($i = 0; $i < count($encoded); $i++) {
                     if (isset($encoded[$i - 1])) {
                         $previousLength += abs($encoded[$i - 1][0]);
                     }
                     $result .= IntegerFormatter::format($offset + $i * $nestedStaticPartLength + $previousLength * 32);
                 }
             }
-            for ($i=0; $i<count($encoded); $i++) {
+            for ($i = 0; $i < count($encoded); $i++) {
                 // $bn = Utils::toBn($result);
                 // $divided = $bn->divide(Utils::toBn(2));
 
@@ -251,7 +251,7 @@ class Ethabi
         if ($solidityType->isDynamicArray($nestedName)) {
             $previousLength = 0;
 
-            for ($i=0; $i<count($encoded); $i++) {
+            for ($i = 0; $i < count($encoded); $i++) {
                 if (isset($encoded[$i - 1])) {
                     $previousLength += abs($encoded[$i - 1])[0];
                 }
@@ -259,7 +259,7 @@ class Ethabi
             }
         }
 
-        for ($i=0; $i<count($encoded); $i++) {
+        for ($i = 0; $i < count($encoded); $i++) {
             // $bn = Utils::toBn($result);
             // $divided = $bn->divide(Utils::toBn(2));
 
