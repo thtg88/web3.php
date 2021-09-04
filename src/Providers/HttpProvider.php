@@ -57,7 +57,6 @@ class HttpProvider extends Provider implements IProvider
 
     /**
      * @param bool $status
-     * @return
      */
     public function batch($status): void
     {
@@ -96,6 +95,7 @@ class HttpProvider extends Provider implements IProvider
         };
 
         $this->requestManager->sendPayload('[' . implode(',', $this->batch) . ']', $proxy);
+
         $this->methods[] = [];
         $this->batch = [];
     }

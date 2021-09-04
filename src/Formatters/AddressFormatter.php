@@ -34,6 +34,7 @@ class AddressFormatter implements IFormatter
 
             return '0x' . $value;
         }
+
         $value = IntegerFormatter::format($value, 40);
 
         return '0x' . $value;
