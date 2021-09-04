@@ -633,8 +633,6 @@ class Contract
      * 1. Get the funtion data with params.
      * 2. Sign the data with user private key.
      * 3. Call sendRawTransaction.
-     *
-     * @param mixed
      */
     public function getData(...$arguments): ?string
     {
