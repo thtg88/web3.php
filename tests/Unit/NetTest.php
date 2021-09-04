@@ -36,9 +36,5 @@ class NetTest extends TestCase
         $net->provider = new HttpProvider($requestManager);
 
         $this->assertEquals($net->provider->requestManager->host, 'http://localhost:8545');
-
-        $net->provider = null;
-
-        $this->assertEquals($net->provider->requestManager->host, 'http://localhost:8545');
     }
 }
