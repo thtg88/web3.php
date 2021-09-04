@@ -451,14 +451,4 @@ class ShhApiTest extends TestCase
             $this->assertTrue(true);
         });
     }
-
-    /** @test */
-    public function wrong_callback(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-
-        $shh = $this->shh;
-
-        $shh->version();
-    }
 }

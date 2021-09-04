@@ -661,14 +661,4 @@ class EthApiTest extends TestCase
             $this->assertTrue(true);
         });
     }
-
-    /** @test */
-    public function wrong_callback(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-
-        $eth = $this->eth;
-
-        $eth->protocolVersion();
-    }
 }

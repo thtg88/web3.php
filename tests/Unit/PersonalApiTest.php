@@ -204,14 +204,4 @@ class PersonalApiTest extends TestCase
             $this->assertTrue(is_string($account));
         });
     }
-
-    /** @test */
-    public function wrong_callback(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-
-        $personal = $this->personal;
-
-        $personal->newAccount('123456');
-    }
 }

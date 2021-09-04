@@ -42,13 +42,4 @@ class NetTest extends TestCase
 
         $this->assertEquals($net->provider->requestManager->host, 'http://localhost:8545');
     }
-
-    /** @test */
-    public function call_throw_runtime_exception(): void
-    {
-        $this->expectException(RuntimeException::class);
-
-        $net = new Net(null);
-        $net->version();
-    }
 }

@@ -343,9 +343,6 @@ class UtilsTest extends TestCase
             'name' => 'approve(address,uint256)',
         ]);
         $this->assertEquals($methodString, 'approve(address,uint256)');
-
-        $this->expectException(InvalidArgumentException::class);
-        $methodString = Utils::jsonMethodToString('test');
     }
 
     /** @test */

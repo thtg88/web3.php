@@ -47,8 +47,5 @@ class Web3Test extends TestCase
         $web3->provider = new HttpProvider($requestManager);
 
         $this->assertEquals($web3->provider->requestManager->host, 'http://localhost:8545');
-
-        $web3->provider = null;
-        $this->assertEquals($web3->provider->requestManager->host, 'http://localhost:8545');
     }
 }

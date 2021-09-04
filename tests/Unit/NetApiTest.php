@@ -74,14 +74,4 @@ class NetApiTest extends TestCase
             $this->assertTrue(true);
         });
     }
-
-    /** @test */
-    public function wrong_callback(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-
-        $net = $this->net;
-
-        $net->version();
-    }
 }
