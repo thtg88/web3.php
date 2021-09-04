@@ -15,22 +15,15 @@ use Web3\Utils;
 
 class HexFormatter implements IFormatter
 {
-    /**
-     * format
-     *
-     * @return string
-     */
-    public static function format($value)
+    public static function format($value): string
     {
         $value = Utils::toString($value);
         $value = mb_strtolower($value);
 
         if (Utils::isZeroPrefixed($value)) {
             return $value;
-        } else {
-            $value = Utils::toHex($value, true);
         }
 
-        return $value;
+        return Utils::toHex($value, true);
     }
 }

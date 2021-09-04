@@ -13,10 +13,5 @@ namespace Web3\Formatters;
 
 interface IFormatter
 {
-    /**
-     * format
-     *
-     * @return string
-     */
     public static function format($value);
 }

@@ -15,12 +15,7 @@ use Web3\Utils;
 
 class StringFormatter implements IFormatter
 {
-    /**
-     * format
-     *
-     * @return string
-     */
-    public static function format($value)
+    public static function format($value): string
     {
         return Utils::toString($value);
     }

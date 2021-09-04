@@ -13,16 +13,12 @@ namespace Web3\Formatters;
 
 class PostFormatter implements IFormatter
 {
-    /**
-     * format
-     *
-     * @return string
-     */
     public static function format($value)
     {
         if (isset($value['priority'])) {
             $value['priority'] = QuantityFormatter::format($value['priority']);
         }
+
         if (isset($value['ttl'])) {
             $value['ttl'] = QuantityFormatter::format($value['ttl']);
         }

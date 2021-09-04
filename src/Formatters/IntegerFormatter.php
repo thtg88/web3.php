@@ -15,12 +15,7 @@ use Web3\Utils;
 
 class IntegerFormatter implements IFormatter
 {
-    /**
-     * format
-     *
-     * @return string
-     */
-    public static function format($value)
+    public static function format($value): string
     {
         $value = (string) $value;
         $arguments = func_get_args();

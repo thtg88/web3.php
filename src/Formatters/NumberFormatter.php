@@ -15,12 +15,7 @@ use Web3\Utils;
 
 class NumberFormatter implements IFormatter
 {
-    /**
-     * format
-     *
-     * @return int
-     */
-    public static function format($value)
+    public static function format($value): int
     {
         $value = Utils::toString($value);
         $bn = Utils::toBn($value);

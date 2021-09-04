@@ -16,12 +16,9 @@ use Web3\Utils;
 class AddressFormatter implements IFormatter
 {
     /**
-     * format
-     * to do: iban
-     *
-     * @return string
+     * @todo iban
      */
-    public static function format($value)
+    public static function format($value): string
     {
         $value = (string) $value;
 
@@ -35,8 +32,6 @@ class AddressFormatter implements IFormatter
             return '0x' . $value;
         }
 
-        $value = IntegerFormatter::format($value, 40);
-
-        return '0x' . $value;
+        return '0x' . IntegerFormatter::format($value, 40);
     }
 }

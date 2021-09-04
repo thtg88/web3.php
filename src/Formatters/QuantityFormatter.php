@@ -29,16 +29,18 @@ class QuantityFormatter implements IFormatter
             if ($value === '0x0' || strpos($value, '0x0') !== 0) {
                 return $value;
             }
+
             $hex = preg_replace('/^0x0+(?!$)/', '', $value);
         } else {
             $bn = Utils::toBn($value);
             $hex = $bn->toHex(true);
         }
+
         if (empty($hex)) {
-            $hex = '0';
-        } else {
-            $hex = preg_replace('/^0+(?!$)/', '', $hex);
+            return '0x0';
         }
+
+        $hex = preg_replace('/^0+(?!$)/', '', $hex);
 
         return '0x' . $hex;
     }

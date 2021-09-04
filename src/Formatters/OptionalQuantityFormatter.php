@@ -15,11 +15,6 @@ use Web3\Validators\TagValidator;
 
 class OptionalQuantityFormatter implements IFormatter
 {
-    /**
-     * format
-     *
-     * @return string
-     */
     public static function format($value)
     {
         if (TagValidator::validate($value)) {

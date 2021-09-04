@@ -13,12 +13,7 @@ namespace Web3\Formatters;
 
 class BooleanFormatter implements IFormatter
 {
-    /**
-     * format
-     *
-     * @return bool
-     */
-    public static function format($value)
+    public static function format($value): bool
     {
         return (bool) $value;
     }
