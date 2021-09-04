@@ -19,4 +19,9 @@ class PeerCount extends EthMethod
     protected array $outputFormatters = [
         BigNumberFormatter::class,
     ];
+
+    public function getMethod(): string
+    {
+        return 'net_peerCount';
+    }
 }

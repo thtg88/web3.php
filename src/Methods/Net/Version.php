@@ -15,4 +15,8 @@ use Web3\Methods\EthMethod;
 
 class Version extends EthMethod
 {
+    public function getMethod(): string
+    {
+        return 'net_version';
+    }
 }

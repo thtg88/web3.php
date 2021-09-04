@@ -15,4 +15,8 @@ use Web3\Methods\EthMethod;
 
 class Listening extends EthMethod
 {
+    public function getMethod(): string
+    {
+        return 'net_listening';
+    }
 }
