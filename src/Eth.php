@@ -67,9 +67,6 @@ class Eth
     private array $methods = [];
     private ?IMethod $method;
 
-    /** @var callable */
-    private $callback;
-
     public function __construct(Provider|string $provider)
     {
         if ($provider instanceof Provider) {
@@ -730,7 +727,6 @@ class Eth
         $this->provider->send($this->method, $callback);
 
         $this->method = null;
-        $this->callback = null;
     }
 
     /**
