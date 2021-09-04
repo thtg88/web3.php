@@ -156,7 +156,10 @@ class Contract
 
     public function setDefaultBlock($defaultBlock): self
     {
-        if (TagValidator::validate($defaultBlock) || QuantityValidator::validate($defaultBlock)) {
+        if (
+            TagValidator::validate($defaultBlock) ||
+            QuantityValidator::validate($defaultBlock)
+        ) {
             $this->defaultBlock = $defaultBlock;
         } else {
             $this->$defaultBlock = 'latest';
@@ -293,11 +296,11 @@ class Contract
         }
 
         if (is_callable($callback) !== true) {
-            throw new \InvalidArgumentException('The last param must be callback function.');
+            throw new InvalidArgumentException('The last param must be callback function.');
         }
 
         if (!isset($this->bytecode)) {
-            throw new \InvalidArgumentException('Please call bytecode($bytecode) before new().');
+            throw new InvalidArgumentException('Please call bytecode($bytecode) before new().');
         }
 
         $params = array_splice($arguments, 0, $input_count);
@@ -342,7 +345,7 @@ class Contract
             throw new InvalidArgumentException('Please make sure the method exists.');
         }
         if (is_callable($callback) !== true) {
-            throw new \InvalidArgumentException('The last param must be callback function.');
+            throw new InvalidArgumentException('The last param must be callback function.');
         }
 
         // check the last one in arguments is transaction object
@@ -473,9 +476,13 @@ class Contract
                 $defaultBlock = $arguments[$argsLen - 1];
             }
         }
-        if (!TagValidator::validate($defaultBlock) && !QuantityValidator::validate($defaultBlock)) {
+        if (
+            !TagValidator::validate($defaultBlock) &&
+            !QuantityValidator::validate($defaultBlock)
+        ) {
             $defaultBlock = $this->defaultBlock;
         }
+
         if (
             !is_array($transaction) &&
             !isset($transaction['from']) &&
@@ -541,17 +548,15 @@ class Contract
                 throw new InvalidArgumentException('Please make sure the method is string.');
             }
 
-            $functions = [];
-            foreach ($this->functions as $function) {
-                if ($function['name'] === $method) {
-                    $functions[] = $function;
-                }
-            };
+            $functions = array_filter(
+                $this->functions,
+                fn ($function) => $function['name'] === $method
+            );
             if (count($functions) < 1) {
                 throw new InvalidArgumentException('Please make sure the method exists.');
             }
             if (is_callable($callback) !== true) {
-                throw new \InvalidArgumentException('The last param must be callback function.');
+                throw new InvalidArgumentException('The last param must be callback function.');
             }
 
             // check the last one in arguments is transaction object
