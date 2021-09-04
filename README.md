@@ -209,75 +209,35 @@ $web3->personal->newAccount('123456', function ($err, $account) use (&$newAccoun
 
 To run examples, you need to run ethereum blockchain local (testrpc).
 
-If you are using docker as development machain, you can try [ethdock](https://github.com/sc0vu/ethdock) to run local ethereum blockchain, just simply run `docker-compose up -d testrpc` and expose the `8545` port.
+You can use [Ganache](https://www.trufflesuite.com/ganache) to set up a testchain and expose it on port 8545
 
 # Develop
 
 ### Local php cli installed
 
 1. Clone the repo and install packages.
+
 ```
-git clone https://github.com/sc0Vu/web3.php.git && cd web3.php && composer install
+git clone https://github.com/thtg88/web3.php.git && cd web3.php && composer install
 ```
 
-2. Run test script.
-```
-vendor/bin/phpunit
-```
+2. Start Ganache workspace on port 8545
 
-### Docker container
+3. Change testHost in `TestCase.php`
 
-1. Clone the repo and run docker container.
-```
-git clone https://github.com/sc0Vu/web3.php.git
-```
-
-2. Copy web3.php to web3.php/docker/app directory and start container.
-```
-cp files docker/app && docker-compose up -d php ganache
-```
-
-3. Enter php container and install packages.
-```
-docker-compose exec php ash
-```
-
-4. Change testHost in `TestCase.php`
 ```
 /**
  * testHost
- * 
+ *
  * @var string
  */
-protected $testHost = 'http://ganache:8545';
+protected $testHost = 'http://127.0.0.1:8545';
 ```
 
-5. Run test script
+4. Run test script
+
 ```
 vendor/bin/phpunit
-```
-
-###### Install packages
-Enter container first
-```
-docker-compose exec php ash
-```
-
-1. gmp
-```
-apk add gmp-dev
-docker-php-ext-install gmp
-```
-
-2. bcmath
-```
-docker-php-ext-install bcmath
-```
-
-###### Remove extension
-Move the extension config from `/usr/local/etc/php/conf.d/`
-```
-mv /usr/local/etc/php/conf.d/extension-config-name to/directory
 ```
 
 # API
