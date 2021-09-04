@@ -17,13 +17,14 @@ class PersonalApiTest extends TestCase
 
         $this->personal = $this->web3->personal;
 
-        $this->web3->eth->coinbase(function ($err, $coinbase) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
-
-            $this->coinbase = $coinbase;
+        [$err, $coinbase] = $this->web3->eth->coinbase(function () {
         });
+
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
+
+        $this->coinbase = $coinbase;
     }
 
     /** @test */
@@ -31,14 +32,15 @@ class PersonalApiTest extends TestCase
     {
         $personal = $this->personal;
 
-        $personal->listAccounts(function ($err, $accounts) {
-            // infura banned us to use list accounts
-            if ($err !== null) {
-                return $this->assertTrue($err->getCode() === 405);
-            }
-
-            $this->assertTrue(is_array($accounts));
+        [$err, $accounts] = $personal->listAccounts(function () {
         });
+
+        // infura banned us to use list accounts
+        if ($err !== null) {
+            $this->assertTrue($err->getCode() === 405);
+        }
+
+        $this->assertTrue(is_array($accounts));
     }
 
     /** @test */
@@ -46,13 +48,14 @@ class PersonalApiTest extends TestCase
     {
         $personal = $this->personal;
 
-        $personal->newAccount('123456', function ($err, $account) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
-
-            $this->assertTrue(is_string($account));
+        [$err, $account] = $personal->newAccount('123456', function () {
         });
+
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
+
+        $this->assertTrue(is_string($account));
     }
 
     /** @test */
@@ -61,22 +64,25 @@ class PersonalApiTest extends TestCase
         $personal = $this->personal;
 
         // create account
-        $personal->newAccount('123456', function ($err, $account) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
-
-            $this->newAccount = $account;
-            $this->assertTrue(is_string($account));
+        [$err, $account] = $personal->newAccount('123456', function () {
         });
 
-        $personal->unlockAccount($this->newAccount, '123456', 0, function ($err, $unlocked) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
 
-            $this->assertTrue($unlocked);
+        $this->newAccount = $account;
+
+        $this->assertTrue(is_string($account));
+
+        [$err, $unlocked] = $personal->unlockAccount($this->newAccount, '123456', 0, function () {
         });
+
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
+
+        $this->assertTrue($unlocked);
     }
 
     /** @test */
@@ -85,22 +91,25 @@ class PersonalApiTest extends TestCase
         $personal = $this->personal;
 
         // create account
-        $personal->newAccount('123456', function ($err, $account) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
-
-            $this->newAccount = $account;
-            $this->assertTrue(is_string($account));
+        [$err, $account] = $personal->newAccount('123456', function () {
         });
 
-        $personal->unlockAccount($this->newAccount, '123456', 100, function ($err, $unlocked) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
 
-            $this->assertTrue($unlocked);
+        $this->newAccount = $account;
+
+        $this->assertTrue(is_string($account));
+
+        [$err, $unlocked] = $personal->unlockAccount($this->newAccount, '123456', 100, function () {
         });
+
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
+
+        $this->assertTrue($unlocked);
     }
 
     /** @test */
@@ -109,27 +118,34 @@ class PersonalApiTest extends TestCase
         $personal = $this->personal;
 
         // create account
-        $personal->newAccount('123456', function ($err, $account) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
-            $this->newAccount = $account;
-            $this->assertTrue(is_string($account));
+        [$err, $account] = $personal->newAccount('123456', function () {
         });
 
-        $personal->unlockAccount($this->newAccount, '123456', 0, function ($err, $unlocked) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
-            $this->assertTrue($unlocked);
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
+
+        $this->newAccount = $account;
+
+        $this->assertTrue(is_string($account));
+
+        [$err, $unlocked] = $personal->unlockAccount($this->newAccount, '123456', 0, function () {
         });
 
-        $personal->lockAccount($this->newAccount, function ($err, $locked) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
-            $this->assertTrue($locked);
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
+
+        $this->assertTrue($unlocked);
+
+        [$err, $locked] = $personal->lockAccount($this->newAccount, function () {
         });
+
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
+
+        $this->assertTrue($locked);
     }
 
     /** @test */
@@ -138,40 +154,43 @@ class PersonalApiTest extends TestCase
         $personal = $this->personal;
 
         // create account
-        $personal->newAccount('123456', function ($err, $account) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
-
-            $this->newAccount = $account;
-            $this->assertTrue(is_string($account));
+        [$err, $account] = $personal->newAccount('123456', function () {
         });
 
-        $this->web3->eth->sendTransaction([
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
+
+        $this->newAccount = $account;
+        $this->assertTrue(is_string($account));
+
+        [$err, $transaction] = $this->web3->eth->sendTransaction([
             'from' => $this->coinbase,
             'to' => $this->newAccount,
             'value' => '0xfffffffff',
-        ], function ($err, $transaction) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
-
-            $this->assertTrue(is_string($transaction));
-            $this->assertTrue(mb_strlen($transaction) === 66);
+        ], function () {
         });
 
-        $personal->sendTransaction([
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
+
+        $this->assertTrue(is_string($transaction));
+        $this->assertTrue(mb_strlen($transaction) === 66);
+
+        [$err, $transaction] = $personal->sendTransaction([
             'from' => $this->newAccount,
             'to' => $this->coinbase,
             'value' => '0x01',
-        ], '123456', function ($err, $transaction) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
-
-            $this->assertTrue(is_string($transaction));
-            $this->assertTrue(mb_strlen($transaction) === 66);
+        ], '123456', function () {
         });
+
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
+
+        $this->assertTrue(is_string($transaction));
+        $this->assertTrue(mb_strlen($transaction) === 66);
     }
 
     /** @test */
@@ -181,11 +200,13 @@ class PersonalApiTest extends TestCase
 
         $personal = $this->personal;
 
-        $personal->newAccount($personal, function ($err, $account) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
-            $this->assertTrue(is_string($account));
+        [$err, $account] = $personal->newAccount($personal, function () {
         });
+
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
+
+        $this->assertTrue(is_string($account));
     }
 }
