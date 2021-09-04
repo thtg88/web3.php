@@ -29,7 +29,6 @@ class Web3
     protected Shh $shh;
     protected Utils $utils;
     private IMethod $method;
-    private $callback;
 
     public function __construct(Provider|string $provider)
     {
