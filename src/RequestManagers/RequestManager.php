@@ -11,7 +11,7 @@
 
 namespace Web3\RequestManagers;
 
-class RequestManager
+abstract class RequestManager implements IRequestManager
 {
     protected string $host;
     protected float $timeout;
