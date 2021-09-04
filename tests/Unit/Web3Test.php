@@ -51,13 +51,4 @@ class Web3Test extends TestCase
         $web3->provider = null;
         $this->assertEquals($web3->provider->requestManager->host, 'http://localhost:8545');
     }
-
-    /** @test */
-    public function call_throw_runtime_exception(): void
-    {
-        $this->expectException(RuntimeException::class);
-
-        $web3 = new Web3(null);
-        $web3->sha3('hello world');
-    }
 }
