@@ -22,17 +22,18 @@ class ShhApiTest extends TestCase
     {
         $shh = $this->shh;
 
-        $shh->version(function ($err, $version) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
-
-            $this->assertTrue(is_string($version));
+        [$err, $version] = $shh->version(function () {
         });
+
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
+
+        $this->assertTrue(is_string($version));
     }
 
     /**
-     * Comment because ganache-cli only implement shh_version.
+     * Commented because ganache-cli only implement shh_version.
      *
      * @test
      */
@@ -40,16 +41,18 @@ class ShhApiTest extends TestCase
     // {
     //     $shh = $this->shh;
 
-    //     $shh->newIdentity(function ($err, $identity) {
-    //         if ($err !== null) {
-    //             return $this->fail($err->getMessage());
-    //         }
-    //         $this->assertEquals(mb_strlen($identity), 132);
+    //     [$err, $identity] = $shh->newIdentity(function () {
     //     });
+
+    //     if ($err !== null) {
+    //         $this->fail($err->getMessage());
+    //     }
+
+    //     $this->assertEquals(mb_strlen($identity), 132);
     // }
 
     /**
-     * Comment because ganache-cli only implement shh_version.
+     * Commented because ganache-cli only implement shh_version.
      *
      * @test
      */
@@ -58,28 +61,34 @@ class ShhApiTest extends TestCase
     //     $shh = $this->shh;
     //     $newIdentity = '0x' . implode('', array_fill(0, 120, '0'));
 
-    //     $shh->hasIdentity($newIdentity, function ($err, $hasIdentity) {
-    //         if ($err !== null) {
-    //             return $this->fail($err->getMessage());
-    //         }
-    //         $this->assertFalse($hasIdentity);
+    //     [$err, $hasIdentity] = $shh->hasIdentity($newIdentity, function () {
     //     });
 
-    //     $shh->newIdentity(function ($err, $identity) use (&$newIdentity) {
-    //         if ($err !== null) {
-    //             return $this->fail($err->getMessage());
-    //         }
-    //         $newIdentity = $identity;
+    //     if ($err !== null) {
+    //         $this->fail($err->getMessage());
+    //     }
 
-    //         $this->assertEquals(mb_strlen($identity), 132);
+    //     $this->assertFalse($hasIdentity);
+
+    //     [$err, $identity] = $shh->newIdentity(function () {
     //     });
 
-    //     $shh->hasIdentity($newIdentity, function ($err, $hasIdentity) {
-    //         if ($err !== null) {
-    //             return $this->fail($err->getMessage());
-    //         }
-    //         $this->assertTrue($hasIdentity);
+    //     if ($err !== null) {
+    //         $this->fail($err->getMessage());
+    //     }
+
+    //     $newIdentity = $identity;
+
+    //     $this->assertEquals(mb_strlen($identity), 132);
+
+    //     [$err, $hasIdentity] = $shh->hasIdentity($newIdentity, function () {
     //     });
+
+    //     if ($err !== null) {
+    //         $this->fail($err->getMessage());
+    //     }
+
+    //     $this->assertTrue($hasIdentity);
     // }
 
     /** @test */
@@ -87,12 +96,14 @@ class ShhApiTest extends TestCase
     // {
     //     $shh = $this->shh;
 
-    //     $shh->newGroup(function ($err, $group) {
-    //         if ($err !== null) {
-    //             return $this->fail($err->getMessage());
-    //         }
-    //         $this->assertEquals(mb_strlen($group), 132);
+    //     [$err, $group] = $shh->newGroup(function () {
     //     });
+
+    //     if ($err !== null) {
+    //         $this->fail($err->getMessage());
+    //     }
+
+    //     $this->assertEquals(mb_strlen($group), 132);
     // }
 
     /** @test */
@@ -101,25 +112,29 @@ class ShhApiTest extends TestCase
     //     $shh = $this->shh;
     //     $newIdentity = '';
 
-    //     $shh->newIdentity(function ($err, $identity) use (&$newIdentity) {
-    //         if ($err !== null) {
-    //             return $this->fail($err->getMessage());
-    //         }
-    //         $newIdentity = $identity;
-
-    //         $this->assertEquals(mb_strlen($identity), 132);
+    //     [$err, $identity] = $shh->newIdentity(function () {
     //     });
 
-    //     $shh->addToGroup($newIdentity, function ($err, $hasAdded) {
-    //         if ($err !== null) {
-    //             return $this->fail($err->getMessage());
-    //         }
-    //         $this->assertTrue($hasAdded);
+    //     if ($err !== null) {
+    //         $this->fail($err->getMessage());
+    //     }
+
+    //     $newIdentity = $identity;
+
+    //     $this->assertEquals(mb_strlen($identity), 132);
+
+    //     [$err, $hasAdded] = $shh->addToGroup($newIdentity, function () {
     //     });
+
+    //     if ($err !== null) {
+    //         $this->fail($err->getMessage());
+    //     }
+
+    //     $this->assertTrue($hasAdded);
     // }
 
     /**
-     * Comment because ganache-cli only implement shh_version.
+     * Commented because ganache-cli only implement shh_version.
      *
      * @test
      */
@@ -130,54 +145,63 @@ class ShhApiTest extends TestCase
     //     $toIdentity = '';
 
     //     // create fromIdentity and toIdentity to prevent unknown identity error
-    //     $shh->newIdentity(function ($err, $identity) use (&$fromIdentity) {
-    //         if ($err !== null) {
-    //             return $this->fail($err->getMessage());
-    //         }
-    //         $fromIdentity = $identity;
-
-    //         $this->assertEquals(mb_strlen($identity), 132);
-    //     });
-    //     $shh->newIdentity(function ($err, $identity) use (&$toIdentity) {
-    //         if ($err !== null) {
-    //             return $this->fail($err->getMessage());
-    //         }
-    //         $toIdentity = $identity;
-
-    //         $this->assertEquals(mb_strlen($identity), 132);
+    //     [$err, $identity] = $shh->newIdentity(function () use (&$fromIdentity) {
     //     });
 
-    //     $shh->post([
+    //     if ($err !== null) {
+    //         $this->fail($err->getMessage());
+    //     }
+
+    //     $fromIdentity = $identity;
+
+    //     $this->assertEquals(mb_strlen($identity), 132);
+
+    //     [$err, $identity] = $shh->newIdentity(function () {
+    //     });
+
+    //     if ($err !== null) {
+    //         $this->fail($err->getMessage());
+    //     }
+
+    //     $toIdentity = $identity;
+
+    //     $this->assertEquals(mb_strlen($identity), 132);
+
+    //     [$err, $isSent] = $shh->post([
     //         'from' => $fromIdentity,
     //         'to' => $toIdentity,
     //         'topics' => ["0x776869737065722d636861742d636c69656e74", "0x4d5a695276454c39425154466b61693532"],
     //         'payload' => "0x7b2274797065223a226d6",
     //         'priority' => "0x64",
     //         'ttl' => "0x64",
-    //     ], function ($err, $isSent) {
-    //         if ($err !== null) {
-    //             return $this->fail($err->getMessage());
-    //         }
-    //         $this->assertTrue($isSent);
+    //     ], function () {
     //     });
 
-    //     $shh->post([
+    //     if ($err !== null) {
+    //         $this->fail($err->getMessage());
+    //     }
+
+    //     $this->assertTrue($isSent);
+
+    //     [$err, $isSent] = $shh->post([
     //         'from' => $fromIdentity,
     //         'to' => $toIdentity,
     //         'topics' => ["0x776869737065722d636861742d636c69656e74", "0x4d5a695276454c39425154466b61693532"],
     //         'payload' => "0x7b2274797065223a226d6",
     //         'priority' => 123,
     //         'ttl' => 123,
-    //     ], function ($err, $isSent) {
-    //         if ($err !== null) {
-    //             return $this->fail($err->getMessage());
-    //         }
-    //         $this->assertTrue($isSent);
+    //     ], function () {
     //     });
+
+    //     if ($err !== null) {
+    //         $this->fail($err->getMessage());
+    //     }
+
+    //     $this->assertTrue($isSent);
     // }
 
     /**
-     * Comment because ganache-cli only implement shh_version.
+     * Commented because ganache-cli only implement shh_version.
      *
      * @test
      */
@@ -187,48 +211,56 @@ class ShhApiTest extends TestCase
     //     $toIdentity = '';
 
     //     // create toIdentity to prevent unknown identity error
-    //     $shh->newIdentity(function ($err, $identity) use (&$toIdentity) {
-    //         if ($err !== null) {
-    //             return $this->fail($err->getMessage());
-    //         }
-    //         $toIdentity = $identity;
-
-    //         $this->assertEquals(mb_strlen($identity), 132);
+    //     [$err, $identity] = $shh->newIdentity(function () {
     //     });
 
-    //     $shh->newFilter([
+    //     if ($err !== null) {
+    //         $this->fail($err->getMessage());
+    //     }
+
+    //     $toIdentity = $identity;
+
+    //     $this->assertEquals(mb_strlen($identity), 132);
+
+    //     [$err, $filterId] = $shh->newFilter([
     //         'to' => $toIdentity,
     //         'topics' => ["0x776869737065722d636861742d636c69656e74", "0x4d5a695276454c39425154466b61693532"],
-    //     ], function ($err, $filterId) {
-    //         if ($err !== null) {
-    //             return $this->fail($err->getMessage());
-    //         }
-    //         $this->assertTrue(is_string($filterId));
+    //     ], function () {
     //     });
 
-    //     $shh->newFilter([
+    //     if ($err !== null) {
+    //         $this->fail($err->getMessage());
+    //     }
+
+    //     $this->assertTrue(is_string($filterId));
+
+    //     [$err, $filterId] = $shh->newFilter([
     //         'to' => $toIdentity,
     //         'topics' => [null, "0x776869737065722d636861742d636c69656e74", "0x4d5a695276454c39425154466b61693532"],
-    //     ], function ($err, $filterId) {
-    //         if ($err !== null) {
-    //             return $this->fail($err->getMessage());
-    //         }
-    //         $this->assertTrue(is_string($filterId));
+    //     ], function () {
     //     });
 
-    //     $shh->newFilter([
+    //     if ($err !== null) {
+    //         $this->fail($err->getMessage());
+    //     }
+
+    //     $this->assertTrue(is_string($filterId));
+
+    //     [$err, $filterId] = $shh->newFilter([
     //         'to' => $toIdentity,
     //         'topics' => ["0x776869737065722d636861742d636c69656e74", ["0x776869737065722d636861742d636c69656e74", "0x4d5a695276454c39425154466b61693532"]],
-    //     ], function ($err, $filterId) {
-    //         if ($err !== null) {
-    //             return $this->fail($err->getMessage());
-    //         }
-    //         $this->assertTrue(is_string($filterId));
+    //     ], function () {
     //     });
+
+    //     if ($err !== null) {
+    //         $this->fail($err->getMessage());
+    //     }
+
+    //     $this->assertTrue(is_string($filterId));
     // }
 
     /**
-     * Comment because ganache-cli only implement shh_version.
+     * Commented because ganache-cli only implement shh_version.
      *
      * @test
      */
@@ -239,37 +271,43 @@ class ShhApiTest extends TestCase
     //     $filter = '';
 
     //     // create toIdentity to prevent unknown identity error
-    //     $shh->newIdentity(function ($err, $identity) use (&$toIdentity) {
-    //         if ($err !== null) {
-    //             return $this->fail($err->getMessage());
-    //         }
-    //         $toIdentity = $identity;
-
-    //         $this->assertEquals(mb_strlen($identity), 132);
+    //     [$err, $identity] = $shh->newIdentity(function () {
     //     });
 
-    //     $shh->newFilter([
+    //     if ($err !== null) {
+    //         $this->fail($err->getMessage());
+    //     }
+
+    //     $toIdentity = $identity;
+
+    //     $this->assertEquals(mb_strlen($identity), 132);
+
+    //     [$err, $filterId] = $shh->newFilter([
     //         'to' => $toIdentity,
     //         'topics' => ["0x776869737065722d636861742d636c69656e74", "0x4d5a695276454c39425154466b61693532"],
-    //     ], function ($err, $filterId) use (&$filter) {
-    //         if ($err !== null) {
-    //             return $this->fail($err->getMessage());
-    //         }
-    //         $filter = $filterId;
-
-    //         $this->assertTrue(is_string($filterId));
+    //     ], function () {
     //     });
 
-    //     $shh->uninstallFilter($filter, function ($err, $uninstalled) {
-    //         if ($err !== null) {
-    //             return $this->fail($err->getMessage());
-    //         }
-    //         $this->assertTrue($uninstalled);
+    //     if ($err !== null) {
+    //         $this->fail($err->getMessage());
+    //     }
+
+    //     $filter = $filterId;
+
+    //     $this->assertTrue(is_string($filterId));
+
+    //     [$err, $uninstalled] = $shh->uninstallFilter($filter, function () {
     //     });
+
+    //     if ($err !== null) {
+    //         $this->fail($err->getMessage());
+    //     }
+
+    //     $this->assertTrue($uninstalled);
     // }
 
     /**
-     * Comment because ganache-cli only implement shh_version.
+     * Commented because ganache-cli only implement shh_version.
      *
      * @test
      */
@@ -281,68 +319,80 @@ class ShhApiTest extends TestCase
     //     $filter = '';
 
     //     // create fromIdentity and toIdentity to prevent unknown identity error
-    //     $shh->newIdentity(function ($err, $identity) use (&$toIdentity) {
-    //         if ($err !== null) {
-    //             return $this->fail($err->getMessage());
-    //         }
-    //         $toIdentity = $identity;
-
-    //         $this->assertEquals(mb_strlen($identity), 132);
+    //     [$err, $identity] = $shh->newIdentity(function () {
     //     });
 
-    //     $shh->newIdentity(function ($err, $identity) use (&$fromIdentity) {
-    //         if ($err !== null) {
-    //             return $this->fail($err->getMessage());
-    //         }
-    //         $fromIdentity = $identity;
+    //     if ($err !== null) {
+    //         $this->fail($err->getMessage());
+    //     }
 
-    //         $this->assertEquals(mb_strlen($identity), 132);
+    //     $toIdentity = $identity;
+
+    //     $this->assertEquals(mb_strlen($identity), 132);
+
+    //     [$err, $identity] = $shh->newIdentity(function () {
     //     });
 
-    //     $shh->newFilter([
+    //     if ($err !== null) {
+    //         $this->fail($err->getMessage());
+    //     }
+
+    //     $fromIdentity = $identity;
+
+    //     $this->assertEquals(mb_strlen($identity), 132);
+
+    //     [$err, $filterId] = $shh->newFilter([
     //         'to' => $toIdentity,
     //         'topics' => ["0x776869737065722d636861742d636c69656e74", "0x4d5a695276454c39425154466b61693532"],
-    //     ], function ($err, $filterId) use (&$filter) {
-    //         if ($err !== null) {
-    //             return $this->fail($err->getMessage());
-    //         }
-    //         $filter = $filterId;
-
-    //         $this->assertTrue(is_string($filterId));
+    //     ], function () {
     //     });
 
-    //     $shh->getFilterChanges($filter, function ($err, $changes) {
-    //         if ($err !== null) {
-    //             return $this->fail($err->getMessage());
-    //         }
-    //         $this->assertTrue(is_array($changes));
+    //     if ($err !== null) {
+    //         $this->fail($err->getMessage());
+    //     }
+
+    //     $filter = $filterId;
+
+    //     $this->assertTrue(is_string($filterId));
+
+    //     [$err, $changes] = $shh->getFilterChanges($filter, function () {
     //     });
+
+    //     if ($err !== null) {
+    //         $this->fail($err->getMessage());
+    //     }
+
+    //     $this->assertTrue(is_array($changes));
 
     //     // try to post, but didn't get changes
-    //     $shh->post([
+    //     [$err, $isSent] = $shh->post([
     //         'from' => $fromIdentity,
     //         'to' => $toIdentity,
     //         'topics' => ["0x776869737065722d636861742d636c69656e74", "0x4d5a695276454c39425154466b61693532"],
     //         'payload' => "0x7b2274797065223a226d6",
     //         'priority' => "0x64",
     //         'ttl' => "0x64",
-    //     ], function ($err, $isSent) {
-    //         if ($err !== null) {
-    //             return $this->fail($err->getMessage());
-    //         }
-    //         $this->assertTrue($isSent);
+    //     ], function () {
     //     });
 
-    //     $shh->getFilterChanges($filter, function ($err, $changes) {
-    //         if ($err !== null) {
-    //             return $this->fail($err->getMessage());
-    //         }
-    //         $this->assertTrue(is_array($changes));
+    //     if ($err !== null) {
+    //         $this->fail($err->getMessage());
+    //     }
+
+    //     $this->assertTrue($isSent);
+
+    //     [$err, $changes] = $shh->getFilterChanges($filter, function () {
     //     });
+
+    //     if ($err !== null) {
+    //         $this->fail($err->getMessage());
+    //     }
+
+    //     $this->assertTrue(is_array($changes));
     // }
 
     /**
-     * Comment because ganache-cli only implement shh_version.
+     * Commented because ganache-cli only implement shh_version.
      *
      * @test
      */
@@ -354,71 +404,82 @@ class ShhApiTest extends TestCase
     //     $filter = '';
 
     //     // create fromIdentity and toIdentity to prevent unknown identity error
-    //     $shh->newIdentity(function ($err, $identity) use (&$toIdentity) {
-    //         if ($err !== null) {
-    //             return $this->fail($err->getMessage());
-    //         }
-    //         $toIdentity = $identity;
-
-    //         $this->assertEquals(mb_strlen($identity), 132);
+    //     [$err, $identity] = $shh->newIdentity(function () {
     //     });
 
-    //     $shh->newIdentity(function ($err, $identity) use (&$fromIdentity) {
-    //         if ($err !== null) {
-    //             return $this->fail($err->getMessage());
-    //         }
-    //         $fromIdentity = $identity;
+    //     if ($err !== null) {
+    //         $this->fail($err->getMessage());
+    //     }
 
-    //         $this->assertEquals(mb_strlen($identity), 132);
+    //     $toIdentity = $identity;
+
+    //     $this->assertEquals(mb_strlen($identity), 132);
+
+    //     [$err, $identity] = $shh->newIdentity(function () {
     //     });
 
-    //     $shh->newFilter([
+    //     if ($err !== null) {
+    //         $this->fail($err->getMessage());
+    //     }
+
+    //     $fromIdentity = $identity;
+
+    //     $this->assertEquals(mb_strlen($identity), 132);
+
+    //     [$err, $filterId] = $shh->newFilter([
     //         'to' => $toIdentity,
     //         'topics' => ["0x776869737065722d636861742d636c69656e74", "0x4d5a695276454c39425154466b61693532"],
-    //     ], function ($err, $filterId) use (&$filter) {
-    //         if ($err !== null) {
-    //             return $this->fail($err->getMessage());
-    //         }
-    //         $filter = $filterId;
-
-    //         $this->assertTrue(is_string($filterId));
+    //     ], function () {
     //     });
 
-    //     $shh->getMessages($filter, function ($err, $messages) {
-    //         if ($err !== null) {
-    //             return $this->fail($err->getMessage());
-    //         }
-    //         $this->assertTrue(is_array($messages));
+    //     if ($err !== null) {
+    //         $this->fail($err->getMessage());
+    //     }
+
+    //     $filter = $filterId;
+
+    //     $this->assertTrue(is_string($filterId));
+
+    //     [$err, $messages] = $shh->getMessages($filter, function () {
     //     });
 
-    //     $shh->post([
+    //     if ($err !== null) {
+    //         $this->fail($err->getMessage());
+    //     }
+
+    //     $this->assertTrue(is_array($messages));
+
+    //     [$err, $isSent] = $shh->post([
     //         'from' => $fromIdentity,
     //         'to' => $toIdentity,
     //         'topics' => ["0x776869737065722d636861742d636c69656e74", "0x4d5a695276454c39425154466b61693532"],
     //         'payload' => "0x7b2274797065223a226d6",
     //         'priority' => "0x64",
     //         'ttl' => "0x64",
-    //     ], function ($err, $isSent) {
-    //         if ($err !== null) {
-    //             return $this->fail($err->getMessage());
-    //         }
-    //         $this->assertTrue($isSent);
+    //     ], function () {
     //     });
 
-    //     $shh->getMessages($filter, function ($err, $messages) use ($fromIdentity, $toIdentity) {
-    //         if ($err !== null) {
-    //             return $this->fail($err->getMessage());
-    //         }
-    //         $this->assertTrue(is_array($messages));
-    //         $this->assertEquals($fromIdentity, $messages[0]->from);
-    //         $this->assertEquals($toIdentity, $messages[0]->to);
-    //         $this->assertEquals('0x07b2274797065223a226d6', $messages[0]->payload);
+    //     if ($err !== null) {
+    //         $this->fail($err->getMessage());
+    //     }
+
+    //     $this->assertTrue($isSent);
+
+    //     [$err, $messages] = $shh->getMessages($filter, function () {
     //     });
+
+    //     if ($err !== null) {
+    //         $this->fail($err->getMessage());
+    //     }
+
+    //     $this->assertTrue(is_array($messages));
+    //     $this->assertEquals($fromIdentity, $messages[0]->from);
+    //     $this->assertEquals($toIdentity, $messages[0]->to);
+    //     $this->assertEquals('0x07b2274797065223a226d6', $messages[0]->payload);
     // }
 
     /**
-     * We transform data and throw invalid argument exception
-     * instead of runtime exception.
+     * We transform data and throw invalid argument exception instead of runtime exception.
      *
      * @test
      */
@@ -428,11 +489,13 @@ class ShhApiTest extends TestCase
 
     //     $shh = $this->shh;
 
-    //     $shh->hasIdentity('0', function ($err, $hasIdentity) {
-    //         if ($err !== null) {
-    //             return $this->fail($err->getMessage());
-    //         }
-    //         $this->assertTrue(true);
+    //     [$err, $hasIdentity] = $shh->hasIdentity('0', function () {
     //     });
+
+    //     if ($err !== null) {
+    //         $this->fail($err->getMessage());
+    //     }
+
+    //     $this->assertTrue(true);
     // }
 }

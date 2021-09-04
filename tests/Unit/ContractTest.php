@@ -93,32 +93,40 @@ class ContractTest extends TestCase
         $contract = $this->contract;
         $account = $this->fromAccount;
 
-        $contract->bytecode($this->testBytecode)
-            ->new(1000000, 'Game Token', 1, 'GT', ['from' => $account, 'gas' => '0x200b20'], function ($err, $result) use ($contract) {
-                if ($err !== null) {
-                    return $this->fail($err->getMessage());
-                }
+        [$err, $result] = $contract->bytecode($this->testBytecode)->new(
+            1000000,
+            'Game Token',
+            1,
+            'GT',
+            ['from' => $account, 'gas' => '0x200b20'],
+            function () {
+            }
+        );
 
-                if ($result) {
-                    echo "\nTransaction has made:) id: " . $result . "\n";
-                }
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
 
-                $transactionId = $result;
+        if ($result) {
+            echo "\nTransaction has made:) id: " . $result . "\n";
+        }
 
-                $this->assertTrue(preg_match('/^0x[a-f0-9]{64}$/', $transactionId) === 1);
+        $transactionId = $result;
 
-                $contract->eth->getTransactionReceipt($transactionId, function ($err, $transaction) {
-                    if ($err !== null) {
-                        return $this->fail($err);
-                    }
+        $this->assertTrue(preg_match('/^0x[a-f0-9]{64}$/', $transactionId) === 1);
 
-                    if ($transaction) {
-                        $this->contractAddress = $transaction->contractAddress;
+        [$err, $transaction] = $contract->eth->getTransactionReceipt($transactionId, function () {
+        });
 
-                        echo "\nTransaction has mined:) block number: " . $transaction->blockNumber . "\n";
-                    }
-                });
-            });
+        if ($err !== null) {
+            $this->fail($err);
+        }
+
+        if ($transaction) {
+            $this->contractAddress = $transaction->contractAddress;
+
+            echo "\nTransaction has mined:) block number: " . $transaction->blockNumber . "\n";
+        }
     }
 
     /** @test */

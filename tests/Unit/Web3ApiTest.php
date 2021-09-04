@@ -20,48 +20,46 @@ class Web3ApiTest extends TestCase
     {
         $web3 = $this->web3;
 
-        $web3->clientVersion(function ($err, $version) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
-            $this->assertTrue(is_string($version));
+        [$err, $version] = $web3->clientVersion(function () {
         });
+
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
+
+        $this->assertTrue(is_string($version));
     }
 
     /** @test */
-    public function sha3(): void
+    public function sha3_hex(): void
     {
         $web3 = $this->web3;
 
-        $web3->sha3($this->testHex, function ($err, $hash) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
-            $this->assertEquals($hash, $this->testHash);
+        [$err, $hash] = $web3->sha3($this->testHex, function () {
         });
 
-        $web3->sha3('hello world', function ($err, $hash) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
-            $this->assertEquals($hash, $this->testHash);
-        });
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
+
+        $this->assertEquals($hash, $this->testHash);
+
+
     }
 
     /** @test */
-    public function unallowed_method(): void
+    public function sha3_hello_world(): void
     {
-        $this->expectException(RuntimeException::class);
-
         $web3 = $this->web3;
 
-        $web3->hello(function ($err, $hello) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
-
-            $this->assertTrue(true);
+        [$err, $hash] = $web3->sha3('hello world', function () {
         });
+
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
+
+        $this->assertEquals($hash, $this->testHash);
     }
 
     /**
@@ -73,12 +71,13 @@ class Web3ApiTest extends TestCase
 
         $web3 = $this->web3;
 
-        $web3->sha3($web3, function ($err, $hash) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
-
-            $this->assertTrue(true);
+        [$err, $hash] = $web3->sha3($web3, function () {
         });
+
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
+
+        $this->assertTrue(true);
     }
 }
