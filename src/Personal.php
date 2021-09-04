@@ -12,8 +12,6 @@
 namespace Web3;
 
 use InvalidArgumentException;
-use RuntimeException;
-use Web3\Methods\IMethod;
 use Web3\Methods\Personal\ListAccounts;
 use Web3\Methods\Personal\LockAccount;
 use Web3\Methods\Personal\NewAccount;
@@ -26,7 +24,6 @@ use Web3\RequestManagers\HttpRequestManager;
 class Personal
 {
     protected Provider $provider;
-    private ?IMethod $method;
 
     public function __construct(Provider|string $provider)
     {
@@ -54,103 +51,66 @@ class Personal
     public function listAccounts(...$arguments): void
     {
         if ($this->provider->isBatch) {
-            $this->__call('listAccounts', $arguments);
+            $this->provider->send(new ListAccounts($arguments));
 
             return;
         }
 
         $callback = array_pop($arguments);
 
-        $this->method = new ListAccounts($arguments);
-
-        $this->send($callback);
+        $this->provider->send(new ListAccounts($arguments), $callback);
     }
 
     public function newAccount(...$arguments): void
     {
         if ($this->provider->isBatch) {
-            $this->__call('newAccount', $arguments);
+            $this->provider->send(new NewAccount($arguments));
 
             return;
         }
 
         $callback = array_pop($arguments);
 
-        $this->method = new NewAccount($arguments);
-
-        $this->send($callback);
+        $this->provider->send(new NewAccount($arguments), $callback);
     }
 
     public function unlockAccount(...$arguments): void
     {
         if ($this->provider->isBatch) {
-            $this->__call('unlockAccount', $arguments);
+            $this->provider->send(new UnlockAccount($arguments));
 
             return;
         }
 
         $callback = array_pop($arguments);
 
-        $this->method = new UnlockAccount($arguments);
-
-        $this->send($callback);
+        $this->provider->send(new UnlockAccount($arguments), $callback);
     }
 
     public function lockAccount(...$arguments): void
     {
         if ($this->provider->isBatch) {
-            $this->__call('lockAccount', $arguments);
+            $this->provider->send(new LockAccount($arguments));
 
             return;
         }
 
         $callback = array_pop($arguments);
 
-        $this->method = new LockAccount($arguments);
-
-        $this->send($callback);
+        $this->provider->send(new LockAccount($arguments), $callback);
     }
 
     public function sendTransaction(...$arguments): void
     {
         if ($this->provider->isBatch) {
-            $this->__call('sendTransaction', $arguments);
+            $this->provider->send(new SendTransaction($arguments));
 
             return;
         }
 
         $callback = array_pop($arguments);
 
-        $this->method = new SendTransaction($arguments);
-
-        $this->send($callback);
-    }
-
-    public function send(callable $callback): void
-    {
-        if ($this->method === null) {
-            throw new RuntimeException('Please set a method.');
-        }
-
-        $this->provider->send($this->method, $callback);
-
-        $this->method = null;
-    }
-
-    /**
-     * @param string $name
-     * @param array $arguments
-     */
-    public function __call($name, $arguments): void
-    {
-        if (!$this->provider->isBatch) {
-            throw new RuntimeException('Method not supported.');
-        }
-
-        $methodClass = sprintf("\Web3\Methods\Personal\%s", ucfirst($name));
-        $method = new $methodClass($arguments);
-
-        $this->provider->send($method, null);
+        $this->provider->send(new SendTransaction($arguments), $callback);
     }
 
     /**

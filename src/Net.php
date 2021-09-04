@@ -12,7 +12,6 @@
 namespace Web3;
 
 use InvalidArgumentException;
-use RuntimeException;
 use Web3\Methods\IMethod;
 use Web3\Methods\Net\Listening;
 use Web3\Methods\Net\PeerCount;
@@ -24,7 +23,6 @@ use Web3\RequestManagers\HttpRequestManager;
 class Net
 {
     protected Provider $provider;
-    private ?IMethod $method;
 
     public function __construct(Provider|string $provider)
     {
@@ -52,73 +50,40 @@ class Net
     public function listening(...$arguments): void
     {
         if ($this->provider->isBatch) {
-            $this->__call('listening', $arguments);
+            $this->provider->send(new Listening($arguments));
 
             return;
         }
 
         $callback = array_pop($arguments);
 
-        $this->method = new Listening($arguments);
-
-        $this->send($callback);
+        $this->provider->send(new Listening($arguments), $callback);
     }
 
     public function peerCount(...$arguments): void
     {
         if ($this->provider->isBatch) {
-            $this->__call('peerCount', $arguments);
+            $this->provider->send(new PeerCount($arguments));
 
             return;
         }
 
         $callback = array_pop($arguments);
 
-        $this->method = new PeerCount($arguments);
-
-        $this->send($callback);
+        $this->provider->send(new PeerCount($arguments), $callback);
     }
 
     public function version(...$arguments): void
     {
         if ($this->provider->isBatch) {
-            $this->__call('version', $arguments);
+            $this->provider->send(new Version($arguments));
 
             return;
         }
 
         $callback = array_pop($arguments);
 
-        $this->method = new Version($arguments);
-
-        $this->send($callback);
-    }
-
-    public function send(callable $callback): void
-    {
-        if ($this->method === null) {
-            throw new RuntimeException('Please set a method.');
-        }
-
-        $this->provider->send($this->method, $callback);
-
-        $this->method = null;
-    }
-
-    /**
-     * @param string $name
-     * @param array $arguments
-     */
-    public function __call($name, $arguments): void
-    {
-        if (!$this->provider->isBatch) {
-            throw new RuntimeException('Method not supported.');
-        }
-
-        $methodClass = sprintf("\Web3\Methods\Net\%s", ucfirst($name));
-        $method = new $methodClass($arguments);
-
-        $this->provider->send($method, null);
+        $this->provider->send(new Version($arguments), $callback);
     }
 
     /**

@@ -13,7 +13,6 @@ namespace Web3;
 
 use InvalidArgumentException;
 use RuntimeException;
-use Web3\Methods\IMethod;
 use Web3\Methods\Shh\GetFilterChanges;
 use Web3\Methods\Shh\GetMessages;
 use Web3\Methods\Shh\HasIdentity;
@@ -29,7 +28,6 @@ use Web3\RequestManagers\HttpRequestManager;
 class Shh
 {
     protected Provider $provider;
-    private ?IMethod $method;
 
     public function __construct(Provider|string $provider)
     {
@@ -62,61 +60,53 @@ class Shh
     public function getFilterChanges(...$arguments): void
     {
         if ($this->provider->isBatch) {
-            $this->__call('getFilterChanges', $arguments);
+            $this->provider->send(new GetFilterChanges($arguments));
 
             return;
         }
 
         $callback = array_pop($arguments);
 
-        $this->method = new GetFilterChanges($arguments);
-
-        $this->send($callback);
+        $this->provider->send(new GetFilterChanges($arguments), $callback);
     }
 
     public function getMessages(...$arguments): void
     {
         if ($this->provider->isBatch) {
-            $this->__call('getMessages', $arguments);
+            $this->provider->send(new GetMessages($arguments));
 
             return;
         }
 
         $callback = array_pop($arguments);
 
-        $this->method = new GetMessages($arguments);
-
-        $this->send($callback);
+        $this->provider->send(new GetMessages($arguments), $callback);
     }
 
     public function hasIdentity(...$arguments): void
     {
         if ($this->provider->isBatch) {
-            $this->__call('hasIdentity', $arguments);
+            $this->provider->send(new HasIdentity($arguments));
 
             return;
         }
 
         $callback = array_pop($arguments);
 
-        $this->method = new HasIdentity($arguments);
-
-        $this->send($callback);
+        $this->provider->send(new HasIdentity($arguments), $callback);
     }
 
     public function newFilter(...$arguments): void
     {
         if ($this->provider->isBatch) {
-            $this->__call('newFilter', $arguments);
+            $this->provider->send(new NewFilter($arguments));
 
             return;
         }
 
         $callback = array_pop($arguments);
 
-        $this->method = new NewFilter($arguments);
-
-        $this->send($callback);
+        $this->provider->send(new NewFilter($arguments), $callback);
     }
 
     public function newGroup(...$arguments): void
@@ -127,88 +117,53 @@ class Shh
     public function newIdentity(...$arguments): void
     {
         if ($this->provider->isBatch) {
-            $this->__call('newIdentity', $arguments);
+            $this->provider->send(new NewIdentity($arguments));
 
             return;
         }
 
         $callback = array_pop($arguments);
 
-        $this->method = new NewIdentity($arguments);
-
-        $this->send($callback);
+        $this->provider->send(new NewIdentity($arguments), $callback);
     }
 
     public function post(...$arguments): void
     {
         if ($this->provider->isBatch) {
-            $this->__call('post', $arguments);
+            $this->provider->send(new Post($arguments));
 
             return;
         }
 
         $callback = array_pop($arguments);
 
-        $this->method = new Post($arguments);
-
-        $this->send($callback);
+        $this->provider->send(new Post($arguments), $callback);
     }
 
     public function uninstallFilter(...$arguments): void
     {
         if ($this->provider->isBatch) {
-            $this->__call('uninstallFilter', $arguments);
+            $this->provider->send(new UninstallFilter($arguments));
 
             return;
         }
 
         $callback = array_pop($arguments);
 
-        $this->method = new UninstallFilter($arguments);
-
-        $this->send($callback);
+        $this->provider->send(new UninstallFilter($arguments), $callback);
     }
 
     public function version(...$arguments): void
     {
         if ($this->provider->isBatch) {
-            $this->__call('version', $arguments);
+            $this->provider->send(new Version($arguments));
 
             return;
         }
 
         $callback = array_pop($arguments);
 
-        $this->method = new Version($arguments);
-
-        $this->send($callback);
-    }
-
-    public function send(callable $callback): void
-    {
-        if ($this->method === null) {
-            throw new RuntimeException('Please set a method.');
-        }
-
-        $this->provider->send($this->method, $callback);
-
-        $this->method = null;
-    }
-
-    /**
-     * @param string $name
-     * @param array $arguments
-     */
-    public function __call($name, $arguments): void
-    {
-        if (!$this->provider->isBatch) {
-            throw new RuntimeException('Method not supported.');
-        }
-
-        $methodClass = sprintf("\Web3\Methods\Shh\%s", ucfirst($name));
-        $method = new $methodClass($arguments);
-
-        $this->provider->send($method, null);
+        $this->provider->send(new Version($arguments), $callback);
     }
 
     /**

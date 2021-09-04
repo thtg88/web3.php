@@ -13,7 +13,6 @@ namespace Web3;
 
 use InvalidArgumentException;
 use RuntimeException;
-use Web3\Methods\IMethod;
 use Web3\Methods\Web3\ClientVersion;
 use Web3\Methods\Web3\Sha3;
 use Web3\Providers\HttpProvider;
@@ -28,7 +27,6 @@ class Web3
     protected Personal $personal;
     protected Shh $shh;
     protected Utils $utils;
-    private ?IMethod $method;
 
     public function __construct(Provider|string $provider)
     {
@@ -56,42 +54,27 @@ class Web3
     public function clientVersion(...$arguments): void
     {
         if ($this->provider->isBatch) {
-            $this->__call('clientVersion', $arguments);
+            $this->provider->send(new ClientVersion($arguments));
 
             return;
         }
 
         $callback = array_pop($arguments);
 
-        $this->method = new ClientVersion($arguments);
-
-        $this->send($callback);
+        $this->provider->send(new ClientVersion($arguments), $callback);
     }
 
     public function sha3(...$arguments): void
     {
         if ($this->provider->isBatch) {
-            $this->__call('sha3', $arguments);
+            $this->provider->send(new Sha3($arguments));
 
             return;
         }
 
         $callback = array_pop($arguments);
 
-        $this->method = new Sha3($arguments);
-
-        $this->send($callback);
-    }
-
-    public function send(callable $callback): void
-    {
-        if ($this->method === null) {
-            throw new RuntimeException('Please set a method.');
-        }
-
-        $this->provider->send($this->method, $callback);
-
-        $this->method = null;
+        $this->provider->send(new Sha3($arguments), $callback);
     }
 
     /**
