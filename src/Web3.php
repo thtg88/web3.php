@@ -28,7 +28,7 @@ class Web3
     protected Personal $personal;
     protected Shh $shh;
     protected Utils $utils;
-    private IMethod $method;
+    private ?IMethod $method;
 
     public function __construct(Provider|string $provider)
     {
