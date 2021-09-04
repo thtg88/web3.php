@@ -46,15 +46,8 @@ abstract class SolidityType implements IType
         return false;
     }
 
-    /**
-     * @param string $name
-     */
-    public function nestedTypes($name)
+    public function nestedTypes(string $name)
     {
-        if (!is_string($name)) {
-            throw new InvalidArgumentException('nestedTypes name must string.');
-        }
-
         $matches = [];
 
         if (preg_match_all('/(\[[0-9]*\])/', $name, $matches, PREG_PATTERN_ORDER) >= 1) {
@@ -64,16 +57,8 @@ abstract class SolidityType implements IType
         return false;
     }
 
-    /**
-     * @param string $name
-     * @return string
-     */
-    public function nestedName($name)
+    public function nestedName(string $name): string
     {
-        if (!is_string($name)) {
-            throw new InvalidArgumentException('nestedName name must string.');
-        }
-
         $nestedTypes = $this->nestedTypes($name);
 
         if ($nestedTypes === false) {
@@ -83,30 +68,21 @@ abstract class SolidityType implements IType
         return mb_substr($name, 0, mb_strlen($name) - mb_strlen($nestedTypes[count($nestedTypes) - 1]));
     }
 
-    /**
-     * @param string $name
-     */
-    public function isDynamicArray($name): bool
+    public function isDynamicArray(string $name): bool
     {
         $nestedTypes = $this->nestedTypes($name);
 
         return $nestedTypes && preg_match('/[0-9]{1,}/', $nestedTypes[count($nestedTypes) - 1]) !== 1;
     }
 
-    /**
-     * @param string $name
-     */
-    public function isStaticArray($name): bool
+    public function isStaticArray(string $name): bool
     {
         $nestedTypes = $this->nestedTypes($name);
 
         return $nestedTypes && preg_match('/[0-9]{1,}/', $nestedTypes[count($nestedTypes) - 1]) === 1;
     }
 
-    /**
-     * @param string $name
-     */
-    public function staticArrayLength($name): int
+    public function staticArrayLength(string $name): int
     {
         $nestedTypes = $this->nestedTypes($name);
 
@@ -123,10 +99,7 @@ abstract class SolidityType implements IType
         return 1;
     }
 
-    /**
-     * @param string $name
-     */
-    public function staticPartLength($name): int
+    public function staticPartLength(string $name): int
     {
         $nestedTypes = $this->nestedTypes($name);
 
@@ -156,13 +129,7 @@ abstract class SolidityType implements IType
         return false;
     }
 
-    /**
-     * encode
-     *
-     * @param string $name
-     * @return string
-     */
-    public function encode($value, $name)
+    public function encode(array $value, string $name): string|array
     {
         if ($this->isDynamicArray($name)) {
             $length = count($value);
@@ -192,14 +159,7 @@ abstract class SolidityType implements IType
         return $this->inputFormat($value, $name);
     }
 
-    /**
-     * decode
-     *
-     * @param string $offset
-     * @param string $name
-     * @return array
-     */
-    public function decode($value, $offset, $name)
+    public function decode(string $value, int $offset, string $name): array|string
     {
         if ($this->isDynamicArray($name)) {
             $arrayOffset = (int) Utils::toBn('0x' . mb_substr($value, $offset * 2, 64))->toString();
@@ -211,7 +171,7 @@ abstract class SolidityType implements IType
             $roundedNestedStaticPartLength = floor(($nestedStaticPartLength + 31) / 32) * 32;
             $result = [];
 
-            for ($i=0; $i<$length * $roundedNestedStaticPartLength; $i+=$roundedNestedStaticPartLength) {
+            for ($i = 0; $i < $length * $roundedNestedStaticPartLength; $i += $roundedNestedStaticPartLength) {
                 $result[] = $this->decode($value, $arrayStart + $i, $nestedName);
             }
 
@@ -227,7 +187,7 @@ abstract class SolidityType implements IType
             $roundedNestedStaticPartLength = floor(($nestedStaticPartLength + 31) / 32) * 32;
             $result = [];
 
-            for ($i=0; $i<$length * $roundedNestedStaticPartLength; $i+=$roundedNestedStaticPartLength) {
+            for ($i = 0; $i < $length * $roundedNestedStaticPartLength; $i += $roundedNestedStaticPartLength) {
                 $result[] = $this->decode($value, $arrayStart + $i, $nestedName);
             }
 

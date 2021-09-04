@@ -17,8 +17,6 @@ interface IType
     public function isDynamicType(): bool;
 
     /**
-     * inputFormat
-     *
      * @param string $name
      * @return string
      */
