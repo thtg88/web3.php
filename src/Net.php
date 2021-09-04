@@ -12,7 +12,6 @@
 namespace Web3;
 
 use InvalidArgumentException;
-use Web3\Methods\IMethod;
 use Web3\Methods\Net\Listening;
 use Web3\Methods\Net\PeerCount;
 use Web3\Methods\Net\Version;

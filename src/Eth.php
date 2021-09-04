@@ -12,7 +12,6 @@
 namespace Web3;
 
 use InvalidArgumentException;
-use RuntimeException;
 use Web3\Methods\Eth\Accounts;
 use Web3\Methods\Eth\BlockNumber;
 use Web3\Methods\Eth\Call;
