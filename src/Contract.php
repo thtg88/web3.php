@@ -44,15 +44,11 @@ class Contract
     protected Ethabi $ethabi;
     protected string $defaultBlock;
 
-    /**
-     * construct
-     *
-     * @param string|\Web3\Providers\Provider $provider
-     * @param string|\stdClass|array $abi
-     * @return void
-     */
-    public function __construct($provider, $abi, $defaultBlock = 'latest')
-    {
+    public function __construct(
+        Provider|string $provider,
+        string|stdClass|array $abi,
+        string $defaultBlock = 'latest'
+    ) {
         if (is_string($provider) && (filter_var($provider, FILTER_VALIDATE_URL) !== false)) {
             // check the uri schema
             if (preg_match('/^https?:\/\//', $provider) === 1) {
@@ -146,14 +142,9 @@ class Contract
         return $this->provider;
     }
 
-    /**
-     * @param \Web3\Providers\Provider $provider
-     */
-    public function setProvider($provider): self
+    public function setProvider(Provider $provider): self
     {
-        if ($provider instanceof Provider) {
-            $this->provider = $provider;
-        }
+        $this->provider = $provider;
 
         return $this;
     }
@@ -163,12 +154,7 @@ class Contract
         return $this->defaultBlock;
     }
 
-    /**
-     * setDefaultBlock
-     *
-     * @return $this
-     */
-    public function setDefaultBlock($defaultBlock)
+    public function setDefaultBlock($defaultBlock): self
     {
         if (TagValidator::validate($defaultBlock) || QuantityValidator::validate($defaultBlock)) {
             $this->defaultBlock = $defaultBlock;
@@ -199,75 +185,37 @@ class Contract
         return $this->constructor;
     }
 
-    /**
-     * getAbi
-     *
-     * @return array
-     */
-    public function getAbi()
+    public function getAbi(): array
     {
         return $this->abi;
     }
 
-    /**
-     * setAbi
-     *
-     * @param string $abi
-     * @return $this
-     */
-    public function setAbi($abi)
+    public function setAbi($abi): self
     {
         return $this->abi($abi);
     }
 
-    /**
-     * getEthabi
-     *
-     * @return array
-     */
-    public function getEthabi()
+    public function getEthabi(): Ethabi
     {
         return $this->ethabi;
     }
 
-    /**
-     * getEth
-     *
-     * @return \Web3\Eth
-     */
-    public function getEth()
+    public function getEth(): Eth
     {
         return $this->eth;
     }
 
-    /**
-     * setBytecode
-     *
-     * @param string $bytecode
-     * @return $this
-     */
-    public function setBytecode($bytecode)
+    public function setBytecode($bytecode): self
     {
         return $this->bytecode($bytecode);
     }
 
-    /**
-     * setToAddress
-     *
-     * @return $this
-     */
-    public function setToAddress($address)
+    public function setToAddress($address): self
     {
         return $this->at($address);
     }
 
-    /**
-     * at
-     *
-     * @param string $address
-     * @return $this
-     */
-    public function at($address)
+    public function at($address): self
     {
         if (AddressValidator::validate($address) === false) {
             throw new InvalidArgumentException('Please make sure address is valid.');
@@ -278,13 +226,7 @@ class Contract
         return $this;
     }
 
-    /**
-     * bytecode
-     *
-     * @param string $bytecode
-     * @return $this
-     */
-    public function bytecode($bytecode)
+    public function bytecode($bytecode): self
     {
         if (HexValidator::validate($bytecode) === false) {
             throw new InvalidArgumentException('Please make sure bytecode is valid.');
@@ -333,20 +275,15 @@ class Contract
     }
 
     /**
-     * new
-     * Deploy a contruct with params.
-     *
-     * @param mixed
-     * @return void
+     * Deploy a contract with params.
      */
-    public function new()
+    public function new(...$arguments): void
     {
         if (!isset($this->constructor)) {
             return;
         }
 
         $constructor = $this->constructor;
-        $arguments = func_get_args();
         $callback = array_pop($arguments);
 
         $input_count = isset($constructor['inputs']) ? count($constructor['inputs']) : 0;
@@ -382,16 +319,12 @@ class Contract
         });
     }
 
-    /**
-     * @param mixed
-     */
-    public function send(): void
+    public function send(...$arguments): void
     {
         if (!isset($this->functions)) {
             return;
         }
 
-        $arguments = func_get_args();
         $method = array_splice($arguments, 0, 1)[0];
         $callback = array_pop($arguments);
 
@@ -480,16 +413,12 @@ class Contract
         });
     }
 
-    /**
-     * @param mixed
-     */
-    public function call(): void
+    public function call(...$arguments): void
     {
         if (!isset($this->functions)) {
             return;
         }
 
-        $arguments = func_get_args();
         $method = array_splice($arguments, 0, 1)[0];
         $callback = array_pop($arguments);
 
@@ -574,16 +503,12 @@ class Contract
         });
     }
 
-    /**
-     * @param mixed
-     */
-    public function estimateGas(): void
+    public function estimateGas(...$arguments): void
     {
         if (!isset($this->functions) && !isset($this->constructor)) {
             return;
         }
 
-        $arguments = func_get_args();
         $callback = array_pop($arguments);
 
         if (empty($this->toAddress) && !empty($this->bytecode)) {
@@ -706,13 +631,11 @@ class Contract
      *
      * @param mixed
      */
-    public function getData(): ?string
+    public function getData(...$arguments): ?string
     {
         if (!isset($this->functions) && !isset($this->constructor)) {
             return null;
         }
-
-        $arguments = func_get_args();
 
         if (empty($this->toAddress) && !empty($this->bytecode)) {
             $constructor = $this->constructor;
