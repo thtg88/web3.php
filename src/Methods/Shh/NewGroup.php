@@ -15,4 +15,8 @@ use Web3\Methods\EthMethod;
 
 class NewGroup extends EthMethod
 {
+    public function getMethod(): string
+    {
+        return 'shh_newGroup';
+    }
 }
