@@ -231,8 +231,8 @@ class EthabiTest extends TestCase
     {
         $abi = $this->abi;
 
-        $this->assertEquals('16', $abi->decodeParameter('uint256', '0x0000000000000000000000000000000000000000000000000000000000000010')->toString());
-        $this->assertEquals('16', $abi->decodeParameter('uint256', '0x0000000000000000000000000000000000000000000000000000000000000010')->toString());
+        $this->assertEquals('16', $abi->decodeParameter('uint256', '0x0000000000000000000000000000000000000000000000000000000000000010'));
+        $this->assertEquals('16', $abi->decodeParameter('uint256', '0x0000000000000000000000000000000000000000000000000000000000000010'));
     }
 
     /** @test */
