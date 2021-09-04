@@ -78,17 +78,8 @@ class Web3ApiTest extends TestCase
             if ($err !== null) {
                 return $this->fail($err->getMessage());
             }
+
             $this->assertTrue(true);
         });
-    }
-
-    /** @test */
-    public function wrong_callback(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-
-        $web3 = $this->web3;
-
-        $web3->sha3('hello world');
     }
 }
