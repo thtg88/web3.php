@@ -4,6 +4,7 @@ namespace Web3\Tests\Unit;
 
 use Web3\Tests\TestCase;
 use Web3\Contracts\SolidityType;
+use Web3\Contracts\Types\Address;
 
 class SolidityTypeTest extends TestCase
 {
@@ -12,7 +13,8 @@ class SolidityTypeTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->type = new SolidityType();
+
+        $this->type = new Address();
     }
 
     /** @test */
