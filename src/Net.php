@@ -11,7 +11,12 @@
 
 namespace Web3;
 
+use InvalidArgumentException;
 use RuntimeException;
+use Web3\Methods\IMethod;
+use Web3\Methods\Net\Listening;
+use Web3\Methods\Net\PeerCount;
+use Web3\Methods\Net\Version;
 use Web3\Providers\HttpProvider;
 use Web3\Providers\Provider;
 use Web3\RequestManagers\HttpRequestManager;
@@ -21,28 +26,83 @@ class Net
     protected Provider $provider;
 
     private array $methods = [];
+    private ?IMethod $method;
 
-    private array $allowedMethods = [
-        'net_version',
-        'net_peerCount',
-        'net_listening',
-    ];
-
-    /**
-     * @param string|\Web3\Providers\Provider $provider
-     */
-    public function __construct($provider)
+    public function __construct(Provider|string $provider)
     {
-        if (is_string($provider) && (filter_var($provider, FILTER_VALIDATE_URL) !== false)) {
-            // check the uri schema
-            if (preg_match('/^https?:\/\//', $provider) === 1) {
-                $requestManager = new HttpRequestManager($provider);
-
-                $this->provider = new HttpProvider($requestManager);
-            }
-        } elseif ($provider instanceof Provider) {
+        if ($provider instanceof Provider) {
             $this->provider = $provider;
+
+            return;
         }
+
+        // check the uri schema
+        if (
+            filter_var($provider, FILTER_VALIDATE_URL) !== false &&
+            preg_match('/^https?:\/\//', $provider) === 1
+        ) {
+            $requestManager = new HttpRequestManager($provider);
+
+            $this->provider = new HttpProvider($requestManager);
+        }
+
+        throw new InvalidArgumentException('Please set a valid provider.');
+    }
+
+    public function listening(...$arguments): void
+    {
+        if ($this->provider->isBatch) {
+            $this->__call('listening', $arguments);
+
+            return;
+        }
+
+        $callback = array_pop($arguments);
+
+        $this->method = new Listening(arguments: $arguments);
+
+        $this->send($callback);
+    }
+
+    public function peerCount(...$arguments): void
+    {
+        if ($this->provider->isBatch) {
+            $this->__call('peerCount', $arguments);
+
+            return;
+        }
+
+        $callback = array_pop($arguments);
+
+        $this->method = new PeerCount(arguments: $arguments);
+
+        $this->send($callback);
+    }
+
+    public function version(...$arguments): void
+    {
+        if ($this->provider->isBatch) {
+            $this->__call('version', $arguments);
+
+            return;
+        }
+
+        $callback = array_pop($arguments);
+
+        $this->method = new Version(arguments: $arguments);
+
+        $this->send($callback);
+    }
+
+    public function send(callable $callback): void
+    {
+        if ($this->method === null) {
+            throw new RuntimeException('Please set a method.');
+        }
+
+        $this->provider->send($this->method, $callback);
+
+        $this->method = null;
     }
 
     /**
@@ -51,48 +111,18 @@ class Net
      */
     public function __call($name, $arguments): void
     {
-        if (empty($this->provider)) {
-            throw new \RuntimeException('Please set provider first.');
-        }
+        $method_name = 'net_' . $name;
 
-        $class = explode('\\', get_class());
-
-        if (preg_match('/^[a-zA-Z0-9]+$/', $name) !== 1) {
-            return;
-        }
-
-        $method = strtolower($class[1]) . '_' . $name;
-
-        if (!in_array($method, $this->allowedMethods)) {
-            throw new RuntimeException('Unallowed rpc method: ' . $method);
-        }
-
-        if ($this->provider->isBatch) {
-            $callback = null;
-        } else {
-            $callback = array_pop($arguments);
-
-            if (is_callable($callback) !== true) {
-                throw new \InvalidArgumentException('The last param must be callback function.');
-            }
-        }
-
-        if (!array_key_exists($method, $this->methods)) {
+        if (!array_key_exists($method_name, $this->methods)) {
             // new the method
-            $methodClass = sprintf("\Web3\Methods\%s\%s", ucfirst($class[1]), ucfirst($name));
-            $methodObject = new $methodClass($method, $arguments);
-            $this->methods[$method] = $methodObject;
+            $methodClass = sprintf("\Web3\Methods\Net\%s", ucfirst($name));
+            $method = new $methodClass($method_name, $arguments);
+            $this->methods[$method_name] = $method;
         } else {
-            $methodObject = $this->methods[$method];
+            $method = $this->methods[$method_name];
         }
 
-        if (!$methodObject->validate($arguments)) {
-            return;
-        }
-
-        $inputs = $methodObject->transform($arguments, $methodObject->inputFormatters);
-        $methodObject->arguments = $inputs;
-        $this->provider->send($methodObject, $callback);
+        $this->provider->send($method, null);
     }
 
     /**
@@ -128,10 +158,7 @@ class Net
         return $this->provider;
     }
 
-    /**
-     * @param \Web3\Providers\Provider $provider
-     */
-    public function setProvider($provider): self
+    public function setProvider(Provider $provider): self
     {
         $this->provider = $provider;
 
@@ -139,12 +166,9 @@ class Net
     }
 
     /**
-     * batch
-     *
      * @param bool $status
-     * @return void
      */
-    public function batch($status)
+    public function batch($status): void
     {
         $status = is_bool($status);
 
