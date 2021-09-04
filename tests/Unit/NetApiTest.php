@@ -3,7 +3,6 @@
 namespace Web3\Tests\Unit;
 
 use phpseclib\Math\BigInteger as BigNumber;
-use RuntimeException;
 use Web3\Net;
 use Web3\Tests\TestCase;
 
