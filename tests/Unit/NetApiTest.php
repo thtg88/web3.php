@@ -22,13 +22,14 @@ class NetApiTest extends TestCase
     {
         $net = $this->net;
 
-        $net->version(function ($err, $version) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
-
-            $this->assertTrue(is_string($version));
+        [$err, $version] = $net->version(function () {
         });
+
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
+
+        $this->assertTrue(is_string($version));
     }
 
     /** @test */
@@ -36,12 +37,14 @@ class NetApiTest extends TestCase
     {
         $net = $this->net;
 
-        $net->peerCount(function ($err, $count) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
-            $this->assertTrue($count instanceof BigNumber);
+        [$err, $count] = $net->peerCount(function () {
         });
+
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
+
+        $this->assertTrue($count instanceof BigNumber);
     }
 
     /** @test */
@@ -49,11 +52,13 @@ class NetApiTest extends TestCase
     {
         $net = $this->net;
 
-        $net->listening(function ($err, $net) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
-            $this->assertTrue(is_bool($net));
+        [$err, $net] = $net->listening(function () {
         });
+
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
+
+        $this->assertTrue(is_bool($net));
     }
 }
