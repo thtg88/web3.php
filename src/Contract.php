@@ -12,9 +12,7 @@
 namespace Web3;
 
 use InvalidArgumentException;
-use Web3\Providers\Provider;
-use Web3\Providers\HttpProvider;
-use Web3\RequestManagers\HttpRequestManager;
+use stdClass;
 use Web3\Contracts\Ethabi;
 use Web3\Contracts\Types\Address;
 use Web3\Contracts\Types\Boolean;
@@ -23,12 +21,15 @@ use Web3\Contracts\Types\DynamicBytes;
 use Web3\Contracts\Types\Integer;
 use Web3\Contracts\Types\Str;
 use Web3\Contracts\Types\Uinteger;
+use Web3\Formatters\AddressFormatter;
+use Web3\Providers\HttpProvider;
+use Web3\Providers\Provider;
+use Web3\RequestManagers\HttpRequestManager;
 use Web3\Validators\AddressValidator;
 use Web3\Validators\HexValidator;
+use Web3\Validators\QuantityValidator;
 use Web3\Validators\StringValidator;
 use Web3\Validators\TagValidator;
-use Web3\Validators\QuantityValidator;
-use Web3\Formatters\AddressFormatter;
 
 class Contract
 {
