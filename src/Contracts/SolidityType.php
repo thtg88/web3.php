@@ -128,7 +128,7 @@ abstract class SolidityType implements IType
         return false;
     }
 
-    public function encode(array $value, string $name): string|array
+    public function encode($value, string $name): string|array
     {
         if ($this->isDynamicArray($name)) {
             $length = count($value);
