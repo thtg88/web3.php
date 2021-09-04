@@ -11,8 +11,6 @@
 
 namespace Web3\Methods;
 
-use InvalidArgumentException;
-
 abstract class JSONRPC implements IRPC
 {
     protected int $id = 0;
