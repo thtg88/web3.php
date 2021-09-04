@@ -26,8 +26,6 @@ use Web3\RequestManagers\HttpRequestManager;
 class Personal
 {
     protected Provider $provider;
-
-    private array $methods = [];
     private ?IMethod $method;
 
     public function __construct(Provider|string $provider)
@@ -145,20 +143,10 @@ class Personal
      */
     public function __call($name, $arguments): void
     {
-        $method_name = 'personal_' . $name;
+        $methodClass = sprintf("\Web3\Methods\Personal\%s", ucfirst($name));
+        $method = new $methodClass($arguments);
 
-        $callback = null;
-
-        if (!array_key_exists($method_name, $this->methods)) {
-            // new the method
-            $methodClass = sprintf("\Web3\Methods\Personal\%s", ucfirst($name));
-            $method = new $methodClass($method_name, $arguments);
-            $this->methods[$method_name] = $method;
-        } else {
-            $method = $this->methods[$method_name];
-        }
-
-        $this->provider->send($method, $callback);
+        $this->provider->send($method, null);
     }
 
     /**

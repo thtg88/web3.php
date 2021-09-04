@@ -28,7 +28,6 @@ class Web3
     protected Personal $personal;
     protected Shh $shh;
     protected Utils $utils;
-    private array $methods = [];
     private IMethod $method;
     private $callback;
 
@@ -100,16 +99,8 @@ class Web3
      */
     public function __call($name, $arguments): void
     {
-        $method_name = 'web3_' . $name;
-
-        if (!array_key_exists($method_name, $this->methods)) {
-            // new the method
-            $methodClass = sprintf("\Web3\Methods\Web3\%s", ucfirst($name));
-            $method = new $methodClass(arguments: $arguments);
-            $this->methods[$method_name] = $method;
-        } else {
-            $method = $this->methods[$method_name];
-        }
+        $methodClass = sprintf("\Web3\Methods\Web3\%s", ucfirst($name));
+        $method = new $methodClass($arguments);
 
         $this->provider->send($method, null);
     }

@@ -63,8 +63,6 @@ use Web3\RequestManagers\HttpRequestManager;
 class Eth
 {
     protected Provider $provider;
-
-    private array $methods = [];
     private ?IMethod $method;
 
     public function __construct(Provider|string $provider)
@@ -737,16 +735,8 @@ class Eth
      */
     public function __call($name, $arguments): void
     {
-        $method_name = 'eth_' . $name;
-
-        if (!array_key_exists($method_name, $this->methods)) {
-            // new the method
-            $methodClass = sprintf("\Web3\Methods\Eth\%s", ucfirst($name));
-            $method = new $methodClass(arguments: $arguments);
-            $this->methods[$method_name] = $method;
-        } else {
-            $method = $this->methods[$method_name];
-        }
+        $methodClass = sprintf("\Web3\Methods\Eth\%s", ucfirst($name));
+        $method = new $methodClass($arguments);
 
         $this->provider->send($method, null);
     }
