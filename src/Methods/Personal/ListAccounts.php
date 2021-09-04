@@ -15,4 +15,8 @@ use Web3\Methods\EthMethod;
 
 class ListAccounts extends EthMethod
 {
+    public function getMethod(): string
+    {
+        return 'personal_listAccounts';
+    }
 }

@@ -28,4 +28,9 @@ class SendTransaction extends EthMethod
         TransactionFormatter::class,
         StringFormatter::class,
     ];
+
+    public function getMethod(): string
+    {
+        return 'personal_sendTransaction';
+    }
 }

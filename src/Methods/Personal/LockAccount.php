@@ -24,4 +24,9 @@ class LockAccount extends EthMethod
     protected array $inputFormatters = [
         AddressFormatter::class,
     ];
+
+    public function getMethod(): string
+    {
+        return 'personal_lockAccount';
+    }
 }

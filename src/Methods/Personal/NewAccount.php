@@ -24,4 +24,9 @@ class NewAccount extends EthMethod
     protected array $inputFormatters = [
         StringFormatter::class,
     ];
+
+    public function getMethod(): string
+    {
+        return 'personal_newAccount';
+    }
 }

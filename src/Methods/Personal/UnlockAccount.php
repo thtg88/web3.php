@@ -36,4 +36,9 @@ class UnlockAccount extends EthMethod
     protected array $defaultValues = [
         2 => 300,
     ];
+
+    public function getMethod(): string
+    {
+        return 'personal_unlockAccount';
+    }
 }
