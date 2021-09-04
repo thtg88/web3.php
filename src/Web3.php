@@ -78,24 +78,6 @@ class Web3
     }
 
     /**
-     * Please note: this is only used for batch request.
-     *
-     * @param string $name
-     * @param array $arguments
-     */
-    public function __call($name, $arguments): void
-    {
-        if (!$this->provider->isBatch) {
-            throw new RuntimeException('Method not supported.');
-        }
-
-        $methodClass = sprintf("\Web3\Methods\Web3\%s", ucfirst($name));
-        $method = new $methodClass($arguments);
-
-        $this->provider->send($method, null);
-    }
-
-    /**
      * @param string $name
      */
     public function __get($name)
