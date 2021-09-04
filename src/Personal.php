@@ -11,7 +11,14 @@
 
 namespace Web3;
 
+use InvalidArgumentException;
 use RuntimeException;
+use Web3\Methods\IMethod;
+use Web3\Methods\Personal\ListAccounts;
+use Web3\Methods\Personal\LockAccount;
+use Web3\Methods\Personal\NewAccount;
+use Web3\Methods\Personal\SendTransaction;
+use Web3\Methods\Personal\UnlockAccount;
 use Web3\Providers\HttpProvider;
 use Web3\Providers\Provider;
 use Web3\RequestManagers\HttpRequestManager;
@@ -21,30 +28,113 @@ class Personal
     protected Provider $provider;
 
     private array $methods = [];
+    private ?IMethod $method;
 
-    private array $allowedMethods = [
-        'personal_listAccounts',
-        'personal_newAccount',
-        'personal_unlockAccount',
-        'personal_lockAccount',
-        'personal_sendTransaction',
-    ];
-
-    /**
-     * @param string|\Web3\Providers\Provider $provider
-     */
-    public function __construct($provider)
+    public function __construct(Provider|string $provider)
     {
-        if (is_string($provider) && (filter_var($provider, FILTER_VALIDATE_URL) !== false)) {
-            // check the uri schema
-            if (preg_match('/^https?:\/\//', $provider) === 1) {
-                $requestManager = new HttpRequestManager($provider);
-
-                $this->provider = new HttpProvider($requestManager);
-            }
-        } elseif ($provider instanceof Provider) {
+        if ($provider instanceof Provider) {
             $this->provider = $provider;
+
+            return;
         }
+
+        // check the uri schema
+        if (
+            filter_var($provider, FILTER_VALIDATE_URL) !== false &&
+            preg_match('/^https?:\/\//', $provider) === 1
+        ) {
+            $requestManager = new HttpRequestManager($provider);
+
+            $this->provider = new HttpProvider($requestManager);
+        }
+
+        throw new InvalidArgumentException('Please set a valid provider.');
+    }
+
+    public function listAccounts(...$arguments): void
+    {
+        if ($this->provider->isBatch) {
+            $this->__call('listAccounts', $arguments);
+
+            return;
+        }
+
+        $callback = array_pop($arguments);
+
+        $this->method = new ListAccounts(arguments: $arguments);
+
+        $this->send($callback);
+    }
+
+    public function newAccount(...$arguments): void
+    {
+        if ($this->provider->isBatch) {
+            $this->__call('newAccount', $arguments);
+
+            return;
+        }
+
+        $callback = array_pop($arguments);
+
+        $this->method = new NewAccount(arguments: $arguments);
+
+        $this->send($callback);
+    }
+
+    public function unlockAccount(...$arguments): void
+    {
+        if ($this->provider->isBatch) {
+            $this->__call('unlockAccount', $arguments);
+
+            return;
+        }
+
+        $callback = array_pop($arguments);
+
+        $this->method = new UnlockAccount(arguments: $arguments);
+
+        $this->send($callback);
+    }
+
+    public function lockAccount(...$arguments): void
+    {
+        if ($this->provider->isBatch) {
+            $this->__call('lockAccount', $arguments);
+
+            return;
+        }
+
+        $callback = array_pop($arguments);
+
+        $this->method = new LockAccount(arguments: $arguments);
+
+        $this->send($callback);
+    }
+
+    public function sendTransaction(...$arguments): void
+    {
+        if ($this->provider->isBatch) {
+            $this->__call('sendTransaction', $arguments);
+
+            return;
+        }
+
+        $callback = array_pop($arguments);
+
+        $this->method = new SendTransaction(arguments: $arguments);
+
+        $this->send($callback);
+    }
+
+    public function send(callable $callback): void
+    {
+        if ($this->method === null) {
+            throw new RuntimeException('Please set a method.');
+        }
+
+        $this->provider->send($this->method, $callback);
+
+        $this->method = null;
     }
 
     /**
@@ -53,48 +143,20 @@ class Personal
      */
     public function __call($name, $arguments): void
     {
-        if (empty($this->provider)) {
-            throw new \RuntimeException('Please set provider first.');
-        }
+        $method_name = 'personal_' . $name;
 
-        $class = explode('\\', get_class());
+        $callback = null;
 
-        if (preg_match('/^[a-zA-Z0-9]+$/', $name) !== 1) {
-            return;
-        }
-
-        $method = strtolower($class[1]) . '_' . $name;
-
-        if (!in_array($method, $this->allowedMethods)) {
-            throw new RuntimeException('Unallowed rpc method: ' . $method);
-        }
-
-        if ($this->provider->isBatch) {
-            $callback = null;
-        } else {
-            $callback = array_pop($arguments);
-
-            if (is_callable($callback) !== true) {
-                throw new \InvalidArgumentException('The last param must be callback function.');
-            }
-        }
-
-        if (!array_key_exists($method, $this->methods)) {
+        if (!array_key_exists($method_name, $this->methods)) {
             // new the method
-            $methodClass = sprintf("\Web3\Methods\%s\%s", ucfirst($class[1]), ucfirst($name));
-            $methodObject = new $methodClass($method, $arguments);
-            $this->methods[$method] = $methodObject;
+            $methodClass = sprintf("\Web3\Methods\Personal\%s", ucfirst($name));
+            $method = new $methodClass($method_name, $arguments);
+            $this->methods[$method_name] = $method;
         } else {
-            $methodObject = $this->methods[$method];
+            $method = $this->methods[$method_name];
         }
 
-        if (!$methodObject->validate($arguments)) {
-            return;
-        }
-
-        $inputs = $methodObject->transform($arguments, $methodObject->inputFormatters);
-        $methodObject->arguments = $inputs;
-        $this->provider->send($methodObject, $callback);
+        $this->provider->send($method, $callback);
     }
 
     /**
@@ -130,10 +192,7 @@ class Personal
         return $this->provider;
     }
 
-    /**
-     * @param \Web3\Providers\Provider $provider
-     */
-    public function setProvider($provider): self
+    public function setProvider(Provider $provider): self
     {
         $this->provider = $provider;
 
@@ -141,12 +200,9 @@ class Personal
     }
 
     /**
-     * batch
-     *
      * @param bool $status
-     * @return void
      */
-    public function batch($status)
+    public function batch($status): void
     {
         $status = is_bool($status);
 
