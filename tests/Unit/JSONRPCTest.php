@@ -2,7 +2,7 @@
 
 namespace Web3\Tests\Unit;
 
-use InvalidArgumentException;
+use TypeError;
 use Web3\Tests\TestCase;
 use Web3\Methods\JSONRPC;
 
@@ -51,12 +51,10 @@ class JSONRPCTest extends TestCase
     }
 
     /** @test */
-    public function throw_exception(): void
+    public function id_not_integer(): void
     {
         $id = 'zzz';
-        $params = [
-           'hello world',
-        ];
+        $params = ['hello world'];
         $rpc = new class($params) extends JSONRPC {
             public function getMethod(): string
             {
@@ -64,18 +62,25 @@ class JSONRPCTest extends TestCase
             }
         };
 
-        try {
-            // id is not integer
-            $rpc->id = $id;
-        } catch (InvalidArgumentException $e) {
-            $this->assertTrue($e !== null);
-        }
+        $this->expectException(TypeError::class);
 
-        try {
-            // arguments is not array
-            $rpc->arguments = $id;
-        } catch (InvalidArgumentException $e) {
-            $this->assertTrue($e !== null);
-        }
+        $rpc->id = $id;
+    }
+
+    /** @test */
+    public function arguments_not_array(): void
+    {
+        $id = 'zzz';
+        $params = ['hello world'];
+        $rpc = new class($params) extends JSONRPC {
+            public function getMethod(): string
+            {
+                return 'echo';
+            }
+        };
+
+        $this->expectException(TypeError::class);
+
+        $rpc->arguments = $id;
     }
 }
