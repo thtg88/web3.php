@@ -2,7 +2,6 @@
 
 namespace Web3\Tests\Unit;
 
-use RuntimeException;
 use Web3\Tests\TestCase;
 use Web3\Web3;
 use Web3\Eth;

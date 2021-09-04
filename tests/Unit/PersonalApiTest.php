@@ -2,7 +2,6 @@
 
 namespace Web3\Tests\Unit;
 
-use InvalidArgumentException;
 use RuntimeException;
 use Web3\Personal;
 use Web3\Tests\TestCase;

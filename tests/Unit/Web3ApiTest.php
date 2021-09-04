@@ -3,7 +3,6 @@
 namespace Web3\Tests\Unit;
 
 use RuntimeException;
-use InvalidArgumentException;
 use Web3\Tests\TestCase;
 
 class Web3ApiTest extends TestCase

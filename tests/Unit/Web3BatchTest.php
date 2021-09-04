@@ -2,7 +2,6 @@
 
 namespace Web3\Tests\Unit;
 
-use RuntimeException;
 use Web3\Tests\TestCase;
 
 class Web3BatchTest extends TestCase

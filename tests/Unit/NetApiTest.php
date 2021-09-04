@@ -2,7 +2,6 @@
 
 namespace Web3\Tests\Unit;
 
-use InvalidArgumentException;
 use phpseclib\Math\BigInteger as BigNumber;
 use RuntimeException;
 use Web3\Net;
