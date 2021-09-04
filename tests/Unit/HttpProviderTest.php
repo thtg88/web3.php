@@ -11,6 +11,20 @@ use Web3\Methods\Web3\ClientVersion;
 class HttpProviderTest extends TestCase
 {
     /** @test */
+    public function set_request_manager(): void
+    {
+        $requestManager = new HttpRequestManager('http://localhost:8545');
+        $provider = new HttpProvider($requestManager);
+
+        $this->assertEquals($provider->requestManager->host, 'http://localhost:8545');
+
+        $requestManager = new HttpRequestManager($this->testRinkebyHost);
+        $provider->requestManager = $requestManager;
+
+        $this->assertEquals($provider->requestManager->host, 'http://localhost:8545');
+    }
+
+    /** @test */
     public function send(): void
     {
         $requestManager = new HttpRequestManager($this->testHost);
