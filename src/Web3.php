@@ -58,6 +58,8 @@ class Web3
     {
         if ($this->provider->isBatch) {
             $this->__call('clientVersion', $arguments);
+
+            return;
         }
 
         $callback = array_pop($arguments);
@@ -71,6 +73,8 @@ class Web3
     {
         if ($this->provider->isBatch) {
             $this->__call('sha3', $arguments);
+
+            return;
         }
 
         $callback = array_pop($arguments);
