@@ -57,20 +57,4 @@ class NetApiTest extends TestCase
             $this->assertTrue(is_bool($net));
         });
     }
-
-    /** @test */
-    public function unallowed_method(): void
-    {
-        $this->expectException(RuntimeException::class);
-
-        $net = $this->net;
-
-        $net->hello(function ($err, $hello) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
-
-            $this->assertTrue(true);
-        });
-    }
 }

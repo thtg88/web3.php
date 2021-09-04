@@ -435,19 +435,4 @@ class ShhApiTest extends TestCase
     //         $this->assertTrue(true);
     //     });
     // }
-
-    /** @test */
-    public function unallowed_method(): void
-    {
-        $this->expectException(RuntimeException::class);
-
-        $shh = $this->shh;
-
-        $shh->hello(function ($err, $hello) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
-            $this->assertTrue(true);
-        });
-    }
 }

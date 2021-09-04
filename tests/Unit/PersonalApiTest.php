@@ -175,21 +175,6 @@ class PersonalApiTest extends TestCase
     }
 
     /** @test */
-    public function unallowed_method(): void
-    {
-        $this->expectException(RuntimeException::class);
-
-        $personal = $this->personal;
-
-        $personal->hello(function ($err, $hello) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
-            $this->assertTrue(true);
-        });
-    }
-
-    /** @test */
     public function wrong_param(): void
     {
         $this->expectException(RuntimeException::class);

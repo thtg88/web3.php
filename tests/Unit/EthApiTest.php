@@ -645,19 +645,4 @@ class EthApiTest extends TestCase
             }
         );
     }
-
-    /** @test */
-    public function unallowed_method(): void
-    {
-        $this->expectException(RuntimeException::class);
-
-        $eth = $this->eth;
-
-        $eth->hello(function ($err, $hello) {
-            if ($err !== null) {
-                return $this->assertTrue($err !== null);
-            }
-            $this->assertTrue(true);
-        });
-    }
 }
