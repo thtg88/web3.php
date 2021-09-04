@@ -142,10 +142,7 @@ class Web3
         return $this->provider;
     }
 
-    /**
-     * @param \Web3\Providers\Provider $provider
-     */
-    public function setProvider($provider): self
+    public function setProvider(Provider $provider): self
     {
         $this->provider = $provider;
 
