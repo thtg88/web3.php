@@ -70,7 +70,7 @@ class PersonalApiTest extends TestCase
             $this->assertTrue(is_string($account));
         });
 
-        $personal->unlockAccount($this->newAccount, '123456', function ($err, $unlocked) {
+        $personal->unlockAccount($this->newAccount, '123456', 0, function ($err, $unlocked) {
             if ($err !== null) {
                 return $this->fail($err->getMessage());
             }
@@ -117,7 +117,7 @@ class PersonalApiTest extends TestCase
             $this->assertTrue(is_string($account));
         });
 
-        $personal->unlockAccount($this->newAccount, '123456', function ($err, $unlocked) {
+        $personal->unlockAccount($this->newAccount, '123456', 0, function ($err, $unlocked) {
             if ($err !== null) {
                 return $this->fail($err->getMessage());
             }
