@@ -93,33 +93,32 @@ class ContractTest extends TestCase
         $contract = $this->contract;
         $account = $this->fromAccount;
 
-
-        $contract->bytecode($this->testBytecode)->new(1000000, 'Game Token', 1, 'GT', [
-            'from' => $account,
-            'gas' => '0x200b20',
-        ], function ($err, $result) use ($contract) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
-
-            if ($result) {
-                echo "\nTransaction has made:) id: " . $result . "\n";
-            }
-
-            $transactionId = $result;
-            $this->assertTrue((preg_match('/^0x[a-f0-9]{64}$/', $transactionId) === 1));
-
-            $contract->eth->getTransactionReceipt($transactionId, function ($err, $transaction) {
+        $contract->bytecode($this->testBytecode)
+            ->new(1000000, 'Game Token', 1, 'GT', ['from' => $account, 'gas' => '0x200b20'], function ($err, $result) use ($contract) {
                 if ($err !== null) {
-                    return $this->fail($err);
+                    return $this->fail($err->getMessage());
                 }
 
-                if ($transaction) {
-                    $this->contractAddress = $transaction->contractAddress;
-                    echo "\nTransaction has mined:) block number: " . $transaction->blockNumber . "\n";
+                if ($result) {
+                    echo "\nTransaction has made:) id: " . $result . "\n";
                 }
+
+                $transactionId = $result;
+
+                $this->assertTrue(preg_match('/^0x[a-f0-9]{64}$/', $transactionId) === 1);
+
+                $contract->eth->getTransactionReceipt($transactionId, function ($err, $transaction) {
+                    if ($err !== null) {
+                        return $this->fail($err);
+                    }
+
+                    if ($transaction) {
+                        $this->contractAddress = $transaction->contractAddress;
+
+                        echo "\nTransaction has mined:) block number: " . $transaction->blockNumber . "\n";
+                    }
+                });
             });
-        });
     }
 
     /** @test */
@@ -244,12 +243,8 @@ class ContractTest extends TestCase
         });
     }
 
-    /**
-     * testEstimateGas
-     *
-     * @return void
-     */
-    public function estimate_gas()
+    /** @test */
+    public function estimate_gas(): void
     {
         $contract = $this->contract;
         $fromAccount = $this->fromAccount;
@@ -290,7 +285,8 @@ class ContractTest extends TestCase
             }
 
             if (isset($result)) {
-                echo "\nEstimate gas: " . $result->toString() . "\n";
+                echo "\nEstimate gas: {$result}\n";
+
                 $this->assertTrue($result !== null);
             }
         });
@@ -302,7 +298,8 @@ class ContractTest extends TestCase
             }
 
             if (isset($result)) {
-                echo "\nEstimate gas: " . $result->toString() . "\n";
+                echo "\nEstimate gas: {$result}\n";
+
                 $this->assertTrue($result !== null);
             }
         });
@@ -437,20 +434,22 @@ class ContractTest extends TestCase
     {
         $bytecode = '0x608060405234801561001057600080fd5b50610a36806100206000396000f3006080604052600436106100af576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff1680630bcd3b33146100b45780631f9030371461014457806325f35c36146101775780632d1be94d146102735780638b84925b146102a2578063a15e05fd146102cd578063a5f807cc1461030f578063d07326681461039f578063ded516d21461043e578063f1d0876a146104ad578063f5c2e88a1461054c575b600080fd5b3480156100c057600080fd5b506100c96105dc565b6040518080602001828103825283818151815260200191508051906020019080838360005b838110156101095780820151818401526020810190506100ee565b50505050905090810190601f1680156101365780820380516001836020036101000a031916815260200191505b509250505060405180910390f35b34801561015057600080fd5b5061015961061e565b60405180826000191660001916815260200191505060405180910390f35b34801561018357600080fd5b5061018c61064b565b604051808060200180602001838103835285818151815260200191508051906020019080838360005b838110156101d05780820151818401526020810190506101b5565b50505050905090810190601f1680156101fd5780820380516001836020036101000a031916815260200191505b50838103825284818151815260200191508051906020019080838360005b8381101561023657808201518184015260208101905061021b565b50505050905090810190601f1680156102635780820380516001836020036101000a031916815260200191505b5094505050505060405180910390f35b34801561027f57600080fd5b506102886106cd565b604051808215151515815260200191505060405180910390f35b3480156102ae57600080fd5b506102b76106db565b6040518082815260200191505060405180910390f35b3480156102d957600080fd5b506102e26106e9565b60405180836000191660001916815260200182600019166000191681526020019250505060405180910390f35b34801561031b57600080fd5b50610324610741565b6040518080602001828103825283818151815260200191508051906020019080838360005b83811015610364578082015181840152602081019050610349565b50505050905090810190601f1680156103915780820380516001836020036101000a031916815260200191505b509250505060405180910390f35b3480156103ab57600080fd5b506103b461076a565b60405180806020018360001916600019168152602001828103825284818151815260200191508051906020019080838360005b838110156104025780820151818401526020810190506103e7565b50505050905090810190601f16801561042f5780820380516001836020036101000a031916815260200191505b50935050505060405180910390f35b34801561044a57600080fd5b506104536107d9565b60405180827effffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff19167effffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff1916815260200191505060405180910390f35b3480156104b957600080fd5b506104c2610806565b60405180836000191660001916815260200180602001828103825283818151815260200191508051906020019080838360005b838110156105105780820151818401526020810190506104f5565b50505050905090810190601f16801561053d5780820380516001836020036101000a031916815260200191505b50935050505060405180910390f35b34801561055857600080fd5b50610561610875565b6040518080602001828103825283818151815260200191508051906020019080838360005b838110156105a1578082015181840152602081019050610586565b50505050905090810190601f1680156105ce5780820380516001836020036101000a031916815260200191505b509250505060405180910390f35b6060806040805190810160405280600381526020017f616263000000000000000000000000000000000000000000000000000000000081525090508091505090565b6000807f616263000000000000000000000000000000000000000000000000000000000090508091505090565b6060806060806040805190810160405280600381526020017f616263000000000000000000000000000000000000000000000000000000000081525091506040805190810160405280600381526020017f78797a0000000000000000000000000000000000000000000000000000000000815250905081819350935050509091565b600080600190508091505090565b600080606390508091505090565b6000806000807f616263000000000000000000000000000000000000000000000000000000000091507f78797a0000000000000000000000000000000000000000000000000000000000905081819350935050509091565b6060806101606040519081016040528061012c81526020016108df61012c913990508091505090565b60606000606060006040805190810160405280600381526020017f616263000000000000000000000000000000000000000000000000000000000081525091507f78797a0000000000000000000000000000000000000000000000000000000000905081819350935050509091565b6000807f610000000000000000000000000000000000000000000000000000000000000090508091505090565b60006060600060607f78797a000000000000000000000000000000000000000000000000000000000091506040805190810160405280600381526020017f6162630000000000000000000000000000000000000000000000000000000000815250905081819350935050509091565b606080606060405190810160405280603c81526020017f616263616263616263636162636162636162636361626361626361626363616281526020017f6361626361626363616263616263616263636162636162636162636300000000815250905080915050905600616263616263616263636162636162636162636361626361626361626363616263616263616263636162636162636162636361626361626361626363616263616263616263636162636162636162636361626361626361626363616263616263616263636162636162636162636361626361626361626363616263616263616263636162636162636162636361626361626361626363616263616263616263636162636162636162636361626361626361626363616263616263616263636162636162636162636361626361626361626363616263616263616263636162636162636162636361626361626361626363616263616263616263636162636162636162636361626361626361626363616263616263616263636162636162636162636361626361626361626363a165627a7a7230582020ee9e6b05918d0df987776ee24808f4dd1c522806bf9fa8f4336c93f6b0ec050029';
         $abi = file_get_contents(__DIR__ . '/../Fixtures/issue_85_abi.json');
+        $contractAddress = '';
         $account = $this->fromAccount;
+        $contract = new Contract($this->web3->provider, $abi);
         $functions = [
-            [
-                'name' => 'getBoolean',
-                'test' => function ($value) {
-                    return is_bool($value);
-                },
-            ],
-            [
-                'name' => 'getInteger',
-                'test' => function ($value) {
-                    return ($value instanceof BigNumber);
-                },
-            ],
+            // [
+            //     'name' => 'getBoolean',
+            //     'test' => function ($value) {
+            //         return is_bool($value);
+            //     },
+            // ],
+            // [
+            //     'name' => 'getInteger',
+            //     'test' => function ($value) {
+            //         return ($value instanceof BigNumber);
+            //     },
+            // ],
             [
                 'name' => 'getBytes1',
                 'test' => function ($value) {
@@ -494,35 +493,31 @@ class ContractTest extends TestCase
                 },
             ],
         ];
-        $contractAddress = '';
 
-        $contract = new Contract($this->web3->provider, $abi);
-        $contract->bytecode($bytecode)->new([
-            'from' => $account,
-            'gas' => '0x200b20',
-        ], function ($err, $result) use ($contract, &$contractAddress) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
-
-            if ($result) {
-                echo "\nTransaction has made:) id: " . $result . "\n";
-            }
-
-            $transactionId = $result;
-            $this->assertTrue((preg_match('/^0x[a-f0-9]{64}$/', $transactionId) === 1));
-
-            $contract->eth->getTransactionReceipt($transactionId, function ($err, $transaction) use (&$contractAddress) {
+        $contract->bytecode($bytecode)
+            ->new(['from' => $account, 'gas' => '0x200b20'], function ($err, $result) use ($contract, &$contractAddress) {
                 if ($err !== null) {
-                    return $this->fail($err);
+                    return $this->fail($err->getMessage());
                 }
 
-                if ($transaction) {
-                    $contractAddress = $transaction->contractAddress;
-                    echo "\nTransaction has mined:) block number: " . $transaction->blockNumber . "\n";
+                if ($result) {
+                    echo "\nTransaction has made:) id: " . $result . "\n";
                 }
+
+                $transactionId = $result;
+                $this->assertTrue((preg_match('/^0x[a-f0-9]{64}$/', $transactionId) === 1));
+
+                $contract->eth->getTransactionReceipt($transactionId, function ($err, $transaction) use (&$contractAddress) {
+                    if ($err !== null) {
+                        return $this->fail($err);
+                    }
+
+                    if ($transaction) {
+                        $contractAddress = $transaction->contractAddress;
+                        echo "\nTransaction has mined:) block number: " . $transaction->blockNumber . "\n";
+                    }
+                });
             });
-        });
 
         $contract->at($contractAddress);
 
@@ -549,10 +544,10 @@ class ContractTest extends TestCase
     {
         $bytecode = '0x608060405234801561001057600080fd5b506103bb806100206000396000f3fe608060405260043610610046576000357c01000000000000000000000000000000000000000000000000000000009004806373d4a13a1461004b578063ab62f0e1146100db575b600080fd5b34801561005757600080fd5b506100606101a3565b6040518080602001828103825283818151815260200191508051906020019080838360005b838110156100a0578082015181840152602081019050610085565b50505050905090810190601f1680156100cd5780820380516001836020036101000a031916815260200191505b509250505060405180910390f35b3480156100e757600080fd5b506101a1600480360360208110156100fe57600080fd5b810190808035906020019064010000000081111561011b57600080fd5b82018360208201111561012d57600080fd5b8035906020019184600183028401116401000000008311171561014f57600080fd5b91908080601f016020809104026020016040519081016040528093929190818152602001838380828437600081840152601f19601f820116905080830192505050505050509192919290505050610241565b005b60008054600181600116156101000203166002900480601f0160208091040260200160405190810160405280929190818152602001828054600181600116156101000203166002900480156102395780601f1061020e57610100808354040283529160200191610239565b820191906000526020600020905b81548152906001019060200180831161021c57829003601f168201915b505050505081565b80600090805190602001906102579291906102ea565b50806040518082805190602001908083835b60208310151561028e5780518252602082019150602081019050602083039250610269565b6001836020036101000a03801982511681845116808217855250505050505090500191505060405180910390207fae08ae866f3211e692b7cdd30e8b6ec658a153397150437cb873f95239953a5460405160405180910390a250565b828054600181600116156101000203166002900490600052602060002090601f016020900481019282601f1061032b57805160ff1916838001178555610359565b82800160010185558215610359579182015b8281111561035857825182559160200191906001019061033d565b5b509050610366919061036a565b5090565b61038c91905b80821115610388576000816000905550600101610370565b5090565b9056fea165627a7a72305820bb836a29a397513a3f2e2199520262ef5978d3a3d7e3d3532da41064d39177e30029';
         $abi = file_get_contents(__DIR__ . '/../Fixtures/issue_125_abi.json');
-
         $contractAddress = '';
         $account = $this->fromAccount;
         $contract = new Contract($this->web3->provider, $abi);
+
         $contract->bytecode($bytecode)->new([
             'from' => $account,
             'gas' => '0x200b20',
@@ -597,8 +592,6 @@ class ContractTest extends TestCase
             'gas' => '0x200b20',
         ], function ($err, $result) use ($contract) {
             if ($err !== null) {
-                var_dump('Error' . $err->getMessage());
-
                 return $this->fail($err->getMessage());
             }
 
@@ -703,17 +696,14 @@ class ContractTest extends TestCase
                         return;
                     }
 
-                    $this->assertEquals((string) $testNumber, $res[0]->toString());
+                    $this->assertEquals((string) $testNumber, $res[0]);
                 });
             });
         });
 
         $testNumber++;
 
-        $contract->send('say', $testNumber, [
-            'from' => $account,
-            'gas' => '0x200b20',
-        ], function ($err, $result) use ($contract, $testNumber) {
+        $contract->send('say', $testNumber, ['from' => $account, 'gas' => '0x200b20'], function ($err, $result) use ($contract, $testNumber) {
             if ($err !== null) {
                 return $this->fail($err->getMessage());
             }
@@ -747,7 +737,7 @@ class ContractTest extends TestCase
                         return;
                     }
 
-                    $this->assertEquals((string) $testNumber, $res[0]->toString());
+                    $this->assertEquals((string) $testNumber, $res[0]);
                 });
 
                 $blockNumber = $blockNumber->subtract(Utils::toBn(1));
@@ -758,7 +748,7 @@ class ContractTest extends TestCase
                         return;
                     }
 
-                    $this->assertEquals((string) $testNumber-1, $res[0]->toString());
+                    $this->assertEquals((string) $testNumber-1, $res[0]);
                 });
             });
         });
@@ -770,7 +760,7 @@ class ContractTest extends TestCase
             }
 
             if (isset($result)) {
-                echo "\nEstimate gas: " . $result->toString() . "\n";
+                echo "\nEstimate gas: " . $result . "\n";
                 $this->assertTrue($result !== null);
             }
         });
@@ -781,7 +771,7 @@ class ContractTest extends TestCase
             }
 
             if (isset($result)) {
-                echo "\nEstimate gas: " . $result->toString() . "\n";
+                echo "\nEstimate gas: " . $result . "\n";
                 $this->assertTrue($result !== null);
             }
         });
