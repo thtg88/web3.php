@@ -76,10 +76,6 @@ class Ethabi
 
     public function encodeParameter(string $type, $param): string
     {
-        if (!is_string($type)) {
-            throw new InvalidArgumentException('The type to encodeParameter must be string.');
-        }
-
         return $this->encodeParameters([$type], [$param]);
     }
 
@@ -211,7 +207,7 @@ class Ethabi
         return $solidityTypes;
     }
 
-    protected function encodeWithOffset(string $type, SolidityType $solidityType, array $encoded, int $offset): string|array
+    protected function encodeWithOffset(string $type, SolidityType $solidityType, array|string $encoded, int $offset): string|array
     {
         if ($solidityType->isDynamicArray($type)) {
             $nestedName = $solidityType->nestedName($type);
