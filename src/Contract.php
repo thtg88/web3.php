@@ -527,11 +527,10 @@ class Contract
         return [null, $transaction];
     }
 
-    public function estimateGas(...$arguments): ?array
+    public function estimateGas(...$arguments): array
     {
-        // TODO: throw?
         if (!isset($this->functions) && !isset($this->constructor)) {
-            return null;
+            throw new RuntimeException('No functions nor constructor set.');
         }
 
         $callback = array_pop($arguments);
@@ -657,10 +656,10 @@ class Contract
      * 2. Sign the data with user private key.
      * 3. Call sendRawTransaction.
      */
-    public function getData(...$arguments): ?string
+    public function getData(...$arguments): string
     {
         if (!isset($this->functions) && !isset($this->constructor)) {
-            return null;
+            throw new RuntimeException('No functions nor constructor set.');
         }
 
         if (empty($this->toAddress) && !empty($this->bytecode)) {
