@@ -48,41 +48,35 @@ class Net
 
     public function listening(...$arguments): array|null|self
     {
-        if ($this->provider->isBatch) {
-            $this->provider->send(new Listening($arguments));
+        $result = $this->provider->send(new Listening($arguments));
 
+        if ($this->provider->isBatch) {
             return $this;
         }
 
-        $callback = array_pop($arguments);
-
-        return $this->provider->send(new Listening($arguments), $callback);
+        return $result;
     }
 
     public function peerCount(...$arguments): array|null|self
     {
-        if ($this->provider->isBatch) {
-            $this->provider->send(new PeerCount($arguments));
+        $result = $this->provider->send(new PeerCount($arguments));
 
+        if ($this->provider->isBatch) {
             return $this;
         }
 
-        $callback = array_pop($arguments);
-
-        return $this->provider->send(new PeerCount($arguments), $callback);
+        return $result;
     }
 
     public function version(...$arguments): array|null|self
     {
-        if ($this->provider->isBatch) {
-            $this->provider->send(new Version($arguments));
+        $result = $this->provider->send(new Version($arguments));
 
+        if ($this->provider->isBatch) {
             return $this;
         }
 
-        $callback = array_pop($arguments);
-
-        return $this->provider->send(new Version($arguments), $callback);
+        return $result;
     }
 
     /**

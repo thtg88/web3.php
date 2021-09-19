@@ -27,14 +27,14 @@ class NetBatchTest extends TestCase
         $net->listening();
         $net->peerCount();
 
-        $net->provider->execute(function ($err, $data) {
-            if ($err !== null) {
-                return $this->fail('Got error!');
-            }
+        [$err, $data] = $net->provider->execute();
 
-            $this->assertTrue(is_string($data[0]));
-            $this->assertTrue(is_bool($data[1]));
-            $this->assertTrue($data[2] instanceof BigNumber);
-        });
+        if ($err !== null) {
+            $this->fail('Got error!');
+        }
+
+        $this->assertTrue(is_string($data[0]));
+        $this->assertTrue(is_bool($data[1]));
+        $this->assertTrue($data[2] instanceof BigNumber);
     }
 }
