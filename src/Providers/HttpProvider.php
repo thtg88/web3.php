@@ -82,7 +82,7 @@ class HttpProvider extends Provider implements IProvider
         $methods = $this->methods;
         $proxy = function ($err, $res) use ($methods, $callback) {
             if ($err !== null) {
-                return call_user_func($callback, $err, null);
+                return $callback($err, null);
             }
 
             foreach ($methods as $key => $method) {
@@ -99,7 +99,7 @@ class HttpProvider extends Provider implements IProvider
                 }
             }
 
-            return call_user_func($callback, null, $res);
+            return $callback(null, $res);
         };
 
         $this->requestManager->sendPayload('[' . implode(',', $this->batch) . ']', $proxy);
