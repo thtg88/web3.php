@@ -26,13 +26,14 @@ class ShhBatchTest extends TestCase
         $shh->version();
         $shh->version();
 
-        $shh->provider->execute(function ($err, $data) {
-            if ($err !== null) {
-                return $this->fail('Got error!');
-            }
-            $this->assertTrue(is_string($data[0]));
-            $this->assertTrue(is_string($data[1]));
-        });
+        [$err, $data] = $shh->provider->execute();
+
+        if ($err !== null) {
+            $this->fail('Got error!');
+        }
+
+        $this->assertTrue(is_string($data[0]));
+        $this->assertTrue(is_string($data[1]));
     }
 
     /** @test */
@@ -46,12 +47,13 @@ class ShhBatchTest extends TestCase
     //     $shh->version();
     //     $shh->hasIdentity('0');
 
-    //     $shh->provider->execute(function ($err, $data) {
-    //         if ($err !== null) {
-    //             return $this->fail('Got error!');
-    //         }
-    //         $this->assertTrue(is_string($data[0]));
-    //         $this->assertFalse($data[1]);
-    //     });
+    //     [$err, $data] = $shh->provider->execute();
+
+    //     if ($err !== null) {
+    //         $this->fail('Got error!');
+    //     }
+
+    //     $this->assertTrue(is_string($data[0]));
+    //     $this->assertFalse($data[1]);
     // }
 }

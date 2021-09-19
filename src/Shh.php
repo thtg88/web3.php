@@ -59,54 +59,46 @@ class Shh
 
     public function getFilterChanges(...$arguments): array|null|self
     {
-        if ($this->provider->isBatch) {
-            $this->provider->send(new GetFilterChanges($arguments));
+        $result = $this->provider->send(new GetFilterChanges($arguments));
 
+        if ($this->provider->isBatch) {
             return $this;
         }
 
-        $callback = array_pop($arguments);
-
-        return $this->provider->send(new GetFilterChanges($arguments), $callback);
+        return $result;
     }
 
     public function getMessages(...$arguments): array|null|self
     {
-        if ($this->provider->isBatch) {
-            $this->provider->send(new GetMessages($arguments));
+        $result = $this->provider->send(new GetMessages($arguments));
 
+        if ($this->provider->isBatch) {
             return $this;
         }
 
-        $callback = array_pop($arguments);
-
-        return $this->provider->send(new GetMessages($arguments), $callback);
+        return $result;
     }
 
     public function hasIdentity(...$arguments): array|null|self
     {
-        if ($this->provider->isBatch) {
-            $this->provider->send(new HasIdentity($arguments));
+        $result = $this->provider->send(new HasIdentity($arguments));
 
+        if ($this->provider->isBatch) {
             return $this;
         }
 
-        $callback = array_pop($arguments);
-
-        return $this->provider->send(new HasIdentity($arguments), $callback);
+        return $result;
     }
 
     public function newFilter(...$arguments): array|null|self
     {
-        if ($this->provider->isBatch) {
-            $this->provider->send(new NewFilter($arguments));
+        $result = $this->provider->send(new NewFilter($arguments));
 
+        if ($this->provider->isBatch) {
             return $this;
         }
 
-        $callback = array_pop($arguments);
-
-        return $this->provider->send(new NewFilter($arguments), $callback);
+        return $result;
     }
 
     public function newGroup(...$arguments): void
@@ -116,54 +108,46 @@ class Shh
 
     public function newIdentity(...$arguments): array|null|self
     {
-        if ($this->provider->isBatch) {
-            $this->provider->send(new NewIdentity($arguments));
+        $result = $this->provider->send(new NewIdentity($arguments));
 
+        if ($this->provider->isBatch) {
             return $this;
         }
 
-        $callback = array_pop($arguments);
-
-        return $this->provider->send(new NewIdentity($arguments), $callback);
+        return $result;
     }
 
     public function post(...$arguments): array|null|self
     {
-        if ($this->provider->isBatch) {
-            $this->provider->send(new Post($arguments));
+        $result = $this->provider->send(new Post($arguments));
 
+        if ($this->provider->isBatch) {
             return $this;
         }
 
-        $callback = array_pop($arguments);
-
-        return $this->provider->send(new Post($arguments), $callback);
+        return $result;
     }
 
     public function uninstallFilter(...$arguments): array|null|self
     {
-        if ($this->provider->isBatch) {
-            $this->provider->send(new UninstallFilter($arguments));
+        $result = $this->provider->send(new UninstallFilter($arguments));
 
+        if ($this->provider->isBatch) {
             return $this;
         }
 
-        $callback = array_pop($arguments);
-
-        return $this->provider->send(new UninstallFilter($arguments), $callback);
+        return $result;
     }
 
     public function version(...$arguments): array|null|self
     {
-        if ($this->provider->isBatch) {
-            $this->provider->send(new Version($arguments));
+        $result = $this->provider->send(new Version($arguments));
 
+        if ($this->provider->isBatch) {
             return $this;
         }
 
-        $callback = array_pop($arguments);
-
-        return $this->provider->send(new Version($arguments), $callback);
+        return $result;
     }
 
     /**
