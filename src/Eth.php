@@ -413,9 +413,9 @@ class Eth
         return $result;
     }
 
-    public function getWork(...$arguments): array|self|null
+    public function getWork(): array|self|null
     {
-        $result = $this->provider->send(new GetWork($arguments));
+        $result = $this->provider->send(new GetWork());
 
         if ($this->provider->isBatch) {
             return $this;
