@@ -12,7 +12,6 @@
 namespace Web3;
 
 use InvalidArgumentException;
-use RuntimeException;
 use Web3\Methods\Web3\ClientVersion;
 use Web3\Methods\Web3\Sha3;
 use Web3\Providers\HttpProvider;
@@ -51,30 +50,30 @@ class Web3
         throw new InvalidArgumentException('Please set a valid provider.');
     }
 
-    public function clientVersion(...$arguments): void
+    public function clientVersion(...$arguments): array|null|self
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new ClientVersion($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new ClientVersion($arguments), $callback);
+        return $this->provider->send(new ClientVersion($arguments), $callback);
     }
 
-    public function sha3(...$arguments): void
+    public function sha3(...$arguments): array|null|self
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new Sha3($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new Sha3($arguments), $callback);
+        return $this->provider->send(new Sha3($arguments), $callback);
     }
 
     /**

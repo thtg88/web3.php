@@ -57,56 +57,56 @@ class Shh
         throw new RuntimeException('Method not implemented.');
     }
 
-    public function getFilterChanges(...$arguments): void
+    public function getFilterChanges(...$arguments): array|null|self
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new GetFilterChanges($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new GetFilterChanges($arguments), $callback);
+        return $this->provider->send(new GetFilterChanges($arguments), $callback);
     }
 
-    public function getMessages(...$arguments): void
+    public function getMessages(...$arguments): array|null|self
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new GetMessages($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new GetMessages($arguments), $callback);
+        return $this->provider->send(new GetMessages($arguments), $callback);
     }
 
-    public function hasIdentity(...$arguments): void
+    public function hasIdentity(...$arguments): array|null|self
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new HasIdentity($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new HasIdentity($arguments), $callback);
+        return $this->provider->send(new HasIdentity($arguments), $callback);
     }
 
-    public function newFilter(...$arguments): void
+    public function newFilter(...$arguments): array|null|self
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new NewFilter($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new NewFilter($arguments), $callback);
+        return $this->provider->send(new NewFilter($arguments), $callback);
     }
 
     public function newGroup(...$arguments): void
@@ -114,56 +114,56 @@ class Shh
         throw new RuntimeException('Method not implemented.');
     }
 
-    public function newIdentity(...$arguments): void
+    public function newIdentity(...$arguments): array|null|self
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new NewIdentity($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new NewIdentity($arguments), $callback);
+        return $this->provider->send(new NewIdentity($arguments), $callback);
     }
 
-    public function post(...$arguments): void
+    public function post(...$arguments): array|null|self
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new Post($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new Post($arguments), $callback);
+        return $this->provider->send(new Post($arguments), $callback);
     }
 
-    public function uninstallFilter(...$arguments): void
+    public function uninstallFilter(...$arguments): array|null|self
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new UninstallFilter($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new UninstallFilter($arguments), $callback);
+        return $this->provider->send(new UninstallFilter($arguments), $callback);
     }
 
-    public function version(...$arguments): void
+    public function version(...$arguments): array|null|self
     {
         if ($this->provider->isBatch) {
             $this->provider->send(new Version($arguments));
 
-            return;
+            return $this;
         }
 
         $callback = array_pop($arguments);
 
-        $this->provider->send(new Version($arguments), $callback);
+        return $this->provider->send(new Version($arguments), $callback);
     }
 
     /**

@@ -12,6 +12,7 @@
 namespace Web3;
 
 use InvalidArgumentException;
+use RuntimeException;
 use stdClass;
 use Web3\Contracts\Ethabi;
 use Web3\Contracts\Types\Address;
@@ -280,10 +281,10 @@ class Contract
     /**
      * Deploy a contract with params.
      */
-    public function new(...$arguments): void
+    public function new(...$arguments): array
     {
         if (!isset($this->constructor)) {
-            return;
+            throw new RuntimeException('No constructor set.');
         }
 
         $constructor = $this->constructor;
@@ -313,19 +314,24 @@ class Contract
 
         $transaction['data'] = '0x' . $this->bytecode . Utils::stripZero($data);
 
-        $this->eth->sendTransaction($transaction, function ($err, $transaction) use ($callback) {
-            if ($err !== null) {
-                return call_user_func($callback, $err, null);
-            }
-
-            return call_user_func($callback, null, $transaction);
+        [$err, $transaction] = $this->eth->sendTransaction($transaction, function () {
         });
+
+        if ($err !== null) {
+            call_user_func($callback, $err, null);
+
+            return [$err, null];
+        }
+
+        call_user_func($callback, null, $transaction);
+
+        return [null, $transaction];
     }
 
-    public function send(...$arguments): void
+    public function send(...$arguments): array
     {
         if (!isset($this->functions)) {
-            return;
+            throw new RuntimeException('No functions set.');
         }
 
         $method = array_splice($arguments, 0, 1)[0];
@@ -407,19 +413,24 @@ class Contract
         $transaction['to'] = $this->toAddress;
         $transaction['data'] = $functionSignature . Utils::stripZero($data);
 
-        $this->eth->sendTransaction($transaction, function ($err, $transaction) use ($callback) {
-            if ($err !== null) {
-                return call_user_func($callback, $err, null);
-            }
-
-            return call_user_func($callback, null, $transaction);
+        [$err, $transaction] = $this->eth->sendTransaction($transaction, function () {
         });
+
+        if ($err !== null) {
+            call_user_func($callback, $err, null);
+
+            return [$err, null];
+        }
+
+        call_user_func($callback, null, $transaction);
+
+        return [null, $transaction];
     }
 
-    public function call(...$arguments): void
+    public function call(...$arguments): array
     {
         if (!isset($this->functions)) {
-            return;
+            throw new RuntimeException('No functions set.');
         }
 
         $method = array_splice($arguments, 0, 1)[0];
@@ -500,20 +511,26 @@ class Contract
         $transaction['to'] = $this->toAddress;
         $transaction['data'] = $functionSignature . Utils::stripZero($data);
 
-        $this->eth->call($transaction, $defaultBlock, function ($err, $transaction) use ($callback, $function) {
-            if ($err !== null) {
-                return call_user_func($callback, $err, null);
-            }
-            $decodedTransaction = $this->ethabi->decodeParameters($function, $transaction);
-
-            return call_user_func($callback, null, $decodedTransaction);
+        [$err, $transaction] = $this->eth->call($transaction, $defaultBlock, function () {
         });
+
+        if ($err !== null) {
+            call_user_func($callback, $err, null);
+
+            return [$err, null];
+        }
+
+        $decodedTransaction = $this->ethabi->decodeParameters($function, $transaction);
+
+        call_user_func($callback, null, $decodedTransaction);
+
+        return [null, $transaction];
     }
 
-    public function estimateGas(...$arguments): void
+    public function estimateGas(...$arguments): array
     {
         if (!isset($this->functions) && !isset($this->constructor)) {
-            return;
+            throw new RuntimeException('No functions nor constructor set.');
         }
 
         $callback = array_pop($arguments);
@@ -618,13 +635,18 @@ class Contract
             $transaction['data'] = $functionSignature . Utils::stripZero($data);
         }
 
-        $this->eth->estimateGas($transaction, function ($err, $gas) use ($callback) {
-            if ($err !== null) {
-                return call_user_func($callback, $err, null);
-            }
-
-            return call_user_func($callback, null, $gas);
+        [$err, $gas] = $this->eth->estimateGas($transaction, function () {
         });
+
+        if ($err !== null) {
+            call_user_func($callback, $err, null);
+
+            return [$err, null];
+        }
+
+        call_user_func($callback, null, $gas);
+
+        return [null, $gas];
     }
 
     /**
@@ -634,10 +656,10 @@ class Contract
      * 2. Sign the data with user private key.
      * 3. Call sendRawTransaction.
      */
-    public function getData(...$arguments): ?string
+    public function getData(...$arguments): string
     {
         if (!isset($this->functions) && !isset($this->constructor)) {
-            return null;
+            throw new RuntimeException('No functions nor constructor set.');
         }
 
         if (empty($this->toAddress) && !empty($this->bytecode)) {

@@ -456,8 +456,5 @@ class UtilsTest extends TestCase
 
         $bn = Utils::toBn(new BigNumber(1));
         $this->assertEquals($bn->toString(), '1');
-
-        $this->expectException(InvalidArgumentException::class);
-        $bn = Utils::toBn(new stdClass());
     }
 }

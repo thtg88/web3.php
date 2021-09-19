@@ -18,7 +18,7 @@ class HttpProvider extends Provider implements IProvider
 {
     protected array $methods = [];
 
-    public function send(IMethod $method, ?callable $callback = null): void
+    public function send(IMethod $method, ?callable $callback = null): ?array
     {
         $payload = $method->toPayloadString();
 
@@ -26,12 +26,12 @@ class HttpProvider extends Provider implements IProvider
             $this->methods[] = $method;
             $this->batch[] = $payload;
 
-            return;
+            return null;
         }
 
         // TODO: should it throw?
         if (!$method->validate()) {
-            return;
+            return ['Validation failed', null];
         }
 
         $method->arguments = $method->transform(
@@ -39,23 +39,28 @@ class HttpProvider extends Provider implements IProvider
             $method->inputFormatters
         );
 
-        $proxy = function ($err, $res) use ($method, $callback) {
-            if ($err !== null) {
-                return call_user_func($callback, $err, null);
-            }
+        [$err, $res] = $this->requestManager->sendPayload($payload, function () {
+        });
 
-            if (!is_array($res)) {
-                $res = $method->transform([$res], $method->outputFormatters);
+        if ($err !== null) {
+            $callback($err, null);
 
-                return call_user_func($callback, null, $res[0]);
-            }
+            return [$err, null];
+        }
 
-            $res = $method->transform($res, $method->outputFormatters);
+        if (!is_array($res)) {
+            $res = $method->transform([$res], $method->outputFormatters);
 
-            return call_user_func($callback, null, $res);
-        };
+            $callback(null, $res[0]);
 
-        $this->requestManager->sendPayload($payload, $proxy);
+            return [null, $res[0]];
+        }
+
+        $res = $method->transform($res, $method->outputFormatters);
+
+        $callback(null, $res);
+
+        return [null, $res];
     }
 
     /**

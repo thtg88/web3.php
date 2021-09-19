@@ -28,15 +28,8 @@ class HttpRequestManager extends RequestManager implements IRequestManager
         $this->client = new Client();
     }
 
-    /**
-     * @param string $payload
-     */
-    public function sendPayload($payload, callable $callback): void
+    public function sendPayload(string $payload, callable $callback): array
     {
-        if (!is_string($payload)) {
-            throw new \InvalidArgumentException('Payload must be string.');
-        }
-
         try {
             $res = $this->client->post($this->host, [
                 'headers' => [
@@ -49,7 +42,7 @@ class HttpRequestManager extends RequestManager implements IRequestManager
         } catch (RequestException $err) {
             call_user_func($callback, $err, null);
 
-            return;
+            return [$err, null];
         }
 
         /** @var StreamInterface $stream */
@@ -61,7 +54,11 @@ class HttpRequestManager extends RequestManager implements IRequestManager
         $stream->close();
 
         if (JSON_ERROR_NONE !== json_last_error()) {
-            call_user_func($callback, new InvalidArgumentException('json_decode error: ' . json_last_error_msg()), null);
+            $error = new InvalidArgumentException('json_decode error: ' . json_last_error_msg());
+
+            call_user_func($callback, $error, null);
+
+            return [$error, null];
         }
 
         if (is_array($json)) {
@@ -89,28 +86,32 @@ class HttpRequestManager extends RequestManager implements IRequestManager
             if (count($errors) > 0) {
                 call_user_func($callback, $errors, $results);
 
-                return;
+                return [$errors, $results];
             }
 
             call_user_func($callback, null, $results);
 
-            return;
+            return [null, $results];
         }
 
         if (property_exists($json, 'result')) {
             call_user_func($callback, null, $json->result);
 
-            return;
+            return [null, $json->result];
         }
 
         if (isset($json->error)) {
-            $error = $json->error;
+            $error = new RPCException(mb_ereg_replace('Error: ', '', $json->error->message), $json->error->code);
 
-            call_user_func($callback, new RPCException(mb_ereg_replace('Error: ', '', $error->message), $error->code), null);
+            call_user_func($callback, $error, null);
 
-            return;
+            return [$error, null];
         }
 
-        call_user_func($callback, new RPCException('Something wrong happened.'), null);
+        $error = new RPCException('Something wrong happened.');
+
+        call_user_func($callback, $error, null);
+
+        return [$error, null];
     }
 }
