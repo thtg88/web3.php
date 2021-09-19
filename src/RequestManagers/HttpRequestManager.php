@@ -14,7 +14,6 @@ namespace Web3\RequestManagers;
 use InvalidArgumentException;
 use Psr\Http\Message\StreamInterface;
 use RuntimeException as RPCException;
-use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Client;
 
 class HttpRequestManager extends RequestManager implements IRequestManager
@@ -30,18 +29,14 @@ class HttpRequestManager extends RequestManager implements IRequestManager
 
     public function sendPayload(string $payload): array
     {
-        try {
-            $res = $this->client->post($this->host, [
-                'headers' => [
-                    'content-type' => 'application/json',
-                ],
-                'body' => $payload,
-                'timeout' => $this->timeout,
-                'connect_timeout' => $this->timeout,
-            ]);
-        } catch (RequestException $err) {
-            return [$err, null];
-        }
+        $res = $this->client->post($this->host, [
+            'headers' => [
+                'content-type' => 'application/json',
+            ],
+            'body' => $payload,
+            'timeout' => $this->timeout,
+            'connect_timeout' => $this->timeout,
+        ]);
 
         /** @var StreamInterface $stream */
         $stream = $res->getBody();
@@ -52,13 +47,13 @@ class HttpRequestManager extends RequestManager implements IRequestManager
         $stream->close();
 
         if (JSON_ERROR_NONE !== json_last_error()) {
-            $error = new InvalidArgumentException('json_decode error: ' . json_last_error_msg());
-
-            return [$error, null];
+            throw new InvalidArgumentException(
+                'json_decode error: ' . json_last_error_msg()
+            );
         }
 
+        // batch results
         if (is_array($json)) {
-            // batch results
             $results = [];
             $errors = [];
 
@@ -91,13 +86,12 @@ class HttpRequestManager extends RequestManager implements IRequestManager
         }
 
         if (isset($json->error)) {
-            $error = new RPCException(mb_ereg_replace('Error: ', '', $json->error->message), $json->error->code);
-
-            return [$error, null];
+            throw new RPCException(
+                mb_ereg_replace('Error: ', '', $json->error->message),
+                $json->error->code,
+            );
         }
 
-        $error = new RPCException('Something wrong happened.');
-
-        return [$error, null];
+        throw new RPCException('Something wrong happened.');
     }
 }
