@@ -12,6 +12,7 @@
 namespace Web3;
 
 use InvalidArgumentException;
+use RuntimeException;
 use stdClass;
 use Web3\Contracts\Ethabi;
 use Web3\Contracts\Types\Address;
@@ -280,10 +281,10 @@ class Contract
     /**
      * Deploy a contract with params.
      */
-    public function new(...$arguments): ?array
+    public function new(...$arguments): array
     {
         if (!isset($this->constructor)) {
-            return null;
+            throw new RuntimeException('No constructor set.');
         }
 
         $constructor = $this->constructor;
@@ -327,11 +328,10 @@ class Contract
         return [null, $transaction];
     }
 
-    public function send(...$arguments): ?array
+    public function send(...$arguments): array
     {
-        // TODO: throw?
         if (!isset($this->functions)) {
-            return null;
+            throw new RuntimeException('No functions set.');
         }
 
         $method = array_splice($arguments, 0, 1)[0];
