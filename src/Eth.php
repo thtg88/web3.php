@@ -184,9 +184,9 @@ class Eth
         return $result;
     }
 
-    public function getBalance(...$arguments): array|self|null
+    public function getBalance(string $address, $block = 'latest'): array|self|null
     {
-        $result = $this->provider->send(new GetBalance($arguments));
+        $result = $this->provider->send(new GetBalance([$address, $block]));
 
         if ($this->provider->isBatch) {
             return $this;
@@ -249,9 +249,9 @@ class Eth
         return $result;
     }
 
-    public function getCode(...$arguments): array|self|null
+    public function getCode(string $address, $block = 'latest'): array|self|null
     {
-        $result = $this->provider->send(new GetCode($arguments));
+        $result = $this->provider->send(new GetCode([$address, $block]));
 
         if ($this->provider->isBatch) {
             return $this;
@@ -347,9 +347,9 @@ class Eth
         return $result;
     }
 
-    public function getTransactionCount(...$arguments): array|self|null
+    public function getTransactionCount(string $address, $block = 'latest'): array|self|null
     {
-        $result = $this->provider->send(new GetTransactionCount($arguments));
+        $result = $this->provider->send(new GetTransactionCount([$address, $block]));
 
         if ($this->provider->isBatch) {
             return $this;
