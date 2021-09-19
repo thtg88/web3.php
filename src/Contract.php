@@ -427,10 +427,10 @@ class Contract
         return [null, $transaction];
     }
 
-    public function call(...$arguments): ?array
+    public function call(...$arguments): array
     {
         if (!isset($this->functions)) {
-            return null;
+            throw new RuntimeException('No functions set.');
         }
 
         $method = array_splice($arguments, 0, 1)[0];
