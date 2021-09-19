@@ -50,9 +50,9 @@ class Web3
         throw new InvalidArgumentException('Please set a valid provider.');
     }
 
-    public function clientVersion(...$arguments): array|null|self
+    public function clientVersion(): array|null|self
     {
-        $result = $this->provider->send(new ClientVersion($arguments));
+        $result = $this->provider->send(new ClientVersion());
 
         if ($this->provider->isBatch) {
             return $this;
@@ -61,9 +61,9 @@ class Web3
         return $result;
     }
 
-    public function sha3(...$arguments): array|null|self
+    public function sha3(string $data): array|null|self
     {
-        $result = $this->provider->send(new Sha3($arguments));
+        $result = $this->provider->send(new Sha3([$data]));
 
         if ($this->provider->isBatch) {
             return $this;

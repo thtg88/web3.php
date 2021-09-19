@@ -48,9 +48,9 @@ class Personal
         throw new InvalidArgumentException('Please set a valid provider.');
     }
 
-    public function listAccounts(...$arguments): array|null|self
+    public function listAccounts(): array|null|self
     {
-        $result = $this->provider->send(new ListAccounts($arguments));
+        $result = $this->provider->send(new ListAccounts());
 
         if ($this->provider->isBatch) {
             return $this;
@@ -59,9 +59,9 @@ class Personal
         return $result;
     }
 
-    public function newAccount(...$arguments): array|null|self
+    public function newAccount(string $passphrase): array|null|self
     {
-        $result = $this->provider->send(new NewAccount($arguments));
+        $result = $this->provider->send(new NewAccount([$passphrase]));
 
         if ($this->provider->isBatch) {
             return $this;
@@ -70,9 +70,13 @@ class Personal
         return $result;
     }
 
-    public function unlockAccount(...$arguments): array|null|self
+    public function unlockAccount(string $address, string $passphrase, $duration = 300): array|null|self
     {
-        $result = $this->provider->send(new UnlockAccount($arguments));
+        $result = $this->provider->send(new UnlockAccount([
+            $address,
+            $passphrase,
+            $duration,
+        ]));
 
         if ($this->provider->isBatch) {
             return $this;
@@ -81,9 +85,9 @@ class Personal
         return $result;
     }
 
-    public function lockAccount(...$arguments): array|null|self
+    public function lockAccount(string $address): array|null|self
     {
-        $result = $this->provider->send(new LockAccount($arguments));
+        $result = $this->provider->send(new LockAccount([$address]));
 
         if ($this->provider->isBatch) {
             return $this;
@@ -92,9 +96,9 @@ class Personal
         return $result;
     }
 
-    public function sendTransaction(...$arguments): array|null|self
+    public function sendTransaction($transaction, string $passphrase): array|null|self
     {
-        $result = $this->provider->send(new SendTransaction($arguments));
+        $result = $this->provider->send(new SendTransaction([$transaction, $passphrase]));
 
         if ($this->provider->isBatch) {
             return $this;

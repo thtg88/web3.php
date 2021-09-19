@@ -57,9 +57,9 @@ class Shh
         throw new RuntimeException('Method not implemented.');
     }
 
-    public function getFilterChanges(...$arguments): array|null|self
+    public function getFilterChanges(float|int|string $filter_id): array|null|self
     {
-        $result = $this->provider->send(new GetFilterChanges($arguments));
+        $result = $this->provider->send(new GetFilterChanges([$filter_id]));
 
         if ($this->provider->isBatch) {
             return $this;
@@ -68,9 +68,9 @@ class Shh
         return $result;
     }
 
-    public function getMessages(...$arguments): array|null|self
+    public function getMessages(float|int|string $filter_id): array|null|self
     {
-        $result = $this->provider->send(new GetMessages($arguments));
+        $result = $this->provider->send(new GetMessages([$filter_id]));
 
         if ($this->provider->isBatch) {
             return $this;
@@ -79,9 +79,9 @@ class Shh
         return $result;
     }
 
-    public function hasIdentity(...$arguments): array|null|self
+    public function hasIdentity(string $identity): array|null|self
     {
-        $result = $this->provider->send(new HasIdentity($arguments));
+        $result = $this->provider->send(new HasIdentity([$identity]));
 
         if ($this->provider->isBatch) {
             return $this;
@@ -90,9 +90,9 @@ class Shh
         return $result;
     }
 
-    public function newFilter(...$arguments): array|null|self
+    public function newFilter(array $filter): array|null|self
     {
-        $result = $this->provider->send(new NewFilter($arguments));
+        $result = $this->provider->send(new NewFilter([$filter]));
 
         if ($this->provider->isBatch) {
             return $this;
@@ -106,9 +106,9 @@ class Shh
         throw new RuntimeException('Method not implemented.');
     }
 
-    public function newIdentity(...$arguments): array|null|self
+    public function newIdentity(): array|null|self
     {
-        $result = $this->provider->send(new NewIdentity($arguments));
+        $result = $this->provider->send(new NewIdentity());
 
         if ($this->provider->isBatch) {
             return $this;
@@ -128,9 +128,9 @@ class Shh
         return $result;
     }
 
-    public function uninstallFilter(...$arguments): array|null|self
+    public function uninstallFilter(float|int|string $filter_id): array|null|self
     {
-        $result = $this->provider->send(new UninstallFilter($arguments));
+        $result = $this->provider->send(new UninstallFilter([$filter_id]));
 
         if ($this->provider->isBatch) {
             return $this;
@@ -139,9 +139,9 @@ class Shh
         return $result;
     }
 
-    public function version(...$arguments): array|null|self
+    public function version(): array|null|self
     {
-        $result = $this->provider->send(new Version($arguments));
+        $result = $this->provider->send(new Version());
 
         if ($this->provider->isBatch) {
             return $this;

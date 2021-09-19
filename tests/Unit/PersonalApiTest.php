@@ -175,20 +175,4 @@ class PersonalApiTest extends TestCase
         $this->assertTrue(is_string($transaction));
         $this->assertTrue(mb_strlen($transaction) === 66);
     }
-
-    /** @test */
-    public function wrong_param(): void
-    {
-        $this->expectException(RuntimeException::class);
-
-        $personal = $this->personal;
-
-        [$err, $account] = $personal->newAccount($personal);
-
-        if ($err !== null) {
-            $this->fail($err->getMessage());
-        }
-
-        $this->assertTrue(is_string($account));
-    }
 }
