@@ -17,11 +17,6 @@ class HttpProviderTest extends TestCase
         $provider = new HttpProvider($requestManager);
 
         $this->assertEquals($provider->requestManager->host, 'http://localhost:8545');
-
-        $requestManager = new HttpRequestManager($this->testRinkebyHost);
-        $provider->requestManager = $requestManager;
-
-        $this->assertEquals($provider->requestManager->host, 'http://localhost:8545');
     }
 
     /** @test */
