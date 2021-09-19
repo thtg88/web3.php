@@ -19,7 +19,7 @@ class TransactionValidator
      *
      * @param array $value
      */
-    public static function validate($value): bool
+    public static function validate(mixed $value): bool
     {
         if (!is_array($value)) {
             return false;

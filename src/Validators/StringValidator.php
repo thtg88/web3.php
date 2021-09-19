@@ -11,12 +11,9 @@
 
 namespace Web3\Validators;
 
-class StringValidator
+class StringValidator implements IValidator
 {
-    /**
-     * @param string $value
-     */
-    public static function validate($value): bool
+    public static function validate(mixed $value): bool
     {
         return is_string($value);
     }

@@ -15,19 +15,19 @@ use Web3\Utils;
 
 class TagValidator implements IValidator
 {
+    public const TAGS = [
+        'latest',
+        'earliest',
+        'pending',
+    ];
+
     /**
      * @param string $value
      */
-    public static function validate($value): bool
+    public static function validate(mixed $value): bool
     {
         $value = Utils::toString($value);
 
-        $tags = [
-            'latest',
-            'earliest',
-            'pending',
-        ];
-
-        return in_array($value, $tags);
+        return in_array($value, self::TAGS);
     }
 }

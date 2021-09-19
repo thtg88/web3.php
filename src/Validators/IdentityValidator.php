@@ -17,10 +17,8 @@ class IdentityValidator
      * To do: check identity length.
      * Spec: 60 bytes, see https://github.com/ethereum/wiki/wiki/JSON-RPC#shh_newidentity
      * But returned value is 64 bytes.
-     *
-     * @param string $value
      */
-    public static function validate($value): bool
+    public static function validate(mixed $value): bool
     {
         if (!is_string($value)) {
             return false;

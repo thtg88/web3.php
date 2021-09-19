@@ -11,9 +11,9 @@
 
 namespace Web3\Validators;
 
-class BooleanValidator
+class BooleanValidator implements IValidator
 {
-    public static function validate($value): bool
+    public static function validate(mixed $value): bool
     {
         return is_bool($value);
     }

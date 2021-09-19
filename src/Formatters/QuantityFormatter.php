@@ -16,8 +16,6 @@ use Web3\Utils;
 class QuantityFormatter implements IFormatter
 {
     /**
-     * format
-     *
      * @return string
      */
     public static function format($value)
