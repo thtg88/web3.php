@@ -31,36 +31,43 @@ class HttpProviderTest extends TestCase
         $provider = new HttpProvider($requestManager);
         $method = new ClientVersion([]);
 
-        $provider->send($method, function ($err, $version) {
-            if ($err !== null) {
-                $this->fail($err->getMessage());
-            }
-            $this->assertTrue(is_string($version));
-        });
+        [$err, $version] = $provider->send($method);
+
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
+
+        $this->assertTrue(is_string($version));
     }
 
     /** @test */
-    public function batch(): void
+    public function batch_fails_if_not_batchin_provider(): void
+    {
+        $this->expectException(RuntimeException::class);
+
+        $requestManager = new HttpRequestManager($this->testHost);
+        $provider = new HttpProvider($requestManager);
+        $method = new ClientVersion([]);
+
+        $provider->execute();
+    }
+
+    /** @test */
+    public function successful_batch(): void
     {
         $requestManager = new HttpRequestManager($this->testHost);
         $provider = new HttpProvider($requestManager);
         $method = new ClientVersion([]);
-        $callback = function ($err, $data) {
-            if ($err !== null) {
-                $this->fail($err->getMessage());
-            }
-            $this->assertEquals($data[0], $data[1]);
-        };
-
-        try {
-            $provider->execute($callback);
-        } catch (RuntimeException $err) {
-            $this->assertTrue($err->getMessage() !== true);
-        }
-
         $provider->batch(true);
         $provider->send($method, null);
         $provider->send($method, null);
-        $provider->execute($callback);
+
+        [$err, $data] = $provider->execute();
+
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
+
+        $this->assertEquals($data[0], $data[1]);
     }
 }

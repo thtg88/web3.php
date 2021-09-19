@@ -15,12 +15,12 @@ use Web3\Methods\IMethod;
 
 interface IProvider
 {
-    public function send(IMethod $method, ?callable $callback = null): ?array;
+    public function send(IMethod $method): ?array;
 
     /**
      * @param bool $status
      */
     public function batch($status): void;
 
-    public function execute(callable $callback): void;
+    public function execute(): array;
 }
