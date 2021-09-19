@@ -11,12 +11,9 @@
 
 namespace Web3\Validators;
 
-class HexValidator
+class HexValidator implements IValidator
 {
-    /**
-     * @param string $value
-     */
-    public static function validate($value): bool
+    public static function validate(mixed $value): bool
     {
         if (!is_string($value)) {
             return false;

@@ -11,9 +11,9 @@
 
 namespace Web3\Validators;
 
-class NonceValidator
+class NonceValidator implements IValidator
 {
-    public static function validate($value): bool
+    public static function validate(mixed $value): bool
     {
         if (!is_string($value)) {
             return false;

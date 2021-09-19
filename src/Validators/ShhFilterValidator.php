@@ -11,12 +11,9 @@
 
 namespace Web3\Validators;
 
-class ShhFilterValidator
+class ShhFilterValidator implements IValidator
 {
-    /**
-     * @param array $value
-     */
-    public static function validate($value): bool
+    public static function validate(mixed $value): bool
     {
         if (!is_array($value)) {
             return false;

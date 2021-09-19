@@ -11,12 +11,9 @@
 
 namespace Web3\Validators;
 
-class CallValidator
+class CallValidator implements IValidator
 {
-    /**
-     * @param array $value
-     */
-    public static function validate($value): bool
+    public static function validate(mixed $value): bool
     {
         if (!is_array($value)) {
             return false;

@@ -13,5 +13,5 @@ namespace Web3\Validators;
 
 interface IValidator
 {
-    public static function validate($value): bool;
+    public static function validate(mixed $value): bool;
 }
