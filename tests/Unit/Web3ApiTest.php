@@ -43,8 +43,6 @@ class Web3ApiTest extends TestCase
         }
 
         $this->assertEquals($hash, $this->testHash);
-
-
     }
 
     /** @test */
