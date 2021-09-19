@@ -13,12 +13,6 @@ namespace Web3\Methods;
 
 interface IRPC
 {
-    /**
-     * __toString
-     *
-     * @return string
-     */
-    public function __toString();
-
+    public function __toString(): string;
     public function toPayload(): array;
 }
