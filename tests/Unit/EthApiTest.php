@@ -9,22 +9,12 @@ use Web3\Tests\TestCase;
 class EthApiTest extends TestCase
 {
     protected Eth $eth;
-    protected string $coinbase;
 
     public function setUp(): void
     {
         parent::setUp();
 
         $this->eth = $this->web3->eth;
-
-        [$err, $coinbase] = $this->eth->coinbase(function () {
-        });
-
-        if ($err !== null) {
-            $this->fail($err->getMessage());
-        }
-
-        $this->coinbase = $coinbase;
     }
 
     /** @test */
@@ -32,13 +22,13 @@ class EthApiTest extends TestCase
     {
         $eth = $this->eth;
 
-        $eth->protocolVersion(function ($err, $version) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
+        [$err, $version] = $eth->protocolVersion();
 
-            $this->assertTrue($version instanceof BigNumber);
-        });
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
+
+        $this->assertTrue($version instanceof BigNumber);
     }
 
     /** @test */
@@ -46,14 +36,14 @@ class EthApiTest extends TestCase
     {
         $eth = $this->eth;
 
-        $eth->syncing(function ($err, $syncing) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
+        [$err, $syncing] = $eth->syncing();
 
-            // due to the result might be object or bool, only test is null
-            $this->assertTrue($syncing !== null);
-        });
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
+
+        // due to the result might be object or bool, only test is null
+        $this->assertTrue($syncing !== null);
     }
 
     /** @test */
@@ -61,13 +51,18 @@ class EthApiTest extends TestCase
     {
         $eth = $this->eth;
 
-        $eth->coinbase(function ($err, $coinbase) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
+        [$err, $coinbase_expected] = $eth->coinbase();
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
 
-            $this->assertEquals($coinbase, $this->coinbase);
-        });
+        [$err, $coinbase_actual] = $this->eth->coinbase();
+
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
+
+        $this->assertEquals($coinbase_expected, $coinbase_actual);
     }
 
     /** @test */
@@ -75,13 +70,13 @@ class EthApiTest extends TestCase
     {
         $eth = $this->eth;
 
-        $eth->mining(function ($err, $mining) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
+        [$err, $mining] = $eth->mining();
 
-            $this->assertTrue($mining);
-        });
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
+
+        $this->assertTrue($mining);
     }
 
     /** @test */
@@ -89,13 +84,13 @@ class EthApiTest extends TestCase
     {
         $eth = $this->eth;
 
-        $eth->hashrate(function ($err, $hashrate) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
+        [$err, $hashrate] = $eth->hashrate();
 
-            $this->assertEquals($hashrate->toString(), '0');
-        });
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
+
+        $this->assertEquals($hashrate->toString(), '0');
     }
 
     /** @test */
@@ -103,13 +98,13 @@ class EthApiTest extends TestCase
     {
         $eth = $this->eth;
 
-        $eth->gasPrice(function ($err, $gasPrice) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
+        [$err, $gasPrice] = $eth->gasPrice();
 
-            $this->assertTrue(is_numeric($gasPrice->toString()));
-        });
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
+
+        $this->assertTrue(is_numeric($gasPrice->toString()));
     }
 
     /** @test */
@@ -117,13 +112,13 @@ class EthApiTest extends TestCase
     {
         $eth = $this->eth;
 
-        $eth->accounts(function ($err, $accounts) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
+        [$err, $accounts] = $eth->accounts();
 
-            $this->assertTrue(is_array($accounts));
-        });
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
+
+        $this->assertTrue(is_array($accounts));
     }
 
     /** @test */
@@ -131,13 +126,13 @@ class EthApiTest extends TestCase
     {
         $eth = $this->eth;
 
-        $eth->blockNumber(function ($err, $blockNumber) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
+        [$err, $blockNumber] = $eth->blockNumber();
 
-            $this->assertTrue(is_numeric($blockNumber->toString()));
-        });
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
+
+        $this->assertTrue(is_numeric($blockNumber->toString()));
     }
 
     /** @test */
@@ -145,13 +140,13 @@ class EthApiTest extends TestCase
     {
         $eth = $this->eth;
 
-        $eth->getBalance('0x407d73d8a49eeb85d32cf465507dd71d507100c1', function ($err, $balance) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
+        [$err, $balance] = $eth->getBalance('0x407d73d8a49eeb85d32cf465507dd71d507100c1');
 
-            $this->assertTrue(is_numeric($balance->toString()));
-        });
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
+
+        $this->assertTrue(is_numeric($balance->toString()));
     }
 
     /** @test  */
@@ -159,13 +154,13 @@ class EthApiTest extends TestCase
     {
         $eth = $this->eth;
 
-        $eth->getStorageAt('0x561a2aa10f9a8589c93665554c871106342f70af', '0x0', function ($err, $storage) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
+        [$err, $storage] = $eth->getStorageAt('0x561a2aa10f9a8589c93665554c871106342f70af', '0x0');
 
-            $this->assertTrue(is_string($storage));
-        });
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
+
+        $this->assertTrue(is_string($storage));
     }
 
     /** @test */
@@ -173,13 +168,13 @@ class EthApiTest extends TestCase
     {
         $eth = $this->eth;
 
-        $eth->getTransactionCount('0x561a2aa10f9a8589c93665554c871106342f70af', function ($err, $transactionCount) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
+        [$err, $transactionCount] = $eth->getTransactionCount('0x561a2aa10f9a8589c93665554c871106342f70af');
 
-            $this->assertTrue(is_numeric($transactionCount->toString()));
-        });
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
+
+        $this->assertTrue(is_numeric($transactionCount->toString()));
     }
 
     /** @test */
@@ -187,13 +182,17 @@ class EthApiTest extends TestCase
     {
         $eth = $this->eth;
 
-        $eth->getBlockTransactionCountByHash('0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238', function ($err, $transactionCount) {
-            if ($err !== null) {
-                return $this->assertTrue($err !== null);
-            }
+        [$err, $transactionCount] = $eth->getBlockTransactionCountByHash(
+            '0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238'
+        );
 
-            $this->assertTrue(is_numeric($transactionCount->toString()));
-        });
+        if ($err !== null) {
+            $this->assertTrue($err !== null);
+
+            return;
+        }
+
+        $this->assertTrue(is_numeric($transactionCount->toString()));
     }
 
     /** @test */
@@ -201,13 +200,15 @@ class EthApiTest extends TestCase
     {
         $eth = $this->eth;
 
-        $eth->getBlockTransactionCountByNumber('0x0', function ($err, $transactionCount) {
-            if ($err !== null) {
-                return $this->assertTrue($err !== null);
-            }
+        [$err, $transactionCount] = $eth->getBlockTransactionCountByNumber('0x0');
 
-            $this->assertTrue(is_numeric($transactionCount->toString()));
-        });
+        if ($err !== null) {
+            $this->assertTrue($err !== null);
+
+            return;
+        }
+
+        $this->assertTrue(is_numeric($transactionCount->toString()));
     }
 
     /** @test */
@@ -215,13 +216,17 @@ class EthApiTest extends TestCase
     {
         $eth = $this->eth;
 
-        $eth->getUncleCountByBlockHash('0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238', function ($err, $uncleCount) {
-            if ($err !== null) {
-                return $this->assertTrue($err !== null);
-            }
+        [$err, $uncleCount] = $eth->getUncleCountByBlockHash(
+            '0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238'
+        );
 
-            $this->assertTrue(is_numeric($uncleCount->toString()));
-        });
+        if ($err !== null) {
+            $this->assertTrue($err !== null);
+
+            return;
+        }
+
+        $this->assertTrue(is_numeric($uncleCount->toString()));
     }
 
     /** @test */
@@ -229,12 +234,15 @@ class EthApiTest extends TestCase
     {
         $eth = $this->eth;
 
-        $eth->getUncleCountByBlockNumber('0x0', function ($err, $uncleCount) {
-            if ($err !== null) {
-                return $this->assertTrue($err !== null);
-            }
-            $this->assertTrue(is_numeric($uncleCount->toString()));
-        });
+        [$err, $uncleCount] = $eth->getUncleCountByBlockNumber('0x0');
+
+        if ($err !== null) {
+            $this->assertTrue($err !== null);
+
+            return;
+        }
+
+        $this->assertTrue(is_numeric($uncleCount->toString()));
     }
 
     /** @test */
@@ -242,13 +250,15 @@ class EthApiTest extends TestCase
     {
         $eth = $this->eth;
 
-        $eth->getCode('0x407d73d8a49eeb85d32cf465507dd71d507100c1', function ($err, $code) {
-            if ($err !== null) {
-                return $this->assertTrue($err !== null);
-            }
+        [$err, $code] = $eth->getCode('0x407d73d8a49eeb85d32cf465507dd71d507100c1');
 
-            $this->assertTrue(is_string($code));
-        });
+        if ($err !== null) {
+            $this->assertTrue($err !== null);
+
+            return;
+        }
+
+        $this->assertTrue(is_string($code));
     }
 
     /** @test */
@@ -256,14 +266,16 @@ class EthApiTest extends TestCase
     {
         $eth = $this->eth;
 
-        $eth->sign('0x407d73d8a49eeb85d32cf465507dd71d507100c1', '0xdeadbeaf', function ($err, $sign) {
-            // infura banned us to sign message
-            if ($err !== null) {
-                return $this->assertTrue($err !== null);
-            }
+        [$err, $sign] = $eth->sign('0x407d73d8a49eeb85d32cf465507dd71d507100c1', '0xdeadbeaf');
 
-            $this->assertTrue(is_string($sign));
-        });
+        // infura banned us to sign message
+        if ($err !== null) {
+            $this->assertTrue($err !== null);
+
+            return;
+        }
+
+        $this->assertTrue(is_string($sign));
     }
 
     /** @test */
@@ -271,21 +283,23 @@ class EthApiTest extends TestCase
     {
         $eth = $this->eth;
 
-        $eth->sendTransaction([
+        [$err, $transaction] = $eth->sendTransaction([
             'from' => '0xb60e8dd61c5d32be8058bb8eb970870f07233155',
             'to' => '0xd46e8dd67c5d32be8058bb8eb970870f07244567',
             'gas' => '0x76c0',
             'gasPrice' => '0x9184e72a000',
             'value' => '0x9184e72a',
             'data' => '0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675',
-        ], function ($err, $transaction) {
-            // infura banned us to send transaction
-            if ($err !== null) {
-                return $this->assertTrue($err !== null);
-            }
+        ]);
 
-            $this->assertTrue(is_string($transaction));
-        });
+        // infura banned us to send transaction
+        if ($err !== null) {
+            $this->assertTrue($err !== null);
+
+            return;
+        }
+
+        $this->assertTrue(is_string($transaction));
     }
 
     /** @test */
@@ -293,13 +307,17 @@ class EthApiTest extends TestCase
     {
         $eth = $this->eth;
 
-        $eth->sendRawTransaction('0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675', function ($err, $transaction) {
-            if ($err !== null) {
-                return $this->assertTrue($err !== null);
-            }
+        [$err, $transaction] = $eth->sendRawTransaction(
+            '0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675'
+        );
 
-            $this->assertTrue(is_string($transaction));
-        });
+        if ($err !== null) {
+            $this->assertTrue($err !== null);
+
+            return;
+        }
+
+        $this->assertTrue(is_string($transaction));
     }
 
     /** @test */
@@ -307,19 +325,22 @@ class EthApiTest extends TestCase
     {
         $eth = $this->eth;
 
-        $eth->call([
+        [$err, $transaction] = $eth->call([
             // 'from' => "0xb60e8dd61c5d32be8058bb8eb970870f07233155",
             'to' => '0xd46e8dd67c5d32be8058bb8eb970870f07244567',
             'gas' => '0x76c0',
             'gasPrice' => '0x9184e72a000',
             'value' => '0x9184e72a',
             'data' => '0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675',
-        ], function ($err, $transaction) {
-            if ($err !== null) {
-                return $this->assertTrue($err !== null);
-            }
-            $this->assertTrue(is_string($transaction));
-        });
+        ]);
+
+        if ($err !== null) {
+            $this->assertTrue($err !== null);
+
+            return;
+        }
+
+        $this->assertTrue(is_string($transaction));
     }
 
     /** @test */
@@ -327,20 +348,22 @@ class EthApiTest extends TestCase
     {
         $eth = $this->eth;
 
-        $eth->estimateGas([
+        [$err, $gas] = $eth->estimateGas([
             'from' => '0xb60e8dd61c5d32be8058bb8eb970870f07233155',
             'to' => '0xd46e8dd67c5d32be8058bb8eb970870f07244567',
             'gas' => '0x76c0',
             'gasPrice' => '0x9184e72a000',
             'value' => '0x9184e72a',
             'data' => '0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675',
-        ], function ($err, $gas) {
-            if ($err !== null) {
-                return $this->assertTrue($err !== null);
-            }
+        ]);
 
-            $this->assertTrue(is_numeric($gas->toString()));
-        });
+        if ($err !== null) {
+            $this->assertTrue($err !== null);
+
+            return;
+        }
+
+        $this->assertTrue(is_numeric($gas->toString()));
     }
 
     /** @test */
@@ -348,12 +371,18 @@ class EthApiTest extends TestCase
     {
         $eth = $this->eth;
 
-        $eth->getBlockByHash('0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238', false, function ($err, $block) {
-            if ($err !== null) {
-                return $this->assertTrue($err !== null);
-            }
-            $this->assertTrue($block !== null);
-        });
+        [$err, $block] = $eth->getBlockByHash(
+            '0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238',
+            false,
+        );
+
+        if ($err !== null) {
+            $this->assertTrue($err !== null);
+
+            return;
+        }
+
+        $this->assertTrue($block !== null);
     }
 
     /** @test */
@@ -361,14 +390,16 @@ class EthApiTest extends TestCase
     {
         $eth = $this->eth;
 
-        $eth->getBlockByNumber('latest', false, function ($err, $block) {
-            if ($err !== null) {
-                return $this->assertTrue($err !== null);
-            }
+        [$err, $block] = $eth->getBlockByNumber('latest', false);
 
-            // weired behavior, see https://github.com/sc0Vu/web3.php/issues/16
-            $this->assertTrue($block !== null);
-        });
+        if ($err !== null) {
+            $this->assertTrue($err !== null);
+
+            return;
+        }
+
+        // weird behavior, see https://github.com/web3p/web3.php/issues/16
+        $this->assertTrue($block !== null);
     }
 
     /** @test */
@@ -376,13 +407,17 @@ class EthApiTest extends TestCase
     {
         $eth = $this->eth;
 
-        $eth->getTransactionByHash('0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238', function ($err, $transaction) {
-            if ($err !== null) {
-                return $this->assertTrue($err !== null);
-            }
+        [$err, $transaction] = $eth->getTransactionByHash(
+            '0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238'
+        );
 
-            $this->assertTrue($transaction == null);
-        });
+        if ($err !== null) {
+            $this->assertTrue($err !== null);
+
+            return;
+        }
+
+        $this->assertTrue($transaction == null);
     }
 
     /** @test */
@@ -390,12 +425,18 @@ class EthApiTest extends TestCase
     {
         $eth = $this->eth;
 
-        $eth->getTransactionByBlockHashAndIndex('0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238', '0x0', function ($err, $transaction) {
-            if ($err !== null) {
-                return $this->assertTrue($err !== null);
-            }
-            $this->assertTrue($transaction == null);
-        });
+        [$err, $transaction] = $eth->getTransactionByBlockHashAndIndex(
+            '0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238',
+            '0x0',
+        );
+
+        if ($err !== null) {
+            $this->assertTrue($err !== null);
+
+            return;
+        }
+
+        $this->assertTrue($transaction == null);
     }
 
     /** @test */
@@ -403,12 +444,15 @@ class EthApiTest extends TestCase
     {
         $eth = $this->eth;
 
-        $eth->getTransactionByBlockNumberAndIndex('0xe8', '0x0', function ($err, $transaction) {
-            if ($err !== null) {
-                return $this->assertTrue($err !== null);
-            }
-            $this->assertTrue($transaction !== null);
-        });
+        [$err, $transaction] = $eth->getTransactionByBlockNumberAndIndex('0xe8', '0x0');
+
+        if ($err !== null) {
+            $this->assertTrue($err !== null);
+
+            return;
+        }
+
+        $this->assertTrue($transaction !== null);
     }
 
     /** @test */
@@ -416,12 +460,16 @@ class EthApiTest extends TestCase
     {
         $eth = $this->eth;
 
-        $eth->getTransactionReceipt('0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238', function ($err, $transaction) {
-            if ($err !== null) {
-                return $this->assertTrue($err !== null);
-            }
-            $this->assertTrue($transaction == null);
-        });
+        [$err, $transaction] = $eth->getTransactionReceipt(
+            '0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238'
+        );
+
+        if ($err !== null) {
+            $this->assertTrue($err !== null);
+
+            return;
+        }
+        $this->assertTrue($transaction == null);
     }
 
     /** @test */
@@ -429,12 +477,18 @@ class EthApiTest extends TestCase
     {
         $eth = $this->eth;
 
-        $eth->getUncleByBlockHashAndIndex('0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238', '0x0', function ($err, $uncle) {
-            if ($err !== null) {
-                return $this->assertTrue($err !== null);
-            }
-            $this->assertTrue($uncle !== null);
-        });
+        [$err, $uncle] = $eth->getUncleByBlockHashAndIndex(
+            '0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238',
+            '0x0',
+        );
+
+        if ($err !== null) {
+            $this->assertTrue($err !== null);
+
+            return;
+        }
+
+        $this->assertTrue($uncle !== null);
     }
 
     /** @test */
@@ -442,12 +496,15 @@ class EthApiTest extends TestCase
     {
         $eth = $this->eth;
 
-        $eth->getUncleByBlockNumberAndIndex('0xe8', '0x0', function ($err, $uncle) {
-            if ($err !== null) {
-                return $this->assertTrue($err !== null);
-            }
-            $this->assertTrue($uncle !== null);
-        });
+        [$err, $uncle] = $eth->getUncleByBlockNumberAndIndex('0xe8', '0x0');
+
+        if ($err !== null) {
+            $this->assertTrue($err !== null);
+
+            return;
+        }
+
+        $this->assertTrue($uncle !== null);
     }
 
     /** @test */
@@ -455,13 +512,17 @@ class EthApiTest extends TestCase
     {
         $eth = $this->eth;
 
-        $eth->compileSolidity('contract test { function multiply(uint a) returns(uint d) { return a * 7; } }', function ($err, $compiled) {
-            if ($err !== null) {
-                return $this->assertTrue($err !== null);
-            }
+        [$err, $compiled] = $eth->compileSolidity(
+            'contract test { function multiply(uint a) returns(uint d) { return a * 7; } }'
+        );
 
-            $this->assertTrue(is_string($compiled));
-        });
+        if ($err !== null) {
+            $this->assertTrue($err !== null);
+
+            return;
+        }
+
+        $this->assertTrue(is_string($compiled));
     }
 
     /** @test */
@@ -469,13 +530,15 @@ class EthApiTest extends TestCase
     {
         $eth = $this->eth;
 
-        $eth->compileLLL('(returnlll (suicide (caller)))', function ($err, $compiled) {
-            if ($err !== null) {
-                return $this->assertTrue($err !== null);
-            }
+        [$err, $compiled] = $eth->compileLLL('(returnlll (suicide (caller)))');
 
-            $this->assertTrue(is_string($compiled));
-        });
+        if ($err !== null) {
+            $this->assertTrue($err !== null);
+
+            return;
+        }
+
+        $this->assertTrue(is_string($compiled));
     }
 
     /** @test */
@@ -483,12 +546,15 @@ class EthApiTest extends TestCase
     {
         $eth = $this->eth;
 
-        $eth->compileSerpent('\/* some serpent *\/', function ($err, $compiled) {
-            if ($err !== null) {
-                return $this->assertTrue($err !== null);
-            }
-            $this->assertTrue(is_string($compiled));
-        });
+        [$err, $compiled] = $eth->compileSerpent('\/* some serpent *\/');
+
+        if ($err !== null) {
+            $this->assertTrue($err !== null);
+
+            return;
+        }
+
+        $this->assertTrue(is_string($compiled));
     }
 
     /** @test */
@@ -496,18 +562,28 @@ class EthApiTest extends TestCase
     {
         $eth = $this->eth;
 
-        $eth->newFilter([
+        [$err, $filter] = $eth->newFilter([
             'fromBlock' => '0x1',
             'toBlock' => '0x2',
             'address' => '0x8888f1f195afa192cfee860698584c030f4c9db1',
-            'topics' => ['0x000000000000000000000000a94f5374fce5edbc8e2a8697c15331677e6ebf0b', null, ['0x000000000000000000000000a94f5374fce5edbc8e2a8697c15331677e6ebf0b', '0x0000000000000000000000000aff3454fce5edbc8cca8697c15331677e6ebccc']],
-        ], function ($err, $filter) {
-            if ($err !== null) {
-                // infura banned us to new filter
-                return $this->assertTrue($err !== null);
-            }
-            $this->assertTrue(is_string($filter));
-        });
+            'topics' => [
+                '0x000000000000000000000000a94f5374fce5edbc8e2a8697c15331677e6ebf0b',
+                null,
+                [
+                    '0x000000000000000000000000a94f5374fce5edbc8e2a8697c15331677e6ebf0b',
+                    '0x0000000000000000000000000aff3454fce5edbc8cca8697c15331677e6ebccc',
+                ],
+            ],
+        ]);
+
+        // infura banned us to new filter
+        if ($err !== null) {
+            $this->assertTrue($err !== null);
+
+            return;
+        }
+
+        $this->assertTrue(is_string($filter));
     }
 
     /** @test */
@@ -515,13 +591,16 @@ class EthApiTest extends TestCase
     {
         $eth = $this->eth;
 
-        $eth->newBlockFilter(function ($err, $filter) {
-            if ($err !== null) {
-                // infura banned us to new block filter
-                return $this->assertTrue($err !== null);
-            }
-            $this->assertTrue(is_string($filter));
-        });
+        [$err, $filter] = $eth->newBlockFilter();
+
+        // infura banned us to new block filter
+        if ($err !== null) {
+            $this->assertTrue($err !== null);
+
+            return;
+        }
+
+        $this->assertTrue(is_string($filter));
     }
 
     /** @test */
@@ -529,13 +608,16 @@ class EthApiTest extends TestCase
     {
         $eth = $this->eth;
 
-        $eth->newPendingTransactionFilter(function ($err, $filter) {
-            if ($err !== null) {
-                // infura banned us to new pending transaction filter
-                return $this->assertTrue($err !== null);
-            }
-            $this->assertTrue(is_string($filter));
-        });
+        [$err, $filter] = $eth->newPendingTransactionFilter();
+
+        // infura banned us to new pending transaction filter
+        if ($err !== null) {
+            $this->assertTrue($err !== null);
+
+            return;
+        }
+
+        $this->assertTrue(is_string($filter));
     }
 
     /** @test */
@@ -543,13 +625,16 @@ class EthApiTest extends TestCase
     {
         $eth = $this->eth;
 
-        $eth->uninstallFilter('0x01', function ($err, $filter) {
-            if ($err !== null) {
-                // infura banned us to uninstall filter
-                return $this->assertTrue($err !== null);
-            }
-            $this->assertTrue(is_bool($filter));
-        });
+        [$err, $filter] = $eth->uninstallFilter('0x01');
+
+        // infura banned us to uninstall filter
+        if ($err !== null) {
+            $this->assertTrue($err !== null);
+
+            return;
+        }
+
+        $this->assertTrue(is_bool($filter));
     }
 
     /** @test */
@@ -557,13 +642,16 @@ class EthApiTest extends TestCase
     {
         $eth = $this->eth;
 
-        $eth->getFilterChanges('0x01', function ($err, $changes) {
-            if ($err !== null) {
-                // infura banned us to get filter changes
-                return $this->assertTrue($err !== null);
-            }
-            $this->assertTrue(is_array($changes));
-        });
+        [$err, $changes] = $eth->getFilterChanges('0x01');
+
+        // infura banned us to get filter changes
+        if ($err !== null) {
+            $this->assertTrue($err !== null);
+
+            return;
+        }
+
+        $this->assertTrue(is_array($changes));
     }
 
     /** @test */
@@ -571,13 +659,16 @@ class EthApiTest extends TestCase
     {
         $eth = $this->eth;
 
-        $eth->getFilterLogs('0x01', function ($err, $logs) {
-            if ($err !== null) {
-                // infura banned us to get filter logs
-                return $this->assertTrue($err !== null);
-            }
-            $this->assertTrue(is_array($logs));
-        });
+        [$err, $logs] = $eth->getFilterLogs('0x01');
+
+        // infura banned us to get filter logs
+        if ($err !== null) {
+            $this->assertTrue($err !== null);
+
+            return;
+        }
+
+        $this->assertTrue(is_array($logs));
     }
 
     /** @test */
@@ -585,17 +676,27 @@ class EthApiTest extends TestCase
     {
         $eth = $this->eth;
 
-        $eth->getLogs([
+        [$err, $logs] = $eth->getLogs([
             'fromBlock' => '0x1',
             'toBlock' => '0x2',
             'address' => '0x8888f1f195afa192cfee860698584c030f4c9db1',
-            'topics' => ['0x000000000000000000000000a94f5374fce5edbc8e2a8697c15331677e6ebf0b', null, ['0x000000000000000000000000a94f5374fce5edbc8e2a8697c15331677e6ebf0b', '0x0000000000000000000000000aff3454fce5edbc8cca8697c15331677e6ebccc']],
-        ], function ($err, $logs) {
-            if ($err !== null) {
-                return $this->assertTrue($err !== null);
-            }
-            $this->assertTrue(is_array($logs));
-        });
+            'topics' => [
+                '0x000000000000000000000000a94f5374fce5edbc8e2a8697c15331677e6ebf0b',
+                null,
+                [
+                    '0x000000000000000000000000a94f5374fce5edbc8e2a8697c15331677e6ebf0b',
+                    '0x0000000000000000000000000aff3454fce5edbc8cca8697c15331677e6ebccc',
+                ],
+            ],
+        ]);
+
+        if ($err !== null) {
+            $this->assertTrue($err !== null);
+
+            return;
+        }
+
+        $this->assertTrue(is_array($logs));
     }
 
     /** @test */
@@ -603,12 +704,15 @@ class EthApiTest extends TestCase
     {
         $eth = $this->eth;
 
-        $eth->getWork(function ($err, $work) {
-            if ($err !== null) {
-                return $this->assertTrue($err !== null);
-            }
-            $this->assertTrue(is_array($work));
-        });
+        [$err, $work] = $eth->getWork();
+
+        if ($err !== null) {
+            $this->assertTrue($err !== null);
+
+            return;
+        }
+
+        $this->assertTrue(is_array($work));
     }
 
     /** @test */
@@ -616,17 +720,19 @@ class EthApiTest extends TestCase
     {
         $eth = $this->eth;
 
-        $eth->submitWork(
+        [$err, $work] = $eth->submitWork(
             '0x0000000000000001',
             '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
             '0xD1FE5700000000000000000000000000D1FE5700000000000000000000000000',
-            function ($err, $work) {
-                if ($err !== null) {
-                    return $this->assertTrue($err !== null);
-                }
-                $this->assertTrue(is_bool($work));
-            }
         );
+
+        if ($err !== null) {
+            $this->assertTrue($err !== null);
+
+            return;
+        }
+
+        $this->assertTrue(is_bool($work));
     }
 
     /** @test */
@@ -634,15 +740,17 @@ class EthApiTest extends TestCase
     {
         $eth = $this->eth;
 
-        $eth->submitHashrate(
+        [$err, $work] = $eth->submitHashrate(
             '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
             '0xD1FE5700000000000000000000000000D1FE5700000000000000000000000000',
-            function ($err, $work) {
-                if ($err !== null) {
-                    return $this->assertTrue($err !== null);
-                }
-                $this->assertTrue(is_bool($work));
-            }
         );
+
+        if ($err !== null) {
+            $this->assertTrue($err !== null);
+
+            return;
+        }
+
+        $this->assertTrue(is_bool($work));
     }
 }
