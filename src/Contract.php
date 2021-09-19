@@ -318,12 +318,12 @@ class Contract
         });
 
         if ($err !== null) {
-            call_user_func($callback, $err, null);
+            $callback($err, null);
 
             return [$err, null];
         }
 
-        call_user_func($callback, null, $transaction);
+        $callback(null, $transaction);
 
         return [null, $transaction];
     }
@@ -417,12 +417,12 @@ class Contract
         });
 
         if ($err !== null) {
-            call_user_func($callback, $err, null);
+            $callback($err, null);
 
             return [$err, null];
         }
 
-        call_user_func($callback, null, $transaction);
+        $callback(null, $transaction);
 
         return [null, $transaction];
     }
@@ -515,14 +515,14 @@ class Contract
         });
 
         if ($err !== null) {
-            call_user_func($callback, $err, null);
+            $callback($err, null);
 
             return [$err, null];
         }
 
         $decodedTransaction = $this->ethabi->decodeParameters($function, $transaction);
 
-        call_user_func($callback, null, $decodedTransaction);
+        $callback(null, $decodedTransaction);
 
         return [null, $transaction];
     }
@@ -639,12 +639,12 @@ class Contract
         });
 
         if ($err !== null) {
-            call_user_func($callback, $err, null);
+            $callback($err, null);
 
             return [$err, null];
         }
 
-        call_user_func($callback, null, $gas);
+        $callback(null, $gas);
 
         return [null, $gas];
     }

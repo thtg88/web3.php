@@ -40,7 +40,7 @@ class HttpRequestManager extends RequestManager implements IRequestManager
                 'connect_timeout' => $this->timeout,
             ]);
         } catch (RequestException $err) {
-            call_user_func($callback, $err, null);
+            $callback($err, null);
 
             return [$err, null];
         }
@@ -56,7 +56,7 @@ class HttpRequestManager extends RequestManager implements IRequestManager
         if (JSON_ERROR_NONE !== json_last_error()) {
             $error = new InvalidArgumentException('json_decode error: ' . json_last_error_msg());
 
-            call_user_func($callback, $error, null);
+            $callback($error, null);
 
             return [$error, null];
         }
@@ -84,18 +84,18 @@ class HttpRequestManager extends RequestManager implements IRequestManager
             }
 
             if (count($errors) > 0) {
-                call_user_func($callback, $errors, $results);
+                $callback($errors, $results);
 
                 return [$errors, $results];
             }
 
-            call_user_func($callback, null, $results);
+            $callback(null, $results);
 
             return [null, $results];
         }
 
         if (property_exists($json, 'result')) {
-            call_user_func($callback, null, $json->result);
+            $callback(null, $json->result);
 
             return [null, $json->result];
         }
@@ -103,14 +103,14 @@ class HttpRequestManager extends RequestManager implements IRequestManager
         if (isset($json->error)) {
             $error = new RPCException(mb_ereg_replace('Error: ', '', $json->error->message), $json->error->code);
 
-            call_user_func($callback, $error, null);
+            $callback($error, null);
 
             return [$error, null];
         }
 
         $error = new RPCException('Something wrong happened.');
 
-        call_user_func($callback, $error, null);
+        $callback($error, null);
 
         return [$error, null];
     }
