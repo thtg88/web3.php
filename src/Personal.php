@@ -50,67 +50,57 @@ class Personal
 
     public function listAccounts(...$arguments): array|null|self
     {
-        if ($this->provider->isBatch) {
-            $this->provider->send(new ListAccounts($arguments));
+        $result = $this->provider->send(new ListAccounts($arguments));
 
+        if ($this->provider->isBatch) {
             return $this;
         }
 
-        $callback = array_pop($arguments);
-
-        return $this->provider->send(new ListAccounts($arguments), $callback);
+        return $result;
     }
 
     public function newAccount(...$arguments): array|null|self
     {
-        if ($this->provider->isBatch) {
-            $this->provider->send(new NewAccount($arguments));
+        $result = $this->provider->send(new NewAccount($arguments));
 
+        if ($this->provider->isBatch) {
             return $this;
         }
 
-        $callback = array_pop($arguments);
-
-        return $this->provider->send(new NewAccount($arguments), $callback);
+        return $result;
     }
 
     public function unlockAccount(...$arguments): array|null|self
     {
-        if ($this->provider->isBatch) {
-            $this->provider->send(new UnlockAccount($arguments));
+        $result = $this->provider->send(new UnlockAccount($arguments));
 
+        if ($this->provider->isBatch) {
             return $this;
         }
 
-        $callback = array_pop($arguments);
-
-        return $this->provider->send(new UnlockAccount($arguments), $callback);
+        return $result;
     }
 
     public function lockAccount(...$arguments): array|null|self
     {
-        if ($this->provider->isBatch) {
-            $this->provider->send(new LockAccount($arguments));
+        $result = $this->provider->send(new LockAccount($arguments));
 
+        if ($this->provider->isBatch) {
             return $this;
         }
 
-        $callback = array_pop($arguments);
-
-        return $this->provider->send(new LockAccount($arguments), $callback);
+        return $result;
     }
 
     public function sendTransaction(...$arguments): array|null|self
     {
-        if ($this->provider->isBatch) {
-            $this->provider->send(new SendTransaction($arguments));
+        $result = $this->provider->send(new SendTransaction($arguments));
 
+        if ($this->provider->isBatch) {
             return $this;
         }
 
-        $callback = array_pop($arguments);
-
-        return $this->provider->send(new SendTransaction($arguments), $callback);
+        return $result;
     }
 
     /**
