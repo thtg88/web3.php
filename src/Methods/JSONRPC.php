@@ -18,7 +18,7 @@ abstract class JSONRPC implements IRPC
     protected string $method = '';
     protected array $arguments = [];
 
-    public function __construct(array $arguments)
+    public function __construct(array $arguments = [])
     {
         $this->arguments = $arguments;
     }
