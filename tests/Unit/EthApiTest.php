@@ -17,13 +17,14 @@ class EthApiTest extends TestCase
 
         $this->eth = $this->web3->eth;
 
-        $this->eth->coinbase(function ($err, $coinbase) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
-
-            $this->coinbase = $coinbase;
+        [$err, $coinbase] = $this->eth->coinbase(function () {
         });
+
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
+
+        $this->coinbase = $coinbase;
     }
 
     /** @test */
