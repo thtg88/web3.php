@@ -46,9 +46,9 @@ class Net
         throw new InvalidArgumentException('Please set a valid provider.');
     }
 
-    public function listening(...$arguments): array|null|self
+    public function listening(): array|null|self
     {
-        $result = $this->provider->send(new Listening($arguments));
+        $result = $this->provider->send(new Listening());
 
         if ($this->provider->isBatch) {
             return $this;
@@ -57,9 +57,9 @@ class Net
         return $result;
     }
 
-    public function peerCount(...$arguments): array|null|self
+    public function peerCount(): array|null|self
     {
-        $result = $this->provider->send(new PeerCount($arguments));
+        $result = $this->provider->send(new PeerCount());
 
         if ($this->provider->isBatch) {
             return $this;
@@ -68,9 +68,9 @@ class Net
         return $result;
     }
 
-    public function version(...$arguments): array|null|self
+    public function version(): array|null|self
     {
-        $result = $this->provider->send(new Version($arguments));
+        $result = $this->provider->send(new Version());
 
         if ($this->provider->isBatch) {
             return $this;
