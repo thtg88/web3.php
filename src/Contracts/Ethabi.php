@@ -25,32 +25,18 @@ class Ethabi
         $this->types = $types;
     }
 
-    /**
-     * @param string $name
-     */
-    public function __get($name)
+    public function __get(string $name)
     {
         $method = 'get' . ucfirst($name);
 
-        if (method_exists($this, $method)) {
-            return call_user_func_array([$this, $method], []);
-        }
-
-        return false;
+        return $this->$method();
     }
 
-    /**
-     * @param string $name
-     */
-    public function __set($name, $value)
+    public function __set(string $name, mixed $value)
     {
         $method = 'set' . ucfirst($name);
 
-        if (method_exists($this, $method)) {
-            return call_user_func_array([$this, $method], [$value]);
-        }
-
-        return false;
+        return $this->$method($value);
     }
 
     public function encodeFunctionSignature(string|stdClass|array $functionName): string
