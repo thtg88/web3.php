@@ -51,21 +51,22 @@ class ContractTest extends TestCase
         $this->toAccount = '0x345C5c580Fb3ABe35518a58f5c4887868D47f365';
         $this->contractAddress = '0x345C5c580Fb3ABe35518a58f5c4887868D47f365';
 
-        $this->contract->eth->accounts(function ($err, $accounts) {
-            if ($err !== null) {
-                return;
-            }
+        [$err, $accounts] = $this->contract->eth->accounts();
 
-            if (!isset($accounts)) {
-                return;
-            }
+        if ($err !== null) {
+            return;
+        }
 
-            $this->accounts = $accounts;
-            if (count($this->accounts) > 1) {
-                $this->fromAccount = $this->accounts[0];
-                $this->toAccount = $this->accounts[1];
-            }
-        });
+        if (!isset($accounts)) {
+            return;
+        }
+
+        $this->accounts = $accounts;
+
+        if (count($this->accounts) > 1) {
+            $this->fromAccount = $this->accounts[0];
+            $this->toAccount = $this->accounts[1];
+        }
     }
 
     /** @test */
@@ -99,8 +100,6 @@ class ContractTest extends TestCase
             1,
             'GT',
             ['from' => $account, 'gas' => '0x200b20'],
-            function () {
-            }
         );
 
         if ($err !== null) {
@@ -115,8 +114,7 @@ class ContractTest extends TestCase
 
         $this->assertTrue(preg_match('/^0x[a-f0-9]{64}$/', $transactionId) === 1);
 
-        [$err, $transaction] = $contract->eth->getTransactionReceipt($transactionId, function () {
-        });
+        [$err, $transaction] = $contract->eth->getTransactionReceipt($transactionId);
 
         if ($err !== null) {
             $this->fail($err);
@@ -135,65 +133,60 @@ class ContractTest extends TestCase
         $contract = $this->contract;
         $fromAccount = $this->fromAccount;
         $toAccount = $this->toAccount;
-
-        $contract->bytecode($this->testBytecode)->new(1000000, 'Game Token', 1, 'GT', [
+        [$err, $result] = $contract->bytecode($this->testBytecode)->new(1000000, 'Game Token', 1, 'GT', [
             'from' => $fromAccount,
             'gas' => '0x200b20',
-        ], function ($err, $result) use ($contract) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
+        ]);
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
+        if ($result) {
+            echo "\nTransaction has made:) id: " . $result . "\n";
+        }
+        $transactionId = $result;
+        $this->assertTrue((preg_match('/^0x[a-f0-9]{64}$/', $transactionId) === 1));
+        [$err, $transaction] = $contract->eth->getTransactionReceipt($transactionId);
+        if ($err !== null) {
+            $this->fail($err);
+        }
+        if ($transaction) {
+            $this->contractAddress = $transaction->contractAddress;
+            echo "\nTransaction has mined:) block number: " . $transaction->blockNumber . "\n";
+        }
 
-            if ($result) {
-                echo "\nTransaction has made:) id: " . $result . "\n";
-            }
+        [$err, $result] = $contract->at($this->contractAddress)->send(
+            'transfer',
+            $toAccount,
+            16,
+            ['from' => $fromAccount, 'gas' => '0x200b20'],
+        );
 
-            $transactionId = $result;
-            $this->assertTrue((preg_match('/^0x[a-f0-9]{64}$/', $transactionId) === 1));
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
 
-            $contract->eth->getTransactionReceipt($transactionId, function ($err, $transaction) {
-                if ($err !== null) {
-                    return $this->fail($err);
-                }
+        if ($result) {
+            echo "\nTransaction has made:) id: " . $result . "\n";
+        }
 
-                if ($transaction) {
-                    $this->contractAddress = $transaction->contractAddress;
-                    echo "\nTransaction has mined:) block number: " . $transaction->blockNumber . "\n";
-                }
-            });
-        });
+        $transactionId = $result;
+        $this->assertTrue((preg_match('/^0x[a-f0-9]{64}$/', $transactionId) === 1));
 
-        $contract->at($this->contractAddress)->send('transfer', $toAccount, 16, [
-            'from' => $fromAccount,
-            'gas' => '0x200b20',
-        ], function ($err, $result) use ($contract, $fromAccount, $toAccount) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
+        [$err, $transaction] = $contract->eth->getTransactionReceipt($transactionId);
 
-            if ($result) {
-                echo "\nTransaction has made:) id: " . $result . "\n";
-            }
+        if ($err !== null) {
+            $this->fail($err);
+        }
 
-            $transactionId = $result;
-            $this->assertTrue((preg_match('/^0x[a-f0-9]{64}$/', $transactionId) === 1));
+        if ($transaction) {
+            $topics = $transaction->logs[0]->topics;
+            echo "\nTransaction has mined:) block number: " . $transaction->blockNumber . "\n";
 
-            $contract->eth->getTransactionReceipt($transactionId, function ($err, $transaction) use ($fromAccount, $toAccount, $contract) {
-                if ($err !== null) {
-                    return $this->fail($err);
-                }
-
-                if ($transaction) {
-                    $topics = $transaction->logs[0]->topics;
-                    echo "\nTransaction has mined:) block number: " . $transaction->blockNumber . "\n";
-
-                    // validate topics
-                    $this->assertEquals($contract->ethabi->encodeEventSignature($this->contract->events['Transfer']), $topics[0]);
-                    $this->assertEquals('0x' . IntegerFormatter::format($fromAccount), $topics[1]);
-                    $this->assertEquals('0x' . IntegerFormatter::format($toAccount), $topics[2]);
-                }
-            });
-        });
+            // validate topics
+            $this->assertEquals($contract->ethabi->encodeEventSignature($this->contract->events['Transfer']), $topics[0]);
+            $this->assertEquals('0x' . IntegerFormatter::format($fromAccount), $topics[1]);
+            $this->assertEquals('0x' . IntegerFormatter::format($toAccount), $topics[2]);
+        }
     }
 
     /** @test */
@@ -202,53 +195,53 @@ class ContractTest extends TestCase
         $contract = $this->contract;
         $fromAccount = $this->fromAccount;
 
-        $contract->bytecode($this->testBytecode)->new(10000, 'Game Token', 1, 'GT', [
+        [$err, $result] = $contract->bytecode($this->testBytecode)->new(10000, 'Game Token', 1, 'GT', [
             'from' => $fromAccount,
             'gas' => '0x200b20',
-        ], function ($err, $result) use ($contract) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
-            if ($result) {
-                echo "\nTransaction has made:) id: " . $result . "\n";
-            }
-            $transactionId = $result;
-            $this->assertTrue((preg_match('/^0x[a-f0-9]{64}$/', $transactionId) === 1));
+        ]);
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
+        if ($result) {
+            echo "\nTransaction has made:) id: " . $result . "\n";
+        }
+        $transactionId = $result;
+        $this->assertTrue((preg_match('/^0x[a-f0-9]{64}$/', $transactionId) === 1));
+        [$err, $transaction] = $contract->eth->getTransactionReceipt($transactionId);
+        if ($err !== null) {
+            $this->fail($err);
+        }
+        if ($transaction) {
+            $this->contractAddress = $transaction->contractAddress;
+            echo "\nTransaction has mined:) block number: " . $transaction->blockNumber . "\n";
+        }
 
-            $contract->eth->getTransactionReceipt($transactionId, function ($err, $transaction) {
-                if ($err !== null) {
-                    return $this->fail($err);
-                }
-                if ($transaction) {
-                    $this->contractAddress = $transaction->contractAddress;
-                    echo "\nTransaction has mined:) block number: " . $transaction->blockNumber . "\n";
-                }
-            });
-        });
+        [$err, $result] = $contract->at($this->contractAddress)
+            ->call('balanceOf', $fromAccount, ['from' => $fromAccount]);
 
-        $contract->at($this->contractAddress)->call('balanceOf', $fromAccount, [
-            'from' => $fromAccount,
-        ], function ($err, $result) use ($contract) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
-            if (isset($result)) {
-                // $bn = Utils::toBn($result);
-                // $this->assertEquals($bn->toString(), '10000', 'Balance should be 10000.');
-                $this->assertTrue($result !== null);
-            }
-        });
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
+
+        if (isset($result)) {
+            // $bn = Utils::toBn($result);
+            // $this->assertEquals($bn->toString(), '10000', 'Balance should be 10000.');
+            $this->assertTrue($result !== null);
+        }
+
         // test issue 143
-        $contract->at($this->contractAddress)->call('balanceOf', $fromAccount, function ($err, $result) use ($contract) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
-            if (isset($result)) {
-                // $bn = Utils::toBn($result);
-                // $this->assertEquals($bn->toString(), '10000', 'Balance should be 10000.');
-                $this->assertTrue($result !== null);
-            }
-        });
+        [$err, $result] = $contract->at($this->contractAddress)
+            ->call('balanceOf', $fromAccount);
+
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
+
+        if (isset($result)) {
+            // $bn = Utils::toBn($result);
+            // $this->assertEquals($bn->toString(), '10000', 'Balance should be 10000.');
+            $this->assertTrue($result !== null);
+        }
     }
 
     /** @test */
@@ -257,60 +250,54 @@ class ContractTest extends TestCase
         $contract = $this->contract;
         $fromAccount = $this->fromAccount;
 
-        $contract->bytecode($this->testBytecode)->new(10000, 'Game Token', 1, 'GT', [
-            'from' => $fromAccount,
-            'gas' => '0x200b20',
-        ], function ($err, $result) use ($contract) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
+        [$err, $result] = $contract->bytecode($this->testBytecode)
+            ->new(10000, 'Game Token', 1, 'GT', ['from' => $fromAccount, 'gas' => '0x200b20']);
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
+        if ($result) {
+            echo "\nTransaction has made:) id: " . $result . "\n";
+        }
+        $transactionId = $result;
+        $this->assertTrue((preg_match('/^0x[a-f0-9]{64}$/', $transactionId) === 1));
+        [$err, $transaction] = $contract->eth->getTransactionReceipt($transactionId);
+        if ($err !== null) {
+            $this->fail($err);
+        }
+        if ($transaction) {
+            $this->contractAddress = $transaction->contractAddress;
+            echo "\nTransaction has mined:) block number: " . $transaction->blockNumber . "\n";
+        }
 
-            if ($result) {
-                echo "\nTransaction has made:) id: " . $result . "\n";
-            }
+        [$err, $result] = $contract->bytecode($this->testBytecode)
+            ->estimateGas(10000, 'Game Token', 1, 'GT', [
+                'from' => $fromAccount,
+                'gas' => '0x200b20',
+            ]);
 
-            $transactionId = $result;
-            $this->assertTrue((preg_match('/^0x[a-f0-9]{64}$/', $transactionId) === 1));
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
 
-            $contract->eth->getTransactionReceipt($transactionId, function ($err, $transaction) {
-                if ($err !== null) {
-                    return $this->fail($err);
-                }
+        if (isset($result)) {
+            echo "\nEstimate gas: {$result}\n";
 
-                if ($transaction) {
-                    $this->contractAddress = $transaction->contractAddress;
-                    echo "\nTransaction has mined:) block number: " . $transaction->blockNumber . "\n";
-                }
-            });
-        });
+            $this->assertTrue($result !== null);
+        }
 
-        $contract->bytecode($this->testBytecode)->estimateGas(10000, 'Game Token', 1, 'GT', [
-            'from' => $fromAccount,
-            'gas' => '0x200b20',
-        ], function ($err, $result) use ($contract) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
+        [$err, $result] = $contract->at($this->contractAddress)
+            ->estimateGas('balanceOf', $fromAccount, ['from' => $fromAccount]);
 
-            if (isset($result)) {
-                echo "\nEstimate gas: {$result}\n";
+        // infura api gg
+        if ($err !== null) {
+            $this->assertTrue($err !== null);
+        }
 
-                $this->assertTrue($result !== null);
-            }
-        });
+        if (isset($result)) {
+            echo "\nEstimate gas: {$result}\n";
 
-        $contract->at($this->contractAddress)->estimateGas('balanceOf', $fromAccount, ['from' => $fromAccount], function ($err, $result) {
-            // infura api gg
-            if ($err !== null) {
-                return $this->assertTrue($err !== null);
-            }
-
-            if (isset($result)) {
-                echo "\nEstimate gas: {$result}\n";
-
-                $this->assertTrue($result !== null);
-            }
-        });
+            $this->assertTrue($result !== null);
+        }
     }
 
     /** @test */
@@ -319,38 +306,34 @@ class ContractTest extends TestCase
         $contract = $this->contract;
         $fromAccount = $this->fromAccount;
 
-        $contract->bytecode($this->testBytecode)->new(10000, 'Game Token', 1, 'GT', [
+        [$err, $result] = $contract->bytecode($this->testBytecode)->new(10000, 'Game Token', 1, 'GT', [
             'from' => $fromAccount,
             'gas' => '0x200b20',
-        ], function ($err, $result) use ($contract) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
+        ]);
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
+        if ($result) {
+            echo "\nTransaction has made:) id: " . $result . "\n";
+        }
+        $transactionId = $result;
+        $this->assertTrue((preg_match('/^0x[a-f0-9]{64}$/', $transactionId) === 1));
+        [$err, $transaction] = $contract->eth->getTransactionReceipt($transactionId);
+        if ($err !== null) {
+            $this->fail($err);
+        }
+        if ($transaction) {
+            $this->contractAddress = $transaction->contractAddress;
+            echo "\nTransaction has mined:) block number: " . $transaction->blockNumber . "\n";
+        }
 
-            if ($result) {
-                echo "\nTransaction has made:) id: " . $result . "\n";
-            }
-
-            $transactionId = $result;
-            $this->assertTrue((preg_match('/^0x[a-f0-9]{64}$/', $transactionId) === 1));
-
-            $contract->eth->getTransactionReceipt($transactionId, function ($err, $transaction) {
-                if ($err !== null) {
-                    return $this->fail($err);
-                }
-
-                if ($transaction) {
-                    $this->contractAddress = $transaction->contractAddress;
-                    echo "\nTransaction has mined:) block number: " . $transaction->blockNumber . "\n";
-                }
-            });
-        });
-
-        $constructorData = $contract->bytecode($this->testBytecode)->getData(10000, 'Game Token', 1, 'GT');
+        $constructorData = $contract->bytecode($this->testBytecode)
+            ->getData(10000, 'Game Token', 1, 'GT');
 
         $this->assertEquals('60606040526040805190810160405280600581526020017f45524332300000000000000000000000000000000000000000000000000000008152506000908051906020019061004f92919061012f565b50341561005b57600080fd5b604051610ec5380380610ec58339810160405280805190602001909190805182019190602001805190602001909190805182019190505083600560003373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020819055508360048190555082600190805190602001906100f392919061012f565b50806002908051906020019061010a92919061012f565b5081600360006101000a81548160ff021916908360ff160217905550505050506101d4565b828054600181600116156101000203166002900490600052602060002090601f016020900481019282601f1061017057805160ff191683800117855561019e565b8280016001018555821561019e579182015b8281111561019d578251825591602001919060010190610182565b5b5090506101ab91906101af565b5090565b6101d191905b808211156101cd5760008160009055506001016101b5565b5090565b90565b610ce2806101e36000396000f3006060604052600436106100a4576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff16806306fdde03146100a9578063095ea7b31461013757806318160ddd1461019157806323b872dd146101ba578063313ce567146102335780635a3b7e421461026257806370a08231146102f057806395d89b411461033d578063a9059cbb146103cb578063dd62ed3e1461040d575b600080fd5b34156100b457600080fd5b6100bc610479565b6040518080602001828103825283818151815260200191508051906020019080838360005b838110156100fc5780820151818401526020810190506100e1565b50505050905090810190601f1680156101295780820380516001836020036101000a031916815260200191505b509250505060405180910390f35b341561014257600080fd5b610177600480803573ffffffffffffffffffffffffffffffffffffffff16906020019091908035906020019091905050610517565b604051808215151515815260200191505060405180910390f35b341561019c57600080fd5b6101a4610609565b6040518082815260200191505060405180910390f35b34156101c557600080fd5b610219600480803573ffffffffffffffffffffffffffffffffffffffff1690602001909190803573ffffffffffffffffffffffffffffffffffffffff1690602001909190803590602001909190505061060f565b604051808215151515815260200191505060405180910390f35b341561023e57600080fd5b61024661092a565b604051808260ff1660ff16815260200191505060405180910390f35b341561026d57600080fd5b61027561093d565b6040518080602001828103825283818151815260200191508051906020019080838360005b838110156102b557808201518184015260208101905061029a565b50505050905090810190601f1680156102e25780820380516001836020036101000a031916815260200191505b509250505060405180910390f35b34156102fb57600080fd5b610327600480803573ffffffffffffffffffffffffffffffffffffffff169060200190919050506109db565b6040518082815260200191505060405180910390f35b341561034857600080fd5b6103506109f3565b6040518080602001828103825283818151815260200191508051906020019080838360005b83811015610390578082015181840152602081019050610375565b50505050905090810190601f1680156103bd5780820380516001836020036101000a031916815260200191505b509250505060405180910390f35b34156103d657600080fd5b61040b600480803573ffffffffffffffffffffffffffffffffffffffff16906020019091908035906020019091905050610a91565b005b341561041857600080fd5b610463600480803573ffffffffffffffffffffffffffffffffffffffff1690602001909190803573ffffffffffffffffffffffffffffffffffffffff16906020019091905050610c91565b6040518082815260200191505060405180910390f35b60018054600181600116156101000203166002900480601f01602080910402602001604051908101604052809291908181526020018280546001816001161561010002031660029004801561050f5780601f106104e45761010080835404028352916020019161050f565b820191906000526020600020905b8154815290600101906020018083116104f257829003601f168201915b505050505081565b600081600660003373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060008573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020819055508273ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff167f8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925846040518082815260200191505060405180910390a36001905092915050565b60045481565b6000808373ffffffffffffffffffffffffffffffffffffffff16141561063457600080fd5b81600560008673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002054101561068057600080fd5b600560008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000205482600560008673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000205401101561070d57600080fd5b600660008573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060003373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000205482111561079657600080fd5b81600560008673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000206000828254039250508190555081600560008573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000206000828254019250508190555081600660008673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060003373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020600082825403925050819055508273ffffffffffffffffffffffffffffffffffffffff168473ffffffffffffffffffffffffffffffffffffffff167fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef846040518082815260200191505060405180910390a3600190509392505050565b600360009054906101000a900460ff1681565b60008054600181600116156101000203166002900480601f0160208091040260200160405190810160405280929190818152602001828054600181600116156101000203166002900480156109d35780601f106109a8576101008083540402835291602001916109d3565b820191906000526020600020905b8154815290600101906020018083116109b657829003601f168201915b505050505081565b60056020528060005260406000206000915090505481565b60028054600181600116156101000203166002900480601f016020809104026020016040519081016040528092919081815260200182805460018160011615610100020316600290048015610a895780601f10610a5e57610100808354040283529160200191610a89565b820191906000526020600020905b815481529060010190602001808311610a6c57829003601f168201915b505050505081565b60008273ffffffffffffffffffffffffffffffffffffffff161415610ab557600080fd5b80600560003373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020541015610b0157600080fd5b600560008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000205481600560008573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002054011015610b8e57600080fd5b80600560003373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000206000828254039250508190555080600560008473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020600082825401925050819055508173ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff167fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef836040518082815260200191505060405180910390a35050565b60066020528160005260406000206020528060005260406000206000915091505054815600a165627a7a723058203eb700b31f6d7723be3f4a0dd07fc4ba166a17279e26a437227679b92bacb5a2002900000000000000000000000000000000000000000000000000000000000027100000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000c0000000000000000000000000000000000000000000000000000000000000000a47616d6520546f6b656e0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000024754000000000000000000000000000000000000000000000000000000000000', $constructorData);
 
-        $balanceOfData = $contract->at($this->contractAddress)->getData('balanceOf', $fromAccount);
+        $balanceOfData = $contract->at($this->contractAddress)
+            ->getData('balanceOf', $fromAccount);
 
         $this->assertEquals('70a08231000000000000000000000000' . Utils::stripZero($fromAccount), $balanceOfData);
     }
@@ -364,77 +347,72 @@ class ContractTest extends TestCase
         $toAccount = $this->toAccount;
 
         // Deploy user contract.
-        $contract->bytecode($this->testUserBytecode)->new([
+        [$err, $result] = $contract->bytecode($this->testUserBytecode)->new([
             'from' => $fromAccount,
             'gas' => '0x200b20',
-        ], function ($err, $result) use ($contract) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
-
-            if ($result) {
-                echo "\nTransaction has made:) id: " . $result . "\n";
-            }
-
-            $transactionId = $result;
-            $this->assertTrue((preg_match('/^0x[a-f0-9]{64}$/', $transactionId) === 1));
-
-            $contract->eth->getTransactionReceipt($transactionId, function ($err, $transaction) {
-                if ($err !== null) {
-                    return $this->fail($err);
-                }
-
-                if ($transaction) {
-                    $this->contractAddress = $transaction->contractAddress;
-                    echo "\nTransaction has mined:) block number: " . $transaction->blockNumber . "\n";
-                }
-            });
-        });
+        ]);
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
+        if ($result) {
+            echo "\nTransaction has made:) id: " . $result . "\n";
+        }
+        $transactionId = $result;
+        $this->assertTrue((preg_match('/^0x[a-f0-9]{64}$/', $transactionId) === 1));
+        [$err, $transaction] = $contract->eth->getTransactionReceipt($transactionId);
+        if ($err !== null) {
+            $this->fail($err);
+        }
+        if ($transaction) {
+            $this->contractAddress = $transaction->contractAddress;
+            echo "\nTransaction has mined:) block number: " . $transaction->blockNumber . "\n";
+        }
 
         // Add user.
-        $contract->at($this->contractAddress)->send('addUser', $toAccount, 'Peter', 'Lai', 18, [
-            'from' => $fromAccount,
-            'gas' => '0x200b20',
-        ], function ($err, $result) use ($contract, $toAccount) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
+        [$err, $result] = $contract->at($this->contractAddress)
+            ->send('addUser', $toAccount, 'Peter', 'Lai', 18, [
+                'from' => $fromAccount,
+                'gas' => '0x200b20',
+            ]);
 
-            if ($result) {
-                echo "\nTransaction has made:) id: " . $result . "\n";
-            }
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
 
-            $transactionId = $result;
-            $this->assertTrue((preg_match('/^0x[a-f0-9]{64}$/', $transactionId) === 1));
+        if ($result) {
+            echo "\nTransaction has made:) id: " . $result . "\n";
+        }
 
-            $contract->eth->getTransactionReceipt($transactionId, function ($err, $transaction) use ($toAccount, $contract) {
-                if ($err !== null) {
-                    return $this->fail($err);
-                }
+        $transactionId = $result;
+        $this->assertTrue((preg_match('/^0x[a-f0-9]{64}$/', $transactionId) === 1));
 
-                if ($transaction) {
-                    $topics = $transaction->logs[0]->topics;
-                    echo "\nTransaction has mined:) block number: " . $transaction->blockNumber . "\n";
+        [$err, $transaction] = $contract->eth->getTransactionReceipt($transactionId);
 
-                    // validate topics
-                    $this->assertEquals($contract->ethabi->encodeEventSignature($this->contract->events['AddUser']), $topics[0]);
-                    $this->assertEquals('0x' . IntegerFormatter::format($toAccount), $topics[1]);
-                }
-            });
-        });
+        if ($err !== null) {
+            $this->fail($err);
+        }
+
+        if ($transaction) {
+            $topics = $transaction->logs[0]->topics;
+            echo "\nTransaction has mined:) block number: " . $transaction->blockNumber . "\n";
+
+            // validate topics
+            $this->assertEquals($contract->ethabi->encodeEventSignature($this->contract->events['AddUser']), $topics[0]);
+            $this->assertEquals('0x' . IntegerFormatter::format($toAccount), $topics[1]);
+        }
 
         // Get user.
-        $contract->call('getUser', $toAccount, ['from' => $fromAccount], function ($err, $result) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
+        [$err, $result] = $contract->call('getUser', $toAccount, ['from' => $fromAccount]);
 
-            if ($result) {
-                $this->assertEquals($result['firstName'], 'Peter');
-                $this->assertEquals($result['lastName'], 'Lai');
-                $this->assertEquals($result['age'], '18');
-            }
-        });
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
+
+        if ($result) {
+            $this->assertEquals($result['firstName'], 'Peter');
+            $this->assertEquals($result['lastName'], 'Lai');
+            $this->assertEquals($result['age'], '18');
+        }
     }
 
     /** @test */
@@ -501,49 +479,43 @@ class ContractTest extends TestCase
                 },
             ],
         ];
-
-        $contract->bytecode($bytecode)
-            ->new(['from' => $account, 'gas' => '0x200b20'], function ($err, $result) use ($contract, &$contractAddress) {
-                if ($err !== null) {
-                    return $this->fail($err->getMessage());
-                }
-
-                if ($result) {
-                    echo "\nTransaction has made:) id: " . $result . "\n";
-                }
-
-                $transactionId = $result;
-                $this->assertTrue((preg_match('/^0x[a-f0-9]{64}$/', $transactionId) === 1));
-
-                $contract->eth->getTransactionReceipt($transactionId, function ($err, $transaction) use (&$contractAddress) {
-                    if ($err !== null) {
-                        return $this->fail($err);
-                    }
-
-                    if ($transaction) {
-                        $contractAddress = $transaction->contractAddress;
-                        echo "\nTransaction has mined:) block number: " . $transaction->blockNumber . "\n";
-                    }
-                });
-            });
+        [$err, $result] = $contract->bytecode($bytecode)
+            ->new(['from' => $account, 'gas' => '0x200b20']);
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
+        if ($result) {
+            echo "\nTransaction has made:) id: " . $result . "\n";
+        }
+        $transactionId = $result;
+        $this->assertTrue((preg_match('/^0x[a-f0-9]{64}$/', $transactionId) === 1));
+        [$err, $transaction] = $contract->eth->getTransactionReceipt($transactionId);
+        if ($err !== null) {
+            $this->fail($err);
+        }
+        if ($transaction) {
+            $contractAddress = $transaction->contractAddress;
+            echo "\nTransaction has mined:) block number: " . $transaction->blockNumber . "\n";
+        }
 
         $contract->at($contractAddress);
 
         foreach ($functions as $function) {
-            $contract->call($function['name'], [], 'latest', function ($err, $res) use ($function) {
-                if ($err !== null) {
-                    echo 'Error when call ' . $function['name'] . '. Message: ' . $err->getMessage() . "\n";
+            [$err, $res] = $contract->call($function['name'], [], 'latest');
 
-                    return;
+            if ($err !== null) {
+                echo 'Error when call ' . $function['name'] . '. Message: ' . $err->getMessage() . "\n";
+
+                return;
+            }
+
+            foreach ($res as $r) {
+                if (!call_user_func($function['test'], $r)) {
+                    var_dump($r);
                 }
 
-                foreach ($res as $r) {
-                    if (!call_user_func($function['test'], $r)) {
-                        var_dump($r);
-                    }
-                    $this->assertTrue(call_user_func($function['test'], $r));
-                }
-            });
+                $this->assertTrue(call_user_func($function['test'], $r));
+            }
         }
     }
 
@@ -556,78 +528,64 @@ class ContractTest extends TestCase
         $account = $this->fromAccount;
         $contract = new Contract($this->web3->provider, $abi);
 
-        $contract->bytecode($bytecode)->new([
-            'from' => $account,
-            'gas' => '0x200b20',
-        ], function ($err, $result) use ($contract, &$contractAddress) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
+        [$err, $result] = $contract->bytecode($bytecode)
+            ->new(['from' => $account, 'gas' => '0x200b20']);
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
+        if ($result) {
+            echo "\nTransaction has made:) id: " . $result . "\n";
+        }
+        $transactionId = $result;
+        $this->assertTrue((preg_match('/^0x[a-f0-9]{64}$/', $transactionId) === 1));
+        [$err, $transaction] = $contract->eth->getTransactionReceipt($transactionId);
+        if ($err !== null) {
+            $this->fail($err);
+        }
 
-            if ($result) {
-                echo "\nTransaction has made:) id: " . $result . "\n";
-            }
-
-            $transactionId = $result;
-            $this->assertTrue((preg_match('/^0x[a-f0-9]{64}$/', $transactionId) === 1));
-
-            $contract->eth->getTransactionReceipt($transactionId, function ($err, $transaction) use (&$contractAddress) {
-                if ($err !== null) {
-                    return $this->fail($err);
-                }
-
-                if ($transaction) {
-                    $contractAddress = $transaction->contractAddress;
-                    echo "\nTransaction has mined:) block number: " . $transaction->blockNumber . "\n";
-                }
-            });
-        });
+        if ($transaction) {
+            $contractAddress = $transaction->contractAddress;
+            echo "\nTransaction has mined:) block number: " . $transaction->blockNumber . "\n";
+        }
 
         $contract->at($contractAddress);
 
-        $contract->call('data', function ($err, $res) {
-            if ($err !== null) {
-                echo 'Error when call data. Message: ' . $err->getMessage() . "\n";
+        [$err, $res] = $contract->call('data');
+        if ($err !== null) {
+            echo 'Error when call data. Message: ' . $err->getMessage() . "\n";
 
-                return;
-            }
+            return;
+        }
 
-            $this->assertEquals('0', $res[0]);
-        });
+        $this->assertEquals('0', $res[0]);
 
-        $contract->send('setData', '0x44aec9b900000000000000000000000000000000000000000000000000000000000000030000000000000000000000000000000000000000000000000000000000000021000000000000000000000000000000000000000000000000000000000000000b', [
+        [$err, $result] = $contract->send('setData', '0x44aec9b900000000000000000000000000000000000000000000000000000000000000030000000000000000000000000000000000000000000000000000000000000021000000000000000000000000000000000000000000000000000000000000000b', [
             'from' => $account,
             'gas' => '0x200b20',
-        ], function ($err, $result) use ($contract) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
+        ]);
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
+        if ($result) {
+            echo "\nTransaction has made:) id: " . $result . "\n";
+        }
+        $transactionId = $result;
+        $this->assertTrue((preg_match('/^0x[a-f0-9]{64}$/', $transactionId) === 1));
+        [$err, $transaction] = $contract->eth->getTransactionReceipt($transactionId);
+        if ($err !== null) {
+            $this->fail($err);
+        }
+        $this->assertTrue($transaction !== null);
 
-            if ($result) {
-                echo "\nTransaction has made:) id: " . $result . "\n";
-            }
+        [$err, $res] = $contract->call('data');
 
-            $transactionId = $result;
-            $this->assertTrue((preg_match('/^0x[a-f0-9]{64}$/', $transactionId) === 1));
+        if ($err !== null) {
+            echo 'Error when call data. Message: ' . $err->getMessage() . "\n";
 
-            $contract->eth->getTransactionReceipt($transactionId, function ($err, $transaction) {
-                if ($err !== null) {
-                    return $this->fail($err);
-                }
+            return;
+        }
 
-                $this->assertTrue($transaction !== null);
-            });
-        });
-
-        $contract->call('data', function ($err, $res) {
-            if ($err !== null) {
-                echo 'Error when call data. Message: ' . $err->getMessage() . "\n";
-
-                return;
-            }
-
-            $this->assertEquals('0x44aec9b900000000000000000000000000000000000000000000000000000000000000030000000000000000000000000000000000000000000000000000000000000021000000000000000000000000000000000000000000000000000000000000000b', $res[0]);
-        });
+        $this->assertEquals('0x44aec9b900000000000000000000000000000000000000000000000000000000000000030000000000000000000000000000000000000000000000000000000000000021000000000000000000000000000000000000000000000000000000000000000b', $res[0]);
     }
 
     /** @test */
@@ -642,146 +600,146 @@ class ContractTest extends TestCase
         $account = $this->fromAccount;
 
         $contract = new Contract($this->web3->provider, $abi);
-        $contract->bytecode($bytecode)->new([
+        [$err, $result] = $contract->bytecode($bytecode)->new([
             'from' => $account,
             'gas' => '0x200b20',
-        ], function ($err, $result) use ($contract, &$contractAddress) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
-            if ($result) {
-                echo "\nTransaction has made:) id: " . $result . "\n";
-            }
-            $transactionId = $result;
-            $this->assertTrue((preg_match('/^0x[a-f0-9]{64}$/', $transactionId) === 1));
-
-            $contract->eth->getTransactionReceipt($transactionId, function ($err, $transaction) use (&$contractAddress) {
-                if ($err !== null) {
-                    return $this->fail($err);
-                }
-                if ($transaction) {
-                    $contractAddress = $transaction->contractAddress;
-                    echo "\nTransaction has mined:) block number: " . $transaction->blockNumber . "\n";
-                }
-            });
-        });
+        ]);
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
+        if ($result) {
+            echo "\nTransaction has made:) id: " . $result . "\n";
+        }
+        $transactionId = $result;
+        $this->assertTrue((preg_match('/^0x[a-f0-9]{64}$/', $transactionId) === 1));
+        [$err, $transaction] = $contract->eth->getTransactionReceipt($transactionId);
+        if ($err !== null) {
+            $this->fail($err);
+        }
+        if ($transaction) {
+            $contractAddress = $transaction->contractAddress;
+            echo "\nTransaction has mined:) block number: " . $transaction->blockNumber . "\n";
+        }
         $contract->at($contractAddress);
 
         // test for send transaction and get data
-        $contract->send('say', $testNumber, $testData, [
+        [$err, $result] = $contract->send('say', $testNumber, $testData, [
             'from' => $account,
             'gas' => '0x200b20',
-        ], function ($err, $result) use ($contract, $testNumber, $testData) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
+        ]);
 
-            if ($result) {
-                echo "\nTransaction has made:) id: " . $result . "\n";
-            }
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
+        if ($result) {
+            echo "\nTransaction has made:) id: " . $result . "\n";
+        }
+        $transactionId = $result;
+        $this->assertTrue((preg_match('/^0x[a-f0-9]{64}$/', $transactionId) === 1));
 
-            $transactionId = $result;
-            $this->assertTrue((preg_match('/^0x[a-f0-9]{64}$/', $transactionId) === 1));
+        [$err, $transaction] = $contract->eth->getTransactionReceipt($transactionId);
+        if ($err !== null) {
+            $this->fail($err);
+        }
 
-            $contract->eth->getTransactionReceipt($transactionId, function ($err, $transaction) use ($testNumber, $testData, $contract) {
-                if ($err !== null) {
-                    return $this->fail($err);
-                }
+        if ($transaction) {
+            $topics = $transaction->logs[0]->topics;
+            echo "\nTransaction has mined:) block number: " . $transaction->blockNumber . "\n";
 
-                if ($transaction) {
-                    $topics = $transaction->logs[0]->topics;
-                    echo "\nTransaction has mined:) block number: " . $transaction->blockNumber . "\n";
+            // validate topics
+            $this->assertEquals($contract->ethabi->encodeEventSignature($contract->events['Say']), $topics[0]);
+            $this->assertEquals('0x' . IntegerFormatter::format($testNumber), $topics[1], $topics[2]);
+        }
 
-                    // validate topics
-                    $this->assertEquals($contract->ethabi->encodeEventSignature($contract->events['Say']), $topics[0]);
-                    $this->assertEquals('0x' . IntegerFormatter::format($testNumber), $topics[1], $topics[2]);
-                }
+        [$err, $res] = $contract->call('number');
 
-                $contract->call('number', function ($err, $res) use ($testNumber) {
-                    if ($err !== null) {
-                        echo 'Error when call number. Message: ' . $err->getMessage() . "\n";
+        if ($err !== null) {
+            echo 'Error when call number. Message: ' . $err->getMessage() . "\n";
 
-                        return;
-                    }
+            return;
+        }
 
-                    $this->assertEquals((string) $testNumber, $res[0]);
-                });
-            });
-        });
-
+        $this->assertEquals((string) $testNumber, $res[0]);
         $testNumber++;
 
-        $contract->send('say', $testNumber, ['from' => $account, 'gas' => '0x200b20'], function ($err, $result) use ($contract, $testNumber) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
+        [$err, $result] = $contract->send('say', $testNumber, [
+            'from' => $account,
+            'gas' => '0x200b20',
+        ]);
 
-            if ($result) {
-                echo "\nTransaction has made:) id: " . $result . "\n";
-            }
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
 
-            $transactionId = $result;
-            $this->assertTrue((preg_match('/^0x[a-f0-9]{64}$/', $transactionId) === 1));
+        if ($result) {
+            echo "\nTransaction has made:) id: " . $result . "\n";
+        }
 
-            $contract->eth->getTransactionReceipt($transactionId, function ($err, $transaction) use ($testNumber, $contract) {
-                if ($err !== null) {
-                    return $this->fail($err);
-                }
+        $transactionId = $result;
+        $this->assertTrue((preg_match('/^0x[a-f0-9]{64}$/', $transactionId) === 1));
 
-                if ($transaction) {
-                    $topics = $transaction->logs[0]->topics;
-                    echo "\nTransaction has mined:) block number: " . $transaction->blockNumber . "\n";
+        [$err, $transaction] = $contract->eth->getTransactionReceipt($transactionId);
+        if ($err !== null) {
+            $this->fail($err);
+        }
 
-                    // validate topics
-                    // $this->assertEquals($contract->ethabi->encodeEventSignature($contract->events['Say']), $topics[0]);
-                    $this->assertEquals('0x' . IntegerFormatter::format($testNumber), $topics[1]);
-                }
+        if ($transaction) {
+            $topics = $transaction->logs[0]->topics;
+            echo "\nTransaction has mined:) block number: " . $transaction->blockNumber . "\n";
 
-                $blockNumber = Utils::toBn($transaction->blockNumber);
-                $contract->call('number', Utils::toHex($blockNumber, true), function ($err, $res) use ($testNumber) {
-                    if ($err !== null) {
-                        echo 'Error when call number. Message: ' . $err->getMessage() . "\n";
+            // validate topics
+            // $this->assertEquals($contract->ethabi->encodeEventSignature($contract->events['Say']), $topics[0]);
+            $this->assertEquals('0x' . IntegerFormatter::format($testNumber), $topics[1]);
+        }
 
-                        return;
-                    }
+        $blockNumber = Utils::toBn($transaction->blockNumber);
+        [$err, $res] = $contract->call('number', Utils::toHex($blockNumber, true));
 
-                    $this->assertEquals((string) $testNumber, $res[0]);
-                });
+        if ($err !== null) {
+            echo 'Error when call number. Message: ' . $err->getMessage() . "\n";
 
-                $blockNumber = $blockNumber->subtract(Utils::toBn(1));
-                $contract->call('number', Utils::toHex($blockNumber, true), function ($err, $res) use ($testNumber) {
-                    if ($err !== null) {
-                        echo 'Error when call number. Message: ' . $err->getMessage() . "\n";
+            return;
+        }
 
-                        return;
-                    }
+        $this->assertEquals((string) $testNumber, $res[0]);
 
-                    $this->assertEquals((string) $testNumber-1, $res[0]);
-                });
-            });
-        });
+        $blockNumber = $blockNumber->subtract(Utils::toBn(1));
+        [$err, $res] = $contract->call('number', Utils::toHex($blockNumber, true));
 
+        if ($err !== null) {
+            echo 'Error when call number. Message: ' . $err->getMessage() . "\n";
+
+            return;
+        }
+
+        $this->assertEquals((string) $testNumber-1, $res[0]);
         // test for estimate gas
-        $contract->estimateGas('say', $testNumber, $testData, ['from' => $account, 'gas' => '0x200b20'], function ($err, $result) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
+        [$err, $result] = $contract->estimateGas('say', $testNumber, $testData, [
+            'from' => $account,
+            'gas' => '0x200b20',
+        ]);
 
-            if (isset($result)) {
-                echo "\nEstimate gas: " . $result . "\n";
-                $this->assertTrue($result !== null);
-            }
-        });
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
 
-        $contract->estimateGas('say', $testNumber, ['from' => $account, 'gas' => '0x200b20'], function ($err, $result) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
+        if (isset($result)) {
+            echo "\nEstimate gas: " . $result . "\n";
+            $this->assertTrue($result !== null);
+        }
 
-            if (isset($result)) {
-                echo "\nEstimate gas: " . $result . "\n";
-                $this->assertTrue($result !== null);
-            }
-        });
+        [$err, $result] = $contract->estimateGas('say', $testNumber, [
+            'from' => $account,
+            'gas' => '0x200b20',
+        ]);
+
+        if ($err !== null) {
+            $this->fail($err->getMessage());
+        }
+
+        if (isset($result)) {
+            echo "\nEstimate gas: " . $result . "\n";
+            $this->assertTrue($result !== null);
+        }
     }
 }

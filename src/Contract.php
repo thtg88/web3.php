@@ -288,16 +288,11 @@ class Contract
         }
 
         $constructor = $this->constructor;
-        $callback = array_pop($arguments);
 
         $input_count = isset($constructor['inputs']) ? count($constructor['inputs']) : 0;
 
         if (count($arguments) < $input_count) {
             throw new InvalidArgumentException('Please make sure you have put all constructor params and callback.');
-        }
-
-        if (is_callable($callback) !== true) {
-            throw new InvalidArgumentException('The last param must be callback function.');
         }
 
         if (!isset($this->bytecode)) {
@@ -314,16 +309,11 @@ class Contract
 
         $transaction['data'] = '0x' . $this->bytecode . Utils::stripZero($data);
 
-        [$err, $transaction] = $this->eth->sendTransaction($transaction, function () {
-        });
+        [$err, $transaction] = $this->eth->sendTransaction($transaction);
 
         if ($err !== null) {
-            $callback($err, null);
-
             return [$err, null];
         }
-
-        $callback(null, $transaction);
 
         return [null, $transaction];
     }
@@ -335,7 +325,6 @@ class Contract
         }
 
         $method = array_splice($arguments, 0, 1)[0];
-        $callback = array_pop($arguments);
 
         if (!is_string($method)) {
             throw new InvalidArgumentException('Please make sure the method is string.');
@@ -349,9 +338,6 @@ class Contract
         };
         if (count($functions) < 1) {
             throw new InvalidArgumentException('Please make sure the method exists.');
-        }
-        if (is_callable($callback) !== true) {
-            throw new InvalidArgumentException('The last param must be callback function.');
         }
 
         // check the last one in arguments is transaction object
@@ -413,16 +399,11 @@ class Contract
         $transaction['to'] = $this->toAddress;
         $transaction['data'] = $functionSignature . Utils::stripZero($data);
 
-        [$err, $transaction] = $this->eth->sendTransaction($transaction, function () {
-        });
+        [$err, $transaction] = $this->eth->sendTransaction($transaction);
 
         if ($err !== null) {
-            $callback($err, null);
-
             return [$err, null];
         }
-
-        $callback(null, $transaction);
 
         return [null, $transaction];
     }
@@ -434,7 +415,6 @@ class Contract
         }
 
         $method = array_splice($arguments, 0, 1)[0];
-        $callback = array_pop($arguments);
 
         if (!is_string($method)) {
             throw new InvalidArgumentException('Please make sure the method is string.');
@@ -446,9 +426,6 @@ class Contract
         );
         if (count($functions) < 1) {
             throw new InvalidArgumentException('Please make sure the method exists.');
-        }
-        if (is_callable($callback) !== true) {
-            throw new InvalidArgumentException('The last param must be callback function.');
         }
 
         // check the arguments
@@ -511,20 +488,15 @@ class Contract
         $transaction['to'] = $this->toAddress;
         $transaction['data'] = $functionSignature . Utils::stripZero($data);
 
-        [$err, $transaction] = $this->eth->call($transaction, $defaultBlock, function () {
-        });
+        [$err, $transaction] = $this->eth->call($transaction, $defaultBlock);
 
         if ($err !== null) {
-            $callback($err, null);
-
             return [$err, null];
         }
 
         $decodedTransaction = $this->ethabi->decodeParameters($function, $transaction);
 
-        $callback(null, $decodedTransaction);
-
-        return [null, $transaction];
+        return [null, $decodedTransaction];
     }
 
     public function estimateGas(...$arguments): array
@@ -533,17 +505,11 @@ class Contract
             throw new RuntimeException('No functions nor constructor set.');
         }
 
-        $callback = array_pop($arguments);
-
         if (empty($this->toAddress) && !empty($this->bytecode)) {
             $constructor = $this->constructor;
 
             if (count($arguments) < count($constructor['inputs'])) {
                 throw new InvalidArgumentException('Please make sure you have put all constructor params and callback.');
-            }
-
-            if (is_callable($callback) !== true) {
-                throw new InvalidArgumentException('The last param must be callback function.');
             }
 
             if (!isset($this->bytecode)) {
@@ -571,9 +537,6 @@ class Contract
             );
             if (count($functions) < 1) {
                 throw new InvalidArgumentException('Please make sure the method exists.');
-            }
-            if (is_callable($callback) !== true) {
-                throw new InvalidArgumentException('The last param must be callback function.');
             }
 
             // check the last one in arguments is transaction object
@@ -635,16 +598,11 @@ class Contract
             $transaction['data'] = $functionSignature . Utils::stripZero($data);
         }
 
-        [$err, $gas] = $this->eth->estimateGas($transaction, function () {
-        });
+        [$err, $gas] = $this->eth->estimateGas($transaction);
 
         if ($err !== null) {
-            $callback($err, null);
-
             return [$err, null];
         }
-
-        $callback(null, $gas);
 
         return [null, $gas];
     }
