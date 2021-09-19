@@ -85,9 +85,9 @@ class Eth
         throw new InvalidArgumentException('Please set a valid provider.');
     }
 
-    public function accounts(...$arguments): array|self|null
+    public function accounts(): array|self|null
     {
-        $result = $this->provider->send(new Accounts($arguments));
+        $result = $this->provider->send(new Accounts());
 
         if ($this->provider->isBatch) {
             return $this;
@@ -96,9 +96,9 @@ class Eth
         return $result;
     }
 
-    public function blockNumber(...$arguments): array|self|null
+    public function blockNumber(): array|self|null
     {
-        $result = $this->provider->send(new BlockNumber($arguments));
+        $result = $this->provider->send(new BlockNumber());
 
         if ($this->provider->isBatch) {
             return $this;
@@ -118,9 +118,9 @@ class Eth
         return $result;
     }
 
-    public function coinbase(...$arguments): array|self|null
+    public function coinbase(): array|self|null
     {
-        $result = $this->provider->send(new Coinbase($arguments));
+        $result = $this->provider->send(new Coinbase());
 
         if ($this->provider->isBatch) {
             return $this;
@@ -173,9 +173,9 @@ class Eth
         return $result;
     }
 
-    public function gasPrice(...$arguments): array|self|null
+    public function gasPrice(): array|self|null
     {
-        $result = $this->provider->send(new GasPrice($arguments));
+        $result = $this->provider->send(new GasPrice());
 
         if ($this->provider->isBatch) {
             return $this;
@@ -195,9 +195,14 @@ class Eth
         return $result;
     }
 
-    public function getBlockByHash(...$arguments): array|self|null
-    {
-        $result = $this->provider->send(new GetBlockByHash($arguments));
+    public function getBlockByHash(
+        string $block_hash,
+        bool $hydrated_transactions,
+    ): array|self|null {
+        $result = $this->provider->send(new GetBlockByHash([
+            $block_hash,
+            $hydrated_transactions,
+        ]));
 
         if ($this->provider->isBatch) {
             return $this;
@@ -206,9 +211,14 @@ class Eth
         return $result;
     }
 
-    public function getBlockByNumber(...$arguments): array|self|null
-    {
-        $result = $this->provider->send(new GetBlockByNumber($arguments));
+    public function getBlockByNumber(
+        string $block_hash,
+        bool $hydrated_transactions,
+    ): array|self|null {
+        $result = $this->provider->send(new GetBlockByNumber([
+            $block_hash,
+            $hydrated_transactions,
+        ]));
 
         if ($this->provider->isBatch) {
             return $this;
@@ -217,9 +227,9 @@ class Eth
         return $result;
     }
 
-    public function getBlockTransactionCountByHash(...$arguments): array|self|null
+    public function getBlockTransactionCountByHash(string $block_hash): array|self|null
     {
-        $result = $this->provider->send(new GetBlockTransactionCountByHash($arguments));
+        $result = $this->provider->send(new GetBlockTransactionCountByHash([$block_hash]));
 
         if ($this->provider->isBatch) {
             return $this;
@@ -228,9 +238,9 @@ class Eth
         return $result;
     }
 
-    public function getBlockTransactionCountByNumber(...$arguments): array|self|null
+    public function getBlockTransactionCountByNumber($block_number): array|self|null
     {
-        $result = $this->provider->send(new GetBlockTransactionCountByNumber($arguments));
+        $result = $this->provider->send(new GetBlockTransactionCountByNumber([$block_number]));
 
         if ($this->provider->isBatch) {
             return $this;
@@ -250,9 +260,9 @@ class Eth
         return $result;
     }
 
-    public function getFilterChanges(...$arguments): array|self|null
+    public function getFilterChanges(string $filter_identifier): array|self|null
     {
-        $result = $this->provider->send(new GetFilterChanges($arguments));
+        $result = $this->provider->send(new GetFilterChanges([$filter_identifier]));
 
         if ($this->provider->isBatch) {
             return $this;
@@ -261,9 +271,9 @@ class Eth
         return $result;
     }
 
-    public function getFilterLogs(...$arguments): array|self|null
+    public function getFilterLogs(string $filter_identifier): array|self|null
     {
-        $result = $this->provider->send(new GetFilterLogs($arguments));
+        $result = $this->provider->send(new GetFilterLogs([$filter_identifier]));
 
         if ($this->provider->isBatch) {
             return $this;
@@ -294,9 +304,14 @@ class Eth
         return $result;
     }
 
-    public function getTransactionByBlockHashAndIndex(...$arguments): array|self|null
-    {
-        $result = $this->provider->send(new GetTransactionByBlockHashAndIndex($arguments));
+    public function getTransactionByBlockHashAndIndex(
+        string $block_hash,
+        $transaction_index,
+    ): array|self|null {
+        $result = $this->provider->send(new GetTransactionByBlockHashAndIndex([
+            $block_hash,
+            $transaction_index,
+        ]));
 
         if ($this->provider->isBatch) {
             return $this;
@@ -305,9 +320,14 @@ class Eth
         return $result;
     }
 
-    public function getTransactionByBlockNumberAndIndex(...$arguments): array|self|null
-    {
-        $result = $this->provider->send(new GetTransactionByBlockNumberAndIndex($arguments));
+    public function getTransactionByBlockNumberAndIndex(
+        $block_number,
+        $transaction_index,
+    ): array|self|null {
+        $result = $this->provider->send(new GetTransactionByBlockNumberAndIndex([
+            $block_number,
+            $transaction_index,
+        ]));
 
         if ($this->provider->isBatch) {
             return $this;
@@ -316,9 +336,9 @@ class Eth
         return $result;
     }
 
-    public function getTransactionByHash(...$arguments): array|self|null
+    public function getTransactionByHash(string $transaction_hash): array|self|null
     {
-        $result = $this->provider->send(new GetTransactionByHash($arguments));
+        $result = $this->provider->send(new GetTransactionByHash([$transaction_hash]));
 
         if ($this->provider->isBatch) {
             return $this;
@@ -338,9 +358,9 @@ class Eth
         return $result;
     }
 
-    public function getTransactionReceipt(...$arguments): array|self|null
+    public function getTransactionReceipt(string $transaction_hash): array|self|null
     {
-        $result = $this->provider->send(new GetTransactionReceipt($arguments));
+        $result = $this->provider->send(new GetTransactionReceipt([$transaction_hash]));
 
         if ($this->provider->isBatch) {
             return $this;
@@ -371,9 +391,9 @@ class Eth
         return $result;
     }
 
-    public function getUncleCountByBlockHash(...$arguments): array|self|null
+    public function getUncleCountByBlockHash(string $block_hash): array|self|null
     {
-        $result = $this->provider->send(new GetUncleCountByBlockHash($arguments));
+        $result = $this->provider->send(new GetUncleCountByBlockHash([$block_hash]));
 
         if ($this->provider->isBatch) {
             return $this;
@@ -382,9 +402,9 @@ class Eth
         return $result;
     }
 
-    public function getUncleCountByBlockNumber(...$arguments): array|self|null
+    public function getUncleCountByBlockNumber($block_number): array|self|null
     {
-        $result = $this->provider->send(new GetUncleCountByBlockNumber($arguments));
+        $result = $this->provider->send(new GetUncleCountByBlockNumber([$block_number]));
 
         if ($this->provider->isBatch) {
             return $this;
@@ -404,9 +424,9 @@ class Eth
         return $result;
     }
 
-    public function hashrate(...$arguments): array|self|null
+    public function hashrate(): array|self|null
     {
-        $result = $this->provider->send(new Hashrate($arguments));
+        $result = $this->provider->send(new Hashrate());
 
         if ($this->provider->isBatch) {
             return $this;
@@ -415,9 +435,9 @@ class Eth
         return $result;
     }
 
-    public function mining(...$arguments): array|self|null
+    public function mining(): array|self|null
     {
-        $result = $this->provider->send(new Mining($arguments));
+        $result = $this->provider->send(new Mining());
 
         if ($this->provider->isBatch) {
             return $this;
@@ -448,9 +468,9 @@ class Eth
         return $result;
     }
 
-    public function newPendingTransactionFilter(...$arguments): array|self|null
+    public function newPendingTransactionFilter(): array|self|null
     {
-        $result = $this->provider->send(new NewPendingTransactionFilter($arguments));
+        $result = $this->provider->send(new NewPendingTransactionFilter());
 
         if ($this->provider->isBatch) {
             return $this;
@@ -459,9 +479,9 @@ class Eth
         return $result;
     }
 
-    public function protocolVersion(...$arguments): array|self|null
+    public function protocolVersion(): array|self|null
     {
-        $result = $this->provider->send(new ProtocolVersion($arguments));
+        $result = $this->provider->send(new ProtocolVersion());
 
         if ($this->provider->isBatch) {
             return $this;
@@ -492,9 +512,9 @@ class Eth
         return $result;
     }
 
-    public function sign(...$arguments): array|self|null
+    public function sign(string $address, string $message): array|self|null
     {
-        $result = $this->provider->send(new Sign($arguments));
+        $result = $this->provider->send(new Sign([$address, $message]));
 
         if ($this->provider->isBatch) {
             return $this;
@@ -514,9 +534,9 @@ class Eth
         return $result;
     }
 
-    public function submitHashrate(...$arguments): array|self|null
+    public function submitHashrate(string $hashrate, string $id): array|self|null
     {
-        $result = $this->provider->send(new SubmitHashrate($arguments));
+        $result = $this->provider->send(new SubmitHashrate([$hashrate, $id]));
 
         if ($this->provider->isBatch) {
             return $this;
@@ -525,9 +545,9 @@ class Eth
         return $result;
     }
 
-    public function syncing(...$arguments): array|self|null
+    public function syncing(): array|self|null
     {
-        $result = $this->provider->send(new Syncing($arguments));
+        $result = $this->provider->send(new Syncing());
 
         if ($this->provider->isBatch) {
             return $this;
@@ -536,9 +556,9 @@ class Eth
         return $result;
     }
 
-    public function uninstallFilter(...$arguments): array|self|null
+    public function uninstallFilter(string $filter_identifier): array|self|null
     {
-        $result = $this->provider->send(new UninstallFilter($arguments));
+        $result = $this->provider->send(new UninstallFilter([$filter_identifier]));
 
         if ($this->provider->isBatch) {
             return $this;
