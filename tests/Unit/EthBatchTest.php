@@ -26,13 +26,13 @@ class EthBatchTest extends TestCase
         $eth->protocolVersion();
         $eth->syncing();
 
-        $eth->provider->execute(function ($err, $data) {
-            if ($err !== null) {
-                return $this->fail('Got error!');
-            }
+        [$err, $data] = $eth->provider->execute();
 
-            $this->assertTrue($data[0] instanceof BigNumber);
-            $this->assertTrue($data[1] !== null);
-        });
+        if ($err !== null) {
+            $this->fail('Got error!');
+        }
+
+        $this->assertTrue($data[0] instanceof BigNumber);
+        $this->assertTrue($data[1] !== null);
     }
 }

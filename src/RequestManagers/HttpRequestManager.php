@@ -28,7 +28,7 @@ class HttpRequestManager extends RequestManager implements IRequestManager
         $this->client = new Client();
     }
 
-    public function sendPayload(string $payload, callable $callback): array
+    public function sendPayload(string $payload): array
     {
         try {
             $res = $this->client->post($this->host, [
@@ -40,8 +40,6 @@ class HttpRequestManager extends RequestManager implements IRequestManager
                 'connect_timeout' => $this->timeout,
             ]);
         } catch (RequestException $err) {
-            $callback($err, null);
-
             return [$err, null];
         }
 
@@ -55,8 +53,6 @@ class HttpRequestManager extends RequestManager implements IRequestManager
 
         if (JSON_ERROR_NONE !== json_last_error()) {
             $error = new InvalidArgumentException('json_decode error: ' . json_last_error_msg());
-
-            $callback($error, null);
 
             return [$error, null];
         }
@@ -84,33 +80,23 @@ class HttpRequestManager extends RequestManager implements IRequestManager
             }
 
             if (count($errors) > 0) {
-                $callback($errors, $results);
-
                 return [$errors, $results];
             }
-
-            $callback(null, $results);
 
             return [null, $results];
         }
 
         if (property_exists($json, 'result')) {
-            $callback(null, $json->result);
-
             return [null, $json->result];
         }
 
         if (isset($json->error)) {
             $error = new RPCException(mb_ereg_replace('Error: ', '', $json->error->message), $json->error->code);
 
-            $callback($error, null);
-
             return [$error, null];
         }
 
         $error = new RPCException('Something wrong happened.');
-
-        $callback($error, null);
 
         return [$error, null];
     }

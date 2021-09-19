@@ -22,8 +22,7 @@ class ShhApiTest extends TestCase
     {
         $shh = $this->shh;
 
-        [$err, $version] = $shh->version(function () {
-        });
+        [$err, $version] = $shh->version();
 
         if ($err !== null) {
             $this->fail($err->getMessage());
@@ -41,8 +40,7 @@ class ShhApiTest extends TestCase
     // {
     //     $shh = $this->shh;
 
-    //     [$err, $identity] = $shh->newIdentity(function () {
-    //     });
+    //     [$err, $identity] = $shh->newIdentity();
 
     //     if ($err !== null) {
     //         $this->fail($err->getMessage());
@@ -61,8 +59,7 @@ class ShhApiTest extends TestCase
     //     $shh = $this->shh;
     //     $newIdentity = '0x' . implode('', array_fill(0, 120, '0'));
 
-    //     [$err, $hasIdentity] = $shh->hasIdentity($newIdentity, function () {
-    //     });
+    //     [$err, $hasIdentity] = $shh->hasIdentity($newIdentity);
 
     //     if ($err !== null) {
     //         $this->fail($err->getMessage());
@@ -70,8 +67,7 @@ class ShhApiTest extends TestCase
 
     //     $this->assertFalse($hasIdentity);
 
-    //     [$err, $identity] = $shh->newIdentity(function () {
-    //     });
+    //     [$err, $identity] = $shh->newIdentity();
 
     //     if ($err !== null) {
     //         $this->fail($err->getMessage());
@@ -81,8 +77,7 @@ class ShhApiTest extends TestCase
 
     //     $this->assertEquals(mb_strlen($identity), 132);
 
-    //     [$err, $hasIdentity] = $shh->hasIdentity($newIdentity, function () {
-    //     });
+    //     [$err, $hasIdentity] = $shh->hasIdentity($newIdentity);
 
     //     if ($err !== null) {
     //         $this->fail($err->getMessage());
@@ -96,8 +91,7 @@ class ShhApiTest extends TestCase
     // {
     //     $shh = $this->shh;
 
-    //     [$err, $group] = $shh->newGroup(function () {
-    //     });
+    //     [$err, $group] = $shh->newGroup();
 
     //     if ($err !== null) {
     //         $this->fail($err->getMessage());
@@ -111,20 +105,14 @@ class ShhApiTest extends TestCase
     // {
     //     $shh = $this->shh;
     //     $newIdentity = '';
-
-    //     [$err, $identity] = $shh->newIdentity(function () {
-    //     });
-
+    //     [$err, $identity] = $shh->newIdentity();
     //     if ($err !== null) {
     //         $this->fail($err->getMessage());
     //     }
-
     //     $newIdentity = $identity;
-
     //     $this->assertEquals(mb_strlen($identity), 132);
 
-    //     [$err, $hasAdded] = $shh->addToGroup($newIdentity, function () {
-    //     });
+    //     [$err, $hasAdded] = $shh->addToGroup($newIdentity);
 
     //     if ($err !== null) {
     //         $this->fail($err->getMessage());
@@ -143,28 +131,18 @@ class ShhApiTest extends TestCase
     //     $shh = $this->shh;
     //     $fromIdentity = '';
     //     $toIdentity = '';
-
     //     // create fromIdentity and toIdentity to prevent unknown identity error
-    //     [$err, $identity] = $shh->newIdentity(function () use (&$fromIdentity) {
-    //     });
-
+    //     [$err, $identity] = $shh->newIdentity();
     //     if ($err !== null) {
     //         $this->fail($err->getMessage());
     //     }
-
     //     $fromIdentity = $identity;
-
     //     $this->assertEquals(mb_strlen($identity), 132);
-
-    //     [$err, $identity] = $shh->newIdentity(function () {
-    //     });
-
+    //     [$err, $identity] = $shh->newIdentity();
     //     if ($err !== null) {
     //         $this->fail($err->getMessage());
     //     }
-
     //     $toIdentity = $identity;
-
     //     $this->assertEquals(mb_strlen($identity), 132);
 
     //     [$err, $isSent] = $shh->post([
@@ -174,8 +152,7 @@ class ShhApiTest extends TestCase
     //         'payload' => "0x7b2274797065223a226d6",
     //         'priority' => "0x64",
     //         'ttl' => "0x64",
-    //     ], function () {
-    //     });
+    //     ]);
 
     //     if ($err !== null) {
     //         $this->fail($err->getMessage());
@@ -190,8 +167,7 @@ class ShhApiTest extends TestCase
     //         'payload' => "0x7b2274797065223a226d6",
     //         'priority' => 123,
     //         'ttl' => 123,
-    //     ], function () {
-    //     });
+    //     ]);
 
     //     if ($err !== null) {
     //         $this->fail($err->getMessage());
@@ -209,24 +185,18 @@ class ShhApiTest extends TestCase
     // {
     //     $shh = $this->shh;
     //     $toIdentity = '';
-
     //     // create toIdentity to prevent unknown identity error
-    //     [$err, $identity] = $shh->newIdentity(function () {
-    //     });
-
+    //     [$err, $identity] = $shh->newIdentity();
     //     if ($err !== null) {
     //         $this->fail($err->getMessage());
     //     }
-
     //     $toIdentity = $identity;
-
     //     $this->assertEquals(mb_strlen($identity), 132);
 
     //     [$err, $filterId] = $shh->newFilter([
     //         'to' => $toIdentity,
     //         'topics' => ["0x776869737065722d636861742d636c69656e74", "0x4d5a695276454c39425154466b61693532"],
-    //     ], function () {
-    //     });
+    //     ]);
 
     //     if ($err !== null) {
     //         $this->fail($err->getMessage());
@@ -237,8 +207,7 @@ class ShhApiTest extends TestCase
     //     [$err, $filterId] = $shh->newFilter([
     //         'to' => $toIdentity,
     //         'topics' => [null, "0x776869737065722d636861742d636c69656e74", "0x4d5a695276454c39425154466b61693532"],
-    //     ], function () {
-    //     });
+    //     ]);
 
     //     if ($err !== null) {
     //         $this->fail($err->getMessage());
@@ -249,8 +218,7 @@ class ShhApiTest extends TestCase
     //     [$err, $filterId] = $shh->newFilter([
     //         'to' => $toIdentity,
     //         'topics' => ["0x776869737065722d636861742d636c69656e74", ["0x776869737065722d636861742d636c69656e74", "0x4d5a695276454c39425154466b61693532"]],
-    //     ], function () {
-    //     });
+    //     ]);
 
     //     if ($err !== null) {
     //         $this->fail($err->getMessage());
@@ -269,35 +237,24 @@ class ShhApiTest extends TestCase
     //     $shh = $this->shh;
     //     $toIdentity = '';
     //     $filter = '';
-
     //     // create toIdentity to prevent unknown identity error
-    //     [$err, $identity] = $shh->newIdentity(function () {
-    //     });
-
+    //     [$err, $identity] = $shh->newIdentity();
     //     if ($err !== null) {
     //         $this->fail($err->getMessage());
     //     }
-
     //     $toIdentity = $identity;
-
     //     $this->assertEquals(mb_strlen($identity), 132);
-
     //     [$err, $filterId] = $shh->newFilter([
     //         'to' => $toIdentity,
     //         'topics' => ["0x776869737065722d636861742d636c69656e74", "0x4d5a695276454c39425154466b61693532"],
-    //     ], function () {
-    //     });
-
+    //     ]);
     //     if ($err !== null) {
     //         $this->fail($err->getMessage());
     //     }
-
     //     $filter = $filterId;
-
     //     $this->assertTrue(is_string($filterId));
 
-    //     [$err, $uninstalled] = $shh->uninstallFilter($filter, function () {
-    //     });
+    //     [$err, $uninstalled] = $shh->uninstallFilter($filter);
 
     //     if ($err !== null) {
     //         $this->fail($err->getMessage());
@@ -317,46 +274,30 @@ class ShhApiTest extends TestCase
     //     $fromIdentity = '';
     //     $toIdentity = '';
     //     $filter = '';
-
     //     // create fromIdentity and toIdentity to prevent unknown identity error
-    //     [$err, $identity] = $shh->newIdentity(function () {
-    //     });
-
+    //     [$err, $identity] = $shh->newIdentity();
     //     if ($err !== null) {
     //         $this->fail($err->getMessage());
     //     }
-
     //     $toIdentity = $identity;
-
     //     $this->assertEquals(mb_strlen($identity), 132);
-
-    //     [$err, $identity] = $shh->newIdentity(function () {
-    //     });
-
+    //     [$err, $identity] = $shh->newIdentity();
     //     if ($err !== null) {
     //         $this->fail($err->getMessage());
     //     }
-
     //     $fromIdentity = $identity;
-
     //     $this->assertEquals(mb_strlen($identity), 132);
-
     //     [$err, $filterId] = $shh->newFilter([
     //         'to' => $toIdentity,
     //         'topics' => ["0x776869737065722d636861742d636c69656e74", "0x4d5a695276454c39425154466b61693532"],
-    //     ], function () {
-    //     });
-
+    //     ]);
     //     if ($err !== null) {
     //         $this->fail($err->getMessage());
     //     }
-
     //     $filter = $filterId;
-
     //     $this->assertTrue(is_string($filterId));
 
-    //     [$err, $changes] = $shh->getFilterChanges($filter, function () {
-    //     });
+    //     [$err, $changes] = $shh->getFilterChanges($filter);
 
     //     if ($err !== null) {
     //         $this->fail($err->getMessage());
@@ -372,8 +313,7 @@ class ShhApiTest extends TestCase
     //         'payload' => "0x7b2274797065223a226d6",
     //         'priority' => "0x64",
     //         'ttl' => "0x64",
-    //     ], function () {
-    //     });
+    //     ]);
 
     //     if ($err !== null) {
     //         $this->fail($err->getMessage());
@@ -381,8 +321,7 @@ class ShhApiTest extends TestCase
 
     //     $this->assertTrue($isSent);
 
-    //     [$err, $changes] = $shh->getFilterChanges($filter, function () {
-    //     });
+    //     [$err, $changes] = $shh->getFilterChanges($filter);
 
     //     if ($err !== null) {
     //         $this->fail($err->getMessage());
@@ -402,46 +341,30 @@ class ShhApiTest extends TestCase
     //     $fromIdentity = '';
     //     $toIdentity = '';
     //     $filter = '';
-
     //     // create fromIdentity and toIdentity to prevent unknown identity error
-    //     [$err, $identity] = $shh->newIdentity(function () {
-    //     });
-
+    //     [$err, $identity] = $shh->newIdentity();
     //     if ($err !== null) {
     //         $this->fail($err->getMessage());
     //     }
-
     //     $toIdentity = $identity;
-
     //     $this->assertEquals(mb_strlen($identity), 132);
-
-    //     [$err, $identity] = $shh->newIdentity(function () {
-    //     });
-
+    //     [$err, $identity] = $shh->newIdentity();
     //     if ($err !== null) {
     //         $this->fail($err->getMessage());
     //     }
-
     //     $fromIdentity = $identity;
-
     //     $this->assertEquals(mb_strlen($identity), 132);
-
     //     [$err, $filterId] = $shh->newFilter([
     //         'to' => $toIdentity,
     //         'topics' => ["0x776869737065722d636861742d636c69656e74", "0x4d5a695276454c39425154466b61693532"],
-    //     ], function () {
-    //     });
-
+    //     ]);
     //     if ($err !== null) {
     //         $this->fail($err->getMessage());
     //     }
-
     //     $filter = $filterId;
-
     //     $this->assertTrue(is_string($filterId));
 
-    //     [$err, $messages] = $shh->getMessages($filter, function () {
-    //     });
+    //     [$err, $messages] = $shh->getMessages($filter);
 
     //     if ($err !== null) {
     //         $this->fail($err->getMessage());
@@ -456,8 +379,7 @@ class ShhApiTest extends TestCase
     //         'payload' => "0x7b2274797065223a226d6",
     //         'priority' => "0x64",
     //         'ttl' => "0x64",
-    //     ], function () {
-    //     });
+    //     ]);
 
     //     if ($err !== null) {
     //         $this->fail($err->getMessage());
@@ -465,8 +387,7 @@ class ShhApiTest extends TestCase
 
     //     $this->assertTrue($isSent);
 
-    //     [$err, $messages] = $shh->getMessages($filter, function () {
-    //     });
+    //     [$err, $messages] = $shh->getMessages($filter);
 
     //     if ($err !== null) {
     //         $this->fail($err->getMessage());
@@ -489,8 +410,7 @@ class ShhApiTest extends TestCase
 
     //     $shh = $this->shh;
 
-    //     [$err, $hasIdentity] = $shh->hasIdentity('0', function () {
-    //     });
+    //     [$err, $hasIdentity] = $shh->hasIdentity('0');
 
     //     if ($err !== null) {
     //         $this->fail($err->getMessage());

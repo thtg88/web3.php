@@ -25,12 +25,13 @@ class PersonalBatchTest extends TestCase
         $personal->listAccounts();
         $personal->newAccount('123456');
 
-        $personal->provider->execute(function ($err, $data) {
-            if ($err !== null) {
-                return $this->assertTrue($err !== null);
-            }
-            $this->assertTrue(is_array($data[0]));
-            $this->assertTrue(is_string($data[1]));
-        });
+        [$err, $data] = $personal->provider->execute();
+
+        if ($err !== null) {
+            $this->assertTrue($err !== null);
+        }
+
+        $this->assertTrue(is_array($data[0]));
+        $this->assertTrue(is_string($data[1]));
     }
 }

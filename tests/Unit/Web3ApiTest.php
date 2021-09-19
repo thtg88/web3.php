@@ -20,8 +20,7 @@ class Web3ApiTest extends TestCase
     {
         $web3 = $this->web3;
 
-        [$err, $version] = $web3->clientVersion(function () {
-        });
+        [$err, $version] = $web3->clientVersion();
 
         if ($err !== null) {
             $this->fail($err->getMessage());
@@ -35,8 +34,7 @@ class Web3ApiTest extends TestCase
     {
         $web3 = $this->web3;
 
-        [$err, $hash] = $web3->sha3($this->testHex, function () {
-        });
+        [$err, $hash] = $web3->sha3($this->testHex);
 
         if ($err !== null) {
             $this->fail($err->getMessage());
@@ -50,8 +48,7 @@ class Web3ApiTest extends TestCase
     {
         $web3 = $this->web3;
 
-        [$err, $hash] = $web3->sha3('hello world', function () {
-        });
+        [$err, $hash] = $web3->sha3('hello world');
 
         if ($err !== null) {
             $this->fail($err->getMessage());
@@ -69,8 +66,7 @@ class Web3ApiTest extends TestCase
 
         $web3 = $this->web3;
 
-        [$err, $hash] = $web3->sha3($web3, function () {
-        });
+        [$err, $hash] = $web3->sha3($web3);
 
         if ($err !== null) {
             $this->fail($err->getMessage());

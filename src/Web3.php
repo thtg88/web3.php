@@ -52,28 +52,24 @@ class Web3
 
     public function clientVersion(...$arguments): array|null|self
     {
-        if ($this->provider->isBatch) {
-            $this->provider->send(new ClientVersion($arguments));
+        $result = $this->provider->send(new ClientVersion($arguments));
 
+        if ($this->provider->isBatch) {
             return $this;
         }
 
-        $callback = array_pop($arguments);
-
-        return $this->provider->send(new ClientVersion($arguments), $callback);
+        return $result;
     }
 
     public function sha3(...$arguments): array|null|self
     {
-        if ($this->provider->isBatch) {
-            $this->provider->send(new Sha3($arguments));
+        $result = $this->provider->send(new Sha3($arguments));
 
+        if ($this->provider->isBatch) {
             return $this;
         }
 
-        $callback = array_pop($arguments);
-
-        return $this->provider->send(new Sha3($arguments), $callback);
+        return $result;
     }
 
     /**

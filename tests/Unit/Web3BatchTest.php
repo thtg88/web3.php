@@ -23,13 +23,13 @@ class Web3BatchTest extends TestCase
         $web3->clientVersion();
         $web3->sha3($this->testHex);
 
-        $web3->provider->execute(function ($err, $data) {
-            if ($err !== null) {
-                return $this->fail('Got error!');
-            }
+        [$err, $data] = $web3->provider->execute();
 
-            $this->assertTrue(is_string($data[0]));
-            $this->assertEquals($data[1], $this->testHash);
-        });
+        if ($err !== null) {
+            $this->fail('Got error!');
+        }
+
+        $this->assertTrue(is_string($data[0]));
+        $this->assertEquals($data[1], $this->testHash);
     }
 }

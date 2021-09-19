@@ -22,8 +22,7 @@ class NetApiTest extends TestCase
     {
         $net = $this->net;
 
-        [$err, $version] = $net->version(function () {
-        });
+        [$err, $version] = $net->version();
 
         if ($err !== null) {
             $this->fail($err->getMessage());
@@ -37,8 +36,7 @@ class NetApiTest extends TestCase
     {
         $net = $this->net;
 
-        [$err, $count] = $net->peerCount(function () {
-        });
+        [$err, $count] = $net->peerCount();
 
         if ($err !== null) {
             $this->fail($err->getMessage());
@@ -52,8 +50,7 @@ class NetApiTest extends TestCase
     {
         $net = $this->net;
 
-        [$err, $net] = $net->listening(function () {
-        });
+        [$err, $net] = $net->listening();
 
         if ($err !== null) {
             $this->fail($err->getMessage());
