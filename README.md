@@ -123,9 +123,8 @@ eth
 ```php
 $eth->batch()
     ->protocolVersion()
-    ->syncing();
-
-[$errors, $data] = $eth->provider->execute();
+    ->syncing()
+    ->execute();
 
 if ($errors !== null) {
     // do something
@@ -140,9 +139,8 @@ net
 ```php
 $net->batch()
     ->version()
-    ->listening();
-
-[$errors, $data] = $net->provider->execute();
+    ->listening()
+    ->execute();
 
 if ($errors !== null) {
     // do something
@@ -157,9 +155,8 @@ personal
 ```php
 $personal->batch()
     ->listAccounts()
-    ->newAccount('123456');
-
-[$errors, $data] = $personal->provider->execute();
+    ->newAccount('123456')
+    ->execute();
 
 if ($errors !== null) {
     // do something
