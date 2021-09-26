@@ -392,7 +392,7 @@ class Utils
     /**
      * Change number or number string to bignumber.
      */
-    public static function toBn(BigInteger|string|int $number): BigInteger
+    public static function toBn(BigInteger|string|int|float $number): BigInteger|array
     {
         if ($number instanceof BigInteger) {
             return $number;
