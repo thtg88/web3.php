@@ -111,4 +111,9 @@ class Net
 
         return $this;
     }
+
+    public function execute(): array
+    {
+        return $this->provider->execute();
+    }
 }
