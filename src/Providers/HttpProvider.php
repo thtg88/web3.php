@@ -20,6 +20,8 @@ class HttpProvider extends Provider implements IProvider
 
     public function send(IMethod $method): ?array
     {
+        $method->validate();
+
         $payload = $method->toPayloadString();
 
         if ($this->isBatch) {
@@ -28,8 +30,6 @@ class HttpProvider extends Provider implements IProvider
 
             return null;
         }
-
-        $method->validate();
 
         $method->arguments = $method->transform(
             $method->arguments,
