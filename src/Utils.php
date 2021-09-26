@@ -368,33 +368,21 @@ class Utils
         return $json['name'] . '(' . implode(',', $typeName) . ')';
     }
 
-    public static function jsonToArray(stdClass|array $json): array
+    public static function jsonToArray(stdClass|array|string $json): ?array
     {
-        if ($json instanceof stdClass) {
-            $json = (array) $json;
-
-            foreach ($json as $key => $param) {
-                if (is_array($param)) {
-                    foreach ($param as $subKey => $subParam) {
-                        $json[$key][$subKey] = self::jsonToArray($subParam);
-                    }
-                } elseif ($param instanceof stdClass) {
-                    $json[$key] = self::jsonToArray($param);
-                }
-            }
-
-            return $json;
+        if (is_string($json)) {
+            return json_decode($json, true);
         }
 
-        if (is_array($json)) {
-            foreach ($json as $key => $param) {
-                if (is_array($param)) {
-                    foreach ($param as $subKey => $subParam) {
-                        $json[$key][$subKey] = self::jsonToArray($subParam);
-                    }
-                } elseif ($param instanceof stdClass) {
-                    $json[$key] = self::jsonToArray($param);
-                }
+        if ($json instanceof stdClass) {
+            return self::jsonToArray((array) $json);
+        }
+
+        foreach ($json as $key => $param) {
+            if (is_array($param) || $param instanceof stdClass) {
+                $json[$key] = self::jsonToArray($param);
+
+                continue;
             }
         }
 
