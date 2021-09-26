@@ -53,14 +53,14 @@ class HttpProviderTest extends TestCase
         $requestManager = new HttpRequestManager($this->testHost);
         $provider = new HttpProvider($requestManager);
         $method = new ClientVersion([]);
-        $provider->batch(true);
+        $provider->batch();
         $provider->send($method, null);
         $provider->send($method, null);
 
-        [$err, $data] = $provider->execute();
+        [$errors, $data] = $provider->execute();
 
-        if ($err !== null) {
-            $this->fail($err->getMessage());
+        if ($errors !== null) {
+            $this->fail($errors->getMessage());
         }
 
         $this->assertEquals($data[0], $data[1]);

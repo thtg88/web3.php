@@ -22,13 +22,12 @@ class EthBatchTest extends TestCase
     {
         $eth = $this->eth;
 
-        $eth->batch(true);
-        $eth->protocolVersion();
-        $eth->syncing();
+        [$errors, $data] = $eth->batch()
+            ->protocolVersion()
+            ->syncing()
+            ->execute();
 
-        [$err, $data] = $eth->provider->execute();
-
-        if ($err !== null) {
+        if ($errors !== null) {
             $this->fail('Got error!');
         }
 

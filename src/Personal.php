@@ -133,13 +133,15 @@ class Personal
         return $this;
     }
 
-    /**
-     * @param bool $status
-     */
-    public function batch($status): void
+    public function batch(bool $status = true): self
     {
-        $status = is_bool($status);
-
         $this->provider->batch($status);
+
+        return $this;
+    }
+
+    public function execute(): array
+    {
+        return $this->provider->execute();
     }
 }

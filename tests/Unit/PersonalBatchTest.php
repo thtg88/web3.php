@@ -21,14 +21,13 @@ class PersonalBatchTest extends TestCase
     {
         $personal = $this->personal;
 
-        $personal->batch(true);
-        $personal->listAccounts();
-        $personal->newAccount('123456');
+        [$errors, $data] = $personal->batch()
+            ->listAccounts()
+            ->newAccount('123456')
+            ->execute();
 
-        [$err, $data] = $personal->provider->execute();
-
-        if ($err !== null) {
-            $this->assertTrue($err !== null);
+        if ($errors !== null) {
+            $this->fail('Got error!');
         }
 
         $this->assertTrue(is_array($data[0]));
