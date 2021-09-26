@@ -71,7 +71,7 @@ class HttpRequestManager extends RequestManager implements IRequestManager
                     continue;
                 }
 
-                $results[] = null;
+                $errors[] = new RPCException('Something wrong happened.');
             }
 
             if (count($errors) > 0) {
