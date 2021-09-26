@@ -29,9 +29,7 @@ class HttpProvider extends Provider implements IProvider
             return null;
         }
 
-        if (!$method->validate()) {
-            return ['Validation failed', null];
-        }
+        $method->validate();
 
         $method->arguments = $method->transform(
             $method->arguments,
@@ -39,10 +37,6 @@ class HttpProvider extends Provider implements IProvider
         );
 
         [$err, $res] = $this->requestManager->sendPayload($payload);
-
-        if ($err !== null) {
-            return [$err, null];
-        }
 
         if (!is_array($res)) {
             $res = $method->transform([$res], $method->outputFormatters);

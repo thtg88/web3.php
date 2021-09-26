@@ -297,10 +297,6 @@ class Contract
 
         [$err, $transaction] = $this->eth->sendTransaction($transaction);
 
-        if ($err !== null) {
-            return [$err, null];
-        }
-
         return [null, $transaction];
     }
 
@@ -387,10 +383,6 @@ class Contract
 
         [$err, $transaction] = $this->eth->sendTransaction($transaction);
 
-        if ($err !== null) {
-            return [$err, null];
-        }
-
         return [null, $transaction];
     }
 
@@ -475,10 +467,6 @@ class Contract
         $transaction['data'] = $functionSignature . Utils::stripZero($data);
 
         [$err, $transaction] = $this->eth->call($transaction, $defaultBlock);
-
-        if ($err !== null) {
-            return [$err, null];
-        }
 
         $decodedTransaction = $this->ethabi->decodeParameters($function, $transaction);
 
@@ -585,10 +573,6 @@ class Contract
         }
 
         [$err, $gas] = $this->eth->estimateGas($transaction);
-
-        if ($err !== null) {
-            return [$err, null];
-        }
 
         return [null, $gas];
     }
