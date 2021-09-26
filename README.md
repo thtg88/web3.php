@@ -9,8 +9,24 @@ Inspired by the great work of all previous [contributors](https://github.com/web
 
 # Install
 
+Add this to your composer.json
+
+```json
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/thtg88/web3.php"
+        }
+    ],
+    "require": {
+        "web3p/web3.php": "dev-master"
+    }
 ```
-composer require thtg88/web3.php
+
+Then execute the following from terminal
+
+```
+composer require web3p/web3.php
 ```
 
 # Usage
