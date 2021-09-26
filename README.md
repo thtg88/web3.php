@@ -38,6 +38,7 @@ $web3 = new Web3('http://localhost:8545');
 ```
 
 ### Using provider
+
 ```php
 use Web3\Web3;
 use Web3\Providers\HttpProvider;
@@ -50,19 +51,20 @@ $web3 = new Web3(new HttpProvider(new HttpRequestManager('http://localhost:8545'
 ```
 
 ### You can use callback to each rpc call:
+
 ```php
-$web3->clientVersion(function ($err, $version) {
-    if ($err !== null) {
-        // do something
-        return;
-    }
-    if (isset($version)) {
-        echo 'Client version: ' . $version;
-    }
-});
+[$err, $version] = $web3->clientVersion();
+
+if ($err !== null) {
+    // do something
+    return;
+}
+
+echo 'Client version: ' . $version;
 ```
 
 ### Eth
+
 ```php
 use Web3\Web3;
 
@@ -79,6 +81,7 @@ $eth = new Eth('http://localhost:8545');
 ```
 
 ### Net
+
 ```php
 use Web3\Web3;
 
@@ -97,66 +100,73 @@ $net = new Net('http://localhost:8545');
 ### Batch
 
 web3
+
 ```php
-$web3->batch(true);
-$web3->clientVersion();
-$web3->hash('0x1234');
-$web3->execute(function ($err, $data) {
-    if ($err !== null) {
-        // do something
-        // it may throw exception or array of exception depends on error type
-        // connection error: throw exception
-        // json rpc error: array of exception
-        return;
-    }
+[$errors, $data] = $web3->batch()
+    ->clientVersion()
+    ->hash('0x1234')
+    ->execute();
+
+if ($errors !== null) {
     // do something
-});
+    // it may throw exception or array of exception depends on error type
+    // connection error: throw exception
+    // json rpc error: array of exception
+    return;
+}
+
+// do something
 ```
 
 eth
 
 ```php
-$eth->batch(true);
-$eth->protocolVersion();
-$eth->syncing();
+$eth->batch()
+    ->protocolVersion()
+    ->syncing();
 
-$eth->provider->execute(function ($err, $data) {
-    if ($err !== null) {
-        // do something
-        return;
-    }
+[$errors, $data] = $eth->provider->execute();
+
+if ($errors !== null) {
     // do something
-});
+    return;
+}
+
+// do something
 ```
 
 net
-```php
-$net->batch(true);
-$net->version();
-$net->listening();
 
-$net->provider->execute(function ($err, $data) {
-    if ($err !== null) {
-        // do something
-        return;
-    }
+```php
+$net->batch()
+    ->version()
+    ->listening();
+
+[$errors, $data] = $net->provider->execute();
+
+if ($errors !== null) {
     // do something
-});
+    return;
+}
+
+// do something
 ```
 
 personal
-```php
-$personal->batch(true);
-$personal->listAccounts();
-$personal->newAccount('123456');
 
-$personal->provider->execute(function ($err, $data) {
-    if ($err !== null) {
-        // do something
-        return;
-    }
+```php
+$personal->batch()
+    ->listAccounts()
+    ->newAccount('123456');
+
+[$errors, $data] = $personal->provider->execute();
+
+if ($errors !== null) {
     // do something
-});
+    return;
+}
+
+// do something
 ```
 
 ### Contract
@@ -189,20 +199,19 @@ $functionData = $contract->at($contractAddress)->getData($functionName, $params)
 ```
 
 # Assign value to outside scope(from callback scope to outside scope)
-Due to callback is not like javascript callback, 
-if we need to assign value to outside scope, 
-we need to assign reference to callback.
+
 ```php
 $newAccount = '';
 
-$web3->personal->newAccount('123456', function ($err, $account) use (&$newAccount) {
-    if ($err !== null) {
-        echo 'Error: ' . $err->getMessage();
-        return;
-    }
-    $newAccount = $account;
-    echo 'New account: ' . $account . PHP_EOL;
-});
+[$err, $account] = $web3->personal->newAccount('123456');
+
+if ($err !== null) {
+    echo 'Error: ' . $err->getMessage();
+    return;
+}
+
+$newAccount = $account;
+echo 'New account: ' . $account . PHP_EOL;
 ```
 
 # Examples
@@ -252,4 +261,5 @@ Thank you to all the people who already contributed to web3.php!
 </a>
 
 # License
+
 MIT
