@@ -29,9 +29,7 @@ class HttpProvider extends Provider implements IProvider
             return null;
         }
 
-        if (!$method->validate()) {
-            return ['Validation failed', null];
-        }
+        $method->validate();
 
         $method->arguments = $method->transform(
             $method->arguments,
