@@ -16,11 +16,6 @@ use Web3\Methods\IMethod;
 interface IProvider
 {
     public function send(IMethod $method): ?array;
-
-    /**
-     * @param bool $status
-     */
-    public function batch($status): void;
-
+    public function batch(bool $status = true): self;
     public function execute(): array;
 }

@@ -49,14 +49,11 @@ class HttpProvider extends Provider implements IProvider
         return [null, $res];
     }
 
-    /**
-     * @param bool $status
-     */
-    public function batch($status): void
+    public function batch(bool $status = true): self
     {
-        $status = is_bool($status);
-
         $this->isBatch = $status;
+
+        return $this;
     }
 
     public function execute(): array

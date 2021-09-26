@@ -22,14 +22,13 @@ class NetBatchTest extends TestCase
     {
         $net = $this->net;
 
-        $net->batch(true);
-        $net->version();
-        $net->listening();
-        $net->peerCount();
+        [$errors, $data] = $net->batch()
+            ->version()
+            ->listening()
+            ->peerCount()
+            ->execute();
 
-        [$err, $data] = $net->provider->execute();
-
-        if ($err !== null) {
+        if ($errors !== null) {
             $this->fail('Got error!');
         }
 

@@ -19,13 +19,12 @@ class Web3BatchTest extends TestCase
     {
         $web3 = $this->web3;
 
-        $web3->batch(true);
-        $web3->clientVersion();
-        $web3->sha3($this->testHex);
+        [$errors, $data] = $web3->batch()
+            ->clientVersion()
+            ->sha3($this->testHex)
+            ->execute();
 
-        [$err, $data] = $web3->provider->execute();
-
-        if ($err !== null) {
+        if ($errors !== null) {
             $this->fail('Got error!');
         }
 
